@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .auth-card {
+            background: #1C1C1C;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #2D2D2D;
+        }
+        
+        .auth-option {
+            background: #0F0F0F;
+            border: 2px solid #2D2D2D;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-option:hover {
+            border-color: #0A84FF;
+            transform: translateY(-2px);
+        }
+        
+        .auth-option.active {
+            border-color: #0A84FF;
+            background: rgba(10, 132, 255, 0.1);
+        }
+        
+        input {
+            width: 100%;
+            background: #0F0F0F;
+            border: 2px solid #2D2D2D;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #0A84FF;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="cinema-summary.html" class="text-primary hover:underline flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back
+                </a>
+                <h1 class="text-xl font-bold">Checkout</h1>
+                <div class="w-20"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Content -->
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="auth-card">
+            <h2 class="text-2xl font-bold mb-2">Complete Your Booking</h2>
+            <p class="text-gray-400 mb-8">Choose how you'd like to continue</p>
+
+            <!-- Auth Options -->
+            <div class="space-y-4 mb-8">
+                <div class="auth-option active" onclick="selectAuthMethod('guest')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-dark-card rounded-full flex items-center justify-center text-2xl">
+                            👤
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Continue as Guest</h3>
+                            <p class="text-sm text-gray-400">Quick checkout with email only</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-option" onclick="selectAuthMethod('login')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-dark-card rounded-full flex items-center justify-center text-2xl">
+                            🔐
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Login with OTP</h3>
+                            <p class="text-sm text-gray-400">Access your bookings and earn rewards</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-option" onclick="selectAuthMethod('create')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-dark-card rounded-full flex items-center justify-center text-2xl">
+                            ✨
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Create Account</h3>
+                            <p class="text-sm text-gray-400">Get exclusive offers and track bookings</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest Form -->
+            <div id="guestForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Email Address</label>
+                        <input type="email" id="guestEmail" placeholder="yourname@example.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Phone Number (Optional)</label>
+                        <input type="tel" id="guestPhone" placeholder="+234 800 000 0000">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="hidden">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Email or Phone</label>
+                        <input type="text" id="loginContact" placeholder="yourname@example.com or +234 800 000 0000">
+                    </div>
+                    <button onclick="sendOTP()" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition">
+                        Send OTP
+                    </button>
+                    <div id="otpSection" class="hidden">
+                        <label class="block text-sm font-semibold mb-2">Enter OTP</label>
+                        <input type="text" id="otpCode" placeholder="000000" maxlength="6">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Account Form -->
+            <div id="createForm" class="hidden">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Full Name</label>
+                        <input type="text" id="createName" placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Email Address</label>
+                        <input type="email" id="createEmail" placeholder="yourname@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Phone Number</label>
+                        <input type="tel" id="createPhone" placeholder="+234 800 000 0000">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue Button -->
+            <button onclick="proceedToPayment()" class="w-full mt-8 bg-primary hover:bg-blue-600 text-white font-bold py-4 rounded-lg transition transform hover:scale-105">
+                Proceed to Payment
+            </button>
+
+            <!-- Summary -->
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center">
+                <div class="text-sm text-gray-400 mb-2">Total Amount</div>
+                <div id="checkoutTotal" class="text-3xl font-bold text-primary"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authMethod = 'guest';
+        let booking = null;
+
+        function loadCheckout() {
+            booking = JSON.parse(localStorage.getItem('cinemaBooking'));
+            if (!booking) {
+                window.location.href = 'cinema-booking.html';
+                return;
+            }
+
+            document.getElementById('checkoutTotal').textContent = `₦${booking.grandTotal.toLocaleString()}`;
+        }
+
+        function selectAuthMethod(method) {
+            authMethod = method;
+            
+            // Update UI
+            document.querySelectorAll('.auth-option').forEach(opt => opt.classList.remove('active'));
+            event.target.closest('.auth-option').classList.add('active');
+            
+            // Show/hide forms
+            document.getElementById('guestForm').classList.toggle('hidden', method !== 'guest');
+            document.getElementById('loginForm').classList.toggle('hidden', method !== 'login');
+            document.getElementById('createForm').classList.toggle('hidden', method !== 'create');
+        }
+
+        function sendOTP() {
+            const contact = document.getElementById('loginContact').value;
+            if (!contact) {
+                alert('Please enter your email or phone number');
+                return;
+            }
+
+            // Simulate OTP send
+            alert(`OTP sent to ${contact}!\n\nDemo OTP: 123456`);
+            document.getElementById('otpSection').classList.remove('hidden');
+        }
+
+        function proceedToPayment() {
+            let userInfo = {};
+
+            if (authMethod === 'guest') {
+                const email = document.getElementById('guestEmail').value;
+                const phone = document.getElementById('guestPhone').value;
+                
+                if (!email) {
+                    alert('Please enter your email address');
+                    return;
+                }
+                
+                userInfo = { email, phone, type: 'guest' };
+            } else if (authMethod === 'login') {
+                const contact = document.getElementById('loginContact').value;
+                const otp = document.getElementById('otpCode').value;
+                
+                if (!contact || !otp) {
+                    alert('Please enter contact and OTP');
+                    return;
+                }
+                
+                if (otp !== '123456') {
+                    alert('Invalid OTP. Demo OTP is: 123456');
+                    return;
+                }
+                
+                userInfo = { contact, type: 'member' };
+            } else if (authMethod === 'create') {
+                const name = document.getElementById('createName').value;
+                const email = document.getElementById('createEmail').value;
+                const phone = document.getElementById('createPhone').value;
+                
+                if (!name || !email || !phone) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                userInfo = { name, email, phone, type: 'new_member' };
+            }
+
+            booking.userInfo = userInfo;
+            localStorage.setItem('cinemaBooking', JSON.stringify(booking));
+            
+            window.location.href = 'cinema-payment.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCheckout);
+    </script>
+</body>
+</html>

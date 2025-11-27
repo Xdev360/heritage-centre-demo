@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Admin Dashboard - Heritage Centre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1C1C1C, #0F0F0F);
+            border: 2px solid #2D2D2D;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            border-color: #0A84FF;
+            transform: translateY(-4px);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        th {
+            background: #1C1C1C;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #0A84FF;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #2D2D2D;
+        }
+        
+        tr:hover {
+            background: rgba(10, 132, 255, 0.05);
+        }
+        
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .status-confirmed { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .status-pending { background: rgba(251, 191, 36, 0.2); color: #FBB928; }
+        .status-used { background: rgba(107, 114, 128, 0.2); color: #9CA3AF; }
+        
+        #scanner-video {
+            max-width: 100%;
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <h1 class="text-2xl font-bold text-primary">🎬 Cinema Admin</h1>
+                <div class="flex items-center gap-6">
+                    <a href="cinema-booking.html" class="text-gray-400 hover:text-white transition">Cinema</a>
+                    <a href="cinema-ceo.html" class="text-gray-400 hover:text-white transition">CEO Dashboard</a>
+                    <a href="index.html" class="text-gray-400 hover:text-white transition">Home</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm mb-2">Today's Bookings</div>
+                <div id="todayBookings" class="text-4xl font-bold text-primary mb-1">0</div>
+                <div class="text-xs text-gray-500">Tickets sold</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm mb-2">Today's Revenue</div>
+                <div id="todayRevenue" class="text-4xl font-bold text-green-500 mb-1">₦0</div>
+                <div class="text-xs text-gray-500">Total earnings</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm mb-2">Active Shows</div>
+                <div id="activeShows" class="text-4xl font-bold text-gold mb-1">8</div>
+                <div class="text-xs text-gray-500">Currently screening</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="text-gray-400 text-sm mb-2">Total Customers</div>
+                <div id="totalCustomers" class="text-4xl font-bold text-blue-400 mb-1">0</div>
+                <div class="text-xs text-gray-500">All time</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-dark-card rounded-xl p-6 mb-8 border border-gray-800">
+            <h2 class="text-2xl font-bold mb-6">Quick Actions</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button onclick="showAddMovie()" class="bg-primary hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg transition">
+                    ➕ Add Movie
+                </button>
+                <button onclick="showAddShowtime()" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-6 rounded-lg transition">
+                    🎬 Add Showtime
+                </button>
+                <button onclick="showQRScanner()" class="bg-gold text-black hover:bg-yellow-500 font-semibold py-4 px-6 rounded-lg transition">
+                    📷 Scan QR
+                </button>
+                <button onclick="printReport()" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-4 px-6 rounded-lg transition">
+                    🖨️ Print Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-dark-card rounded-xl p-6 mb-8 border border-gray-800">
+            <div class="flex flex-wrap gap-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Date</label>
+                    <input type="date" id="filterDate" class="bg-dark border border-gray-700 rounded-lg px-4 py-2 text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Movie</label>
+                    <select id="filterMovie" class="bg-dark border border-gray-700 rounded-lg px-4 py-2 text-white">
+                        <option value="all">All Movies</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Hall</label>
+                    <select id="filterHall" class="bg-dark border border-gray-700 rounded-lg px-4 py-2 text-white">
+                        <option value="all">All Halls</option>
+                        <option value="Screen 1">Screen 1</option>
+                        <option value="Screen 2">Screen 2</option>
+                        <option value="Screen 3">Screen 3</option>
+                        <option value="VIP Lounge">VIP Lounge</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Status</label>
+                    <select id="filterStatus" class="bg-dark border border-gray-700 rounded-lg px-4 py-2 text-white">
+                        <option value="all">All Status</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="used">Used</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="applyFilters()" class="bg-primary hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="bg-dark-card rounded-xl border border-gray-800 overflow-hidden">
+            <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="text-2xl font-bold">All Bookings</h2>
+                <button onclick="exportCSV()" class="text-primary hover:underline text-sm font-semibold">
+                    📊 Export CSV
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Movie</th>
+                            <th>Date & Time</th>
+                            <th>Hall</th>
+                            <th>Seats</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsBody">
+                        <tr>
+                            <td colspan="9" class="text-center text-gray-400 py-8">No bookings found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-dark-card rounded-xl p-8 max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">QR Code Scanner</h3>
+                <button onclick="closeQRScanner()" class="text-gray-400 hover:text-white text-2xl">✕</button>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-semibold mb-2">Enter Booking Reference</label>
+                <div class="flex gap-3">
+                    <input type="text" id="qrInput" placeholder="HC12345678" class="flex-1 bg-dark border-2 border-gray-700 rounded-lg px-4 py-3 text-white focus:border-primary">
+                    <button onclick="validateTicket()" class="bg-primary hover:bg-blue-600 text-white font-bold px-8 rounded-lg transition">
+                        Validate
+                    </button>
+                </div>
+            </div>
+            
+            <div id="validationResult" class="hidden p-6 rounded-lg"></div>
+        </div>
+    </div>
+
+    <script>
+        function loadDashboard() {
+            const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+            
+            // Calculate stats
+            const today = new Date().toISOString().split('T')[0];
+            const todayBookings = bookings.filter(b => b.bookingDate && b.bookingDate.startsWith(today));
+            
+            document.getElementById('todayBookings').textContent = todayBookings.reduce((sum, b) => sum + b.seats.length, 0);
+            document.getElementById('todayRevenue').textContent = '₦' + todayBookings.reduce((sum, b) => sum + b.grandTotal, 0).toLocaleString();
+            document.getElementById('totalCustomers').textContent = bookings.length;
+            
+            // Populate movie filter
+            const movies = [...new Set(bookings.map(b => b.movieTitle))];
+            const movieFilter = document.getElementById('filterMovie');
+            movies.forEach(movie => {
+                const option = document.createElement('option');
+                option.value = movie;
+                option.textContent = movie;
+                movieFilter.appendChild(option);
+            });
+            
+            renderBookings(bookings);
+        }
+
+        function renderBookings(bookings) {
+            const tbody = document.getElementById('bookingsBody');
+            
+            if (bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">No bookings found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = bookings.map(booking => {
+                const seatLabels = booking.seats.map(s => s.id).join(', ');
+                const status = booking.validated ? 'used' : 'confirmed';
+                const customerName = booking.userInfo.name || booking.userInfo.email || 'Guest';
+                
+                return `
+                    <tr>
+                        <td class="font-mono text-primary">${booking.bookingReference}</td>
+                        <td class="font-semibold">${booking.movieTitle}</td>
+                        <td>${new Date(booking.date).toLocaleDateString()} ${booking.time}</td>
+                        <td>${booking.hall}</td>
+                        <td class="text-sm">${seatLabels}</td>
+                        <td>${customerName}</td>
+                        <td class="font-semibold">₦${booking.grandTotal.toLocaleString()}</td>
+                        <td><span class="status-badge status-${status}">${status}</span></td>
+                        <td>
+                            <button onclick="viewBooking('${booking.bookingReference}')" class="text-primary hover:underline text-sm">View</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function applyFilters() {
+            const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+            const date = document.getElementById('filterDate').value;
+            const movie = document.getElementById('filterMovie').value;
+            const hall = document.getElementById('filterHall').value;
+            const status = document.getElementById('filterStatus').value;
+            
+            const filtered = bookings.filter(b => {
+                if (date && b.date !== date) return false;
+                if (movie !== 'all' && b.movieTitle !== movie) return false;
+                if (hall !== 'all' && b.hall !== hall) return false;
+                if (status !== 'all') {
+                    const bookingStatus = b.validated ? 'used' : 'confirmed';
+                    if (bookingStatus !== status) return false;
+                }
+                return true;
+            });
+            
+            renderBookings(filtered);
+        }
+
+        function showQRScanner() {
+            document.getElementById('qrModal').classList.remove('hidden');
+            document.getElementById('qrInput').focus();
+        }
+
+        function closeQRScanner() {
+            document.getElementById('qrModal').classList.add('hidden');
+            document.getElementById('validationResult').classList.add('hidden');
+            document.getElementById('qrInput').value = '';
+        }
+
+        function validateTicket() {
+            const ref = document.getElementById('qrInput').value.trim();
+            const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+            const booking = bookings.find(b => b.bookingReference === ref);
+            
+            const resultDiv = document.getElementById('validationResult');
+            resultDiv.classList.remove('hidden');
+            
+            if (!booking) {
+                resultDiv.className = 'p-6 rounded-lg bg-red-900 border-2 border-red-500';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">❌</div>
+                        <div class="text-xl font-bold mb-2">Invalid Ticket</div>
+                        <div class="text-sm text-gray-300">Booking reference not found</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (booking.validated) {
+                resultDiv.className = 'p-6 rounded-lg bg-yellow-900 border-2 border-yellow-500';
+                resultDiv.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-5xl mb-3">⚠️</div>
+                        <div class="text-xl font-bold mb-2">Already Used</div>
+                        <div class="text-sm text-gray-300">This ticket has already been validated</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Mark as validated
+            booking.validated = true;
+            booking.validatedAt = new Date().toISOString();
+            localStorage.setItem('cinemaBookings', JSON.stringify(bookings));
+            
+            resultDiv.className = 'p-6 rounded-lg bg-green-900 border-2 border-green-500';
+            resultDiv.innerHTML = `
+                <div class="text-center mb-4">
+                    <div class="text-5xl mb-3">✅</div>
+                    <div class="text-xl font-bold mb-2">Valid Ticket</div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between"><span>Movie:</span><span class="font-bold">${booking.movieTitle}</span></div>
+                    <div class="flex justify-between"><span>Seats:</span><span class="font-bold">${booking.seats.map(s => s.id).join(', ')}</span></div>
+                    <div class="flex justify-between"><span>Hall:</span><span class="font-bold">${booking.hall}</span></div>
+                    <div class="flex justify-between"><span>Time:</span><span class="font-bold">${booking.time}</span></div>
+                </div>
+            `;
+            
+            // Reload bookings
+            loadDashboard();
+        }
+
+        function viewBooking(ref) {
+            const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+            const booking = bookings.find(b => b.bookingReference === ref);
+            if (booking) {
+                alert(JSON.stringify(booking, null, 2));
+            }
+        }
+
+        function showAddMovie() {
+            alert('Add Movie feature would open a form to:\n\n• Upload poster\n• Enter title, genre, duration\n• Add synopsis\n• Set rating\n• Add cast/crew\n\nThis would require a backend API in production.');
+        }
+
+        function showAddShowtime() {
+            alert('Add Showtime feature would allow:\n\n• Select movie\n• Choose date/time\n• Select hall\n• Set ticket prices\n• Configure seat layout\n\nThis would integrate with the movies database.');
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function exportCSV() {
+            const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+            const csv = [
+                ['Booking ID', 'Movie', 'Date', 'Time', 'Hall', 'Seats', 'Customer', 'Amount', 'Status'],
+                ...bookings.map(b => [
+                    b.bookingReference,
+                    b.movieTitle,
+                    b.date,
+                    b.time,
+                    b.hall,
+                    b.seats.map(s => s.id).join(';'),
+                    b.userInfo.email || 'Guest',
+                    b.grandTotal,
+                    b.validated ? 'Used' : 'Confirmed'
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cinema-bookings-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

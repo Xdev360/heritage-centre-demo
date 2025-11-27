@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(45deg); }
+            50% { transform: scale(1.2) rotate(45deg); }
+            100% { transform: scale(1) rotate(45deg); }
+        }
+        
+        .checkmark {
+            animation: checkmark 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .ticket-card {
+            background: linear-gradient(135deg, #1C1C1C, #0F0F0F);
+            border: 2px solid #2D2D2D;
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ticket-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0A84FF, #00D4FF);
+        }
+        
+        .action-btn {
+            background: #1C1C1C;
+            border: 2px solid #2D2D2D;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .action-btn:hover {
+            border-color: #0A84FF;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Success Animation -->
+    <div class="bg-gradient-to-b from-dark-card to-dark py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- Success Checkmark -->
+            <div class="mb-6">
+                <div class="w-24 h-24 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                    <svg class="w-16 h-16 text-white checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 fade-in-up">Booking Confirmed!</h1>
+            <p class="text-xl text-gray-400 mb-2 fade-in-up" style="animation-delay: 0.2s;">Payment successful</p>
+            <div class="text-sm text-gray-500 fade-in-up" style="animation-delay: 0.3s;">
+                Booking Reference: <span id="bookingRef" class="text-primary font-bold"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Details -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="ticket-card p-8 mb-8 fade-in-up" style="animation-delay: 0.4s;">
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Movie Poster & Details -->
+                <div class="md:col-span-2">
+                    <div class="flex gap-6">
+                        <img id="moviePoster" src="" alt="" class="w-32 h-48 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h2 id="movieTitle" class="text-3xl font-bold mb-4"></h2>
+                            
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <div class="text-gray-400 mb-1">Date & Time</div>
+                                    <div id="showDateTime" class="font-semibold"></div>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 mb-1">Cinema Hall</div>
+                                    <div id="hallInfo" class="font-semibold"></div>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 mb-1">Seats</div>
+                                    <div id="seatsInfo" class="font-semibold text-primary"></div>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 mb-1">Total Paid</div>
+                                    <div id="totalPaid" class="font-semibold text-primary text-xl"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Snacks Pickup Code -->
+                    <div id="snacksPickup" class="mt-6 p-4 bg-dark rounded-lg hidden">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🍿</span>
+                            <div>
+                                <div class="text-sm text-gray-400">Snacks Pickup Code</div>
+                                <div id="pickupCode" class="text-2xl font-bold text-gold"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- QR Code -->
+                <div class="md:col-span-1 flex flex-col items-center justify-center bg-white p-6 rounded-lg">
+                    <div id="qrcode" class="mb-4"></div>
+                    <div class="text-center text-gray-800 text-sm font-semibold">
+                        Scan at cinema entrance
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid sm:grid-cols-3 gap-4 mb-8 fade-in-up" style="animation-delay: 0.6s;">
+            <button onclick="downloadTicket()" class="action-btn text-center">
+                <div class="text-3xl mb-2">📥</div>
+                <div class="font-semibold">Download Ticket</div>
+                <div class="text-xs text-gray-400">PDF Format</div>
+            </button>
+            
+            <button onclick="addToCalendar()" class="action-btn text-center">
+                <div class="text-3xl mb-2">📅</div>
+                <div class="font-semibold">Add to Calendar</div>
+                <div class="text-xs text-gray-400">Get reminded</div>
+            </button>
+            
+            <button onclick="emailTicket()" class="action-btn text-center">
+                <div class="text-3xl mb-2">📧</div>
+                <div class="font-semibold">Email Ticket</div>
+                <div class="text-xs text-gray-400">Send to inbox</div>
+            </button>
+        </div>
+
+        <!-- Important Info -->
+        <div class="bg-dark-card rounded-xl p-6 border border-gray-800 mb-8 fade-in-up" style="animation-delay: 0.8s;">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span>ℹ️</span> Important Information
+            </h3>
+            <ul class="space-y-2 text-sm text-gray-300">
+                <li class="flex items-start gap-2">
+                    <span class="text-primary">✓</span>
+                    <span>Please arrive at least 15 minutes before showtime</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-primary">✓</span>
+                    <span>Present this QR code at the cinema entrance for entry</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-primary">✓</span>
+                    <span>Snacks can be collected at the concession counter with your pickup code</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-primary">✓</span>
+                    <span>Gates close 10 minutes after showtime</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-gold">⚠️</span>
+                    <span>Refunds available up to 2 hours before showtime. Contact support for assistance.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 fade-in-up" style="animation-delay: 1s;">
+            <a href="cinema-booking.html" class="flex-1 bg-primary hover:bg-blue-600 text-white text-center font-bold py-4 px-8 rounded-lg transition">
+                Book Another Movie
+            </a>
+            <a href="account.html" class="flex-1 bg-dark-card hover:bg-gray-800 text-white text-center font-bold py-4 px-8 rounded-lg transition border-2 border-gray-700">
+                View My Bookings
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let booking = null;
+
+        function loadConfirmation() {
+            booking = JSON.parse(localStorage.getItem('cinemaBooking'));
+            if (!booking || !booking.bookingReference) {
+                window.location.href = 'cinema-booking.html';
+                return;
+            }
+
+            // Populate details
+            document.getElementById('bookingRef').textContent = booking.bookingReference;
+            document.getElementById('moviePoster').src = booking.moviePoster;
+            document.getElementById('movieTitle').textContent = booking.movieTitle;
+            
+            const dateObj = new Date(booking.date);
+            document.getElementById('showDateTime').textContent = 
+                dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + 
+                ' • ' + booking.time;
+            
+            document.getElementById('hallInfo').textContent = `${booking.hall} • ${booking.format.toUpperCase()}`;
+            
+            const seatLabels = booking.seats.map(s => s.id).join(', ');
+            document.getElementById('seatsInfo').textContent = seatLabels;
+            
+            document.getElementById('totalPaid').textContent = `₦${booking.grandTotal.toLocaleString()}`;
+
+            // Generate QR Code
+            new QRCode(document.getElementById('qrcode'), {
+                text: `HERITAGE-CINEMA:${booking.bookingReference}:${booking.movieTitle}:${seatLabels}`,
+                width: 200,
+                height: 200,
+                colorDark: '#0F0F0F',
+                colorLight: '#ffffff',
+            });
+
+            // Snacks pickup code
+            if (booking.snacks && booking.snacks.length > 0) {
+                const pickupCode = 'SP' + booking.bookingReference.slice(-6);
+                document.getElementById('pickupCode').textContent = pickupCode;
+                document.getElementById('snacksPickup').classList.remove('hidden');
+            }
+
+            // Send email notification (demo)
+            setTimeout(() => sendEmailTicket(), 1000);
+        }
+
+        function downloadTicket() {
+            alert('📥 Ticket Download\n\nIn production, this would generate and download a PDF ticket with:\n\n• QR Code\n• Movie details\n• Seat numbers\n• Showtime\n• Booking reference\n\nDemo: PDF generation would use jsPDF library.');
+        }
+
+        function addToCalendar() {
+            const event = {
+                title: `Movie: ${booking.movieTitle}`,
+                start: new Date(booking.date + 'T' + booking.time),
+                duration: booking.duration,
+                location: 'Heritage Cinema, ' + booking.hall
+            };
+            
+            alert(`📅 Add to Calendar\n\nEvent: ${event.title}\nDate: ${event.start.toLocaleString()}\nLocation: ${event.location}\n\nIn production, this would create an .ics file or integrate with Google Calendar/Apple Calendar.`);
+        }
+
+        function emailTicket() {
+            const email = booking.userInfo.email || 'your@email.com';
+            alert(`📧 Email Sent!\n\nYour ticket has been sent to:\n${email}\n\nPlease check your inbox and spam folder.`);
+        }
+
+        function sendEmailTicket() {
+            // This would integrate with backend email service
+            console.log('Email ticket sent to:', booking.userInfo.email);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadConfirmation);
+
+        // Prevent back navigation
+        window.history.pushState(null, '', window.location.href);
+        window.onpopstate = function() {
+            window.history.pushState(null, '', window.location.href);
+        };
+    </script>
+</body>
+</html>

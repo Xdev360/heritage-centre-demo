@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema CEO Dashboard - Heritage Centre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .kpi-card {
+            background: linear-gradient(135deg, #1C1C1C, #0F0F0F);
+            border: 2px solid #2D2D2D;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color, #0A84FF);
+        }
+        
+        .chart-container {
+            background: #1C1C1C;
+            border: 1px solid #2D2D2D;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <h1 class="text-2xl font-bold text-gold">👑 Cinema CEO Dashboard</h1>
+                <div class="flex items-center gap-6">
+                    <select id="periodSelector" class="bg-dark border border-gray-700 rounded-lg px-4 py-2 text-white text-sm">
+                        <option value="today">Today</option>
+                        <option value="week" selected>This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="year">This Year</option>
+                    </select>
+                    <a href="cinema-admin.html" class="text-gray-400 hover:text-white transition">Admin</a>
+                    <a href="index.html" class="text-gray-400 hover:text-white transition">Home</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Executive Summary -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold mb-2">Executive Overview</h2>
+            <p class="text-gray-400">Real-time cinema performance metrics</p>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="kpi-card" style="--accent-color: #22C55E">
+                <div class="text-sm text-gray-400 mb-2">Total Revenue</div>
+                <div id="totalRevenue" class="text-3xl font-bold text-green-500 mb-2">₦0</div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-green-500">↑ 12.5%</span>
+                    <span class="text-gray-500">vs last period</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #0A84FF">
+                <div class="text-sm text-gray-400 mb-2">Tickets Sold</div>
+                <div id="totalTickets" class="text-3xl font-bold text-primary mb-2">0</div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-primary">↑ 8.3%</span>
+                    <span class="text-gray-500">vs last period</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #FFD700">
+                <div class="text-sm text-gray-400 mb-2">Avg. Ticket Price</div>
+                <div id="avgTicket" class="text-3xl font-bold text-gold mb-2">₦0</div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-gold">→ 0.0%</span>
+                    <span class="text-gray-500">vs last period</span>
+                </div>
+            </div>
+            
+            <div class="kpi-card" style="--accent-color: #F59E0B">
+                <div class="text-sm text-gray-400 mb-2">Snacks Revenue</div>
+                <div id="snacksRevenue" class="text-3xl font-bold text-orange-500 mb-2">₦0</div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="text-orange-500">↑ 15.7%</span>
+                    <span class="text-gray-500">vs last period</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid lg:grid-cols-2 gap-6 mb-6">
+            <!-- Revenue Trend -->
+            <div class="chart-container">
+                <h3 class="text-xl font-bold mb-4">Revenue Trend</h3>
+                <canvas id="revenueChart"></canvas>
+            </div>
+            
+            <!-- Bookings Trend -->
+            <div class="chart-container">
+                <h3 class="text-xl font-bold mb-4">Daily Bookings</h3>
+                <canvas id="bookingsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="grid lg:grid-cols-3 gap-6 mb-6">
+            <!-- Movie Performance -->
+            <div class="chart-container lg:col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Movie Performance Ranking</h3>
+                    <button onclick="exportPDF()" class="text-primary hover:underline text-sm font-semibold">
+                        📄 Export PDF
+                    </button>
+                </div>
+                <canvas id="moviePerformanceChart"></canvas>
+            </div>
+            
+            <!-- Revenue Breakdown -->
+            <div class="chart-container">
+                <h3 class="text-xl font-bold mb-4">Revenue Sources</h3>
+                <canvas id="revenueBreakdownChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Charts Row 3 -->
+        <div class="grid lg:grid-cols-2 gap-6 mb-6">
+            <!-- Hall Occupancy -->
+            <div class="chart-container">
+                <h3 class="text-xl font-bold mb-4">Hall Occupancy Rate</h3>
+                <canvas id="occupancyChart"></canvas>
+            </div>
+            
+            <!-- Peak Hours -->
+            <div class="chart-container">
+                <h3 class="text-xl font-bold mb-4">Peak Hour Traffic</h3>
+                <canvas id="peakHoursChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Performers Table -->
+        <div class="bg-dark-card rounded-xl border border-gray-800 overflow-hidden">
+            <div class="p-6 border-b border-gray-800">
+                <h3 class="text-2xl font-bold">Top Performing Movies</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-dark border-b-2 border-primary">
+                            <th class="p-4 text-left">Rank</th>
+                            <th class="p-4 text-left">Movie</th>
+                            <th class="p-4 text-left">Tickets Sold</th>
+                            <th class="p-4 text-left">Revenue</th>
+                            <th class="p-4 text-left">Avg. Occupancy</th>
+                            <th class="p-4 text-left">Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topMoviesTable">
+                        <!-- Will be populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+
+        function loadCEODashboard() {
+            const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+            
+            if (bookings.length === 0) {
+                // Create demo data for visualization
+                createDemoData();
+            } else {
+                calculateMetrics(bookings);
+            }
+            
+            renderCharts();
+        }
+
+        function calculateMetrics(bookings) {
+            const totalRev = bookings.reduce((sum, b) => sum + b.grandTotal, 0);
+            const totalTix = bookings.reduce((sum, b) => sum + b.seats.length, 0);
+            const snacksRev = bookings.reduce((sum, b) => sum + (b.totalSnacksPrice || 0), 0);
+            
+            document.getElementById('totalRevenue').textContent = '₦' + totalRev.toLocaleString();
+            document.getElementById('totalTickets').textContent = totalTix;
+            document.getElementById('avgTicket').textContent = totalTix > 0 ? '₦' + Math.round(totalRev / totalTix).toLocaleString() : '₦0';
+            document.getElementById('snacksRevenue').textContent = '₦' + snacksRev.toLocaleString();
+        }
+
+        function createDemoData() {
+            // Demo metrics
+            document.getElementById('totalRevenue').textContent = '₦1,245,000';
+            document.getElementById('totalTickets').textContent = '342';
+            document.getElementById('avgTicket').textContent = '₦3,640';
+            document.getElementById('snacksRevenue').textContent = '₦186,500';
+        }
+
+        function renderCharts() {
+            // Revenue Trend Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            charts.revenue = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [125000, 158000, 142000, 176000, 198000, 245000, 201000],
+                        borderColor: '#22C55E',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D2D2D' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Bookings Chart
+            const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+            charts.bookings = new Chart(bookingsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Bookings',
+                        data: [32, 45, 38, 52, 61, 78, 64],
+                        backgroundColor: '#0A84FF',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D2D2D' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Movie Performance Chart
+            const movieCtx = document.getElementById('moviePerformanceChart').getContext('2d');
+            charts.movies = new Chart(movieCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Quantum Nexus', 'Thunder Strike', 'Shadows of Lagos', 'Galaxy Warriors', 'Midnight Laughter'],
+                    datasets: [{
+                        label: 'Revenue (₦ thousands)',
+                        data: [320, 285, 245, 198, 156],
+                        backgroundColor: ['#0A84FF', '#22C55E', '#FFD700', '#F59E0B', '#EF4444'],
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D2D2D' }
+                        },
+                        y: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Breakdown Chart
+            const breakdownCtx = document.getElementById('revenueBreakdownChart').getContext('2d');
+            charts.breakdown = new Chart(breakdownCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tickets', 'Snacks', 'Service Fees'],
+                    datasets: [{
+                        data: [1058500, 186500, 51000],
+                        backgroundColor: ['#0A84FF', '#FFD700', '#9CA3AF'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#9CA3AF' }
+                        }
+                    }
+                }
+            });
+
+            // Occupancy Chart
+            const occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
+            charts.occupancy = new Chart(occupancyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Screen 1', 'Screen 2', 'Screen 3', 'VIP Lounge'],
+                    datasets: [{
+                        label: 'Occupancy %',
+                        data: [78, 65, 82, 91],
+                        backgroundColor: '#22C55E',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { 
+                                color: '#9CA3AF',
+                                callback: value => value + '%'
+                            },
+                            grid: { color: '#2D2D2D' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Peak Hours Chart
+            const peakCtx = document.getElementById('peakHoursChart').getContext('2d');
+            charts.peak = new Chart(peakCtx, {
+                type: 'line',
+                data: {
+                    labels: ['10AM', '12PM', '2PM', '4PM', '6PM', '8PM', '10PM'],
+                    datasets: [{
+                        label: 'Footfall',
+                        data: [15, 32, 28, 45, 89, 112, 78],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#9CA3AF' },
+                            grid: { color: '#2D2D2D' }
+                        },
+                        x: {
+                            ticks: { color: '#9CA3AF' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Populate top movies table
+            const topMovies = [
+                { rank: 1, movie: 'Quantum Nexus', tickets: 95, revenue: 320000, occupancy: 85, trend: '↑' },
+                { rank: 2, movie: 'Thunder Strike', tickets: 82, revenue: 285000, occupancy: 78, trend: '↑' },
+                { rank: 3, movie: 'Shadows of Lagos', tickets: 71, revenue: 245000, occupancy: 82, trend: '→' },
+                { rank: 4, movie: 'Galaxy Warriors', tickets: 58, revenue: 198000, occupancy: 91, trend: '↓' },
+                { rank: 5, movie: 'Midnight Laughter', tickets: 36, revenue: 156000, occupancy: 65, trend: '↑' },
+            ];
+
+            const tbody = document.getElementById('topMoviesTable');
+            tbody.innerHTML = topMovies.map(m => `
+                <tr class="border-b border-gray-800 hover:bg-gray-900">
+                    <td class="p-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full ${
+                            m.rank === 1 ? 'bg-gold text-black' : 
+                            m.rank === 2 ? 'bg-gray-400 text-black' : 
+                            m.rank === 3 ? 'bg-orange-600 text-white' : 'bg-gray-700'
+                        } font-bold">${m.rank}</span>
+                    </td>
+                    <td class="p-4 font-semibold">${m.movie}</td>
+                    <td class="p-4">${m.tickets}</td>
+                    <td class="p-4">₦${m.revenue.toLocaleString()}</td>
+                    <td class="p-4">${m.occupancy}%</td>
+                    <td class="p-4 text-2xl">${m.trend}</td>
+                </tr>
+            `).join('');
+        }
+
+        function exportPDF() {
+            alert('📄 Export to PDF\n\nIn production, this would generate a comprehensive PDF report including:\n\n• All charts and visualizations\n• KPI summaries\n• Top performers table\n• Executive insights\n• Period comparison\n\nWould use jsPDF + html2canvas libraries.');
+        }
+
+        document.getElementById('periodSelector').addEventListener('change', (e) => {
+            alert(`Period changed to: ${e.target.value}\n\nIn production, charts would update with data for the selected period.`);
+        });
+
+        document.addEventListener('DOMContentLoaded', loadCEODashboard);
+    </script>
+</body>
+</html>

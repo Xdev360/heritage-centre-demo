@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .seat {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px 8px 2px 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .seat:hover::before {
+            content: attr(data-seat);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            margin-bottom: 4px;
+            z-index: 10;
+        }
+        
+        .seat-available {
+            background: white;
+            color: #0F0F0F;
+            border: 2px solid #E5E7EB;
+        }
+        
+        .seat-available:hover {
+            background: #0A84FF;
+            color: white;
+            border-color: #0A84FF;
+            transform: scale(1.1);
+        }
+        
+        .seat-selected {
+            background: #0A84FF;
+            color: white;
+            border: 2px solid #0A84FF;
+            transform: scale(1.05);
+        }
+        
+        .seat-unavailable {
+            background: #374151;
+            color: #6B7280;
+            border: 2px solid #4B5563;
+            cursor: not-allowed;
+        }
+        
+        .seat-vip {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #0F0F0F;
+            border: 2px solid #FFD700;
+        }
+        
+        .seat-vip.seat-available:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .seat-vip.seat-selected {
+            background: linear-gradient(135deg, #FFA500, #FF8C00);
+            border-color: #FFA500;
+        }
+        
+        .seat-couple {
+            width: 85px;
+        }
+        
+        .screen {
+            background: linear-gradient(to bottom, #374151, #1F2937);
+            border-radius: 50% 50% 0 0;
+            padding: 12px;
+            text-align: center;
+            color: #9CA3AF;
+            font-weight: 600;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(10, 132, 255, 0.3);
+        }
+        
+        .row-label {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #0A84FF;
+        }
+        
+        .seat-map-container {
+            overflow-x: auto;
+            padding: 20px;
+            background: rgba(28, 28, 28, 0.5);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .zoom-controls {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 30;
+        }
+        
+        .zoom-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #1C1C1C;
+            border: 2px solid #0A84FF;
+            color: #0A84FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .zoom-btn:hover {
+            background: #0A84FF;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, #1C1C1C, rgba(28, 28, 28, 0.95));
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #0A84FF;
+            padding: 16px;
+            z-index: 40;
+        }
+        
+        @media (max-width: 640px) {
+            .seat {
+                width: 32px;
+                height: 32px;
+                font-size: 9px;
+            }
+            .seat-couple {
+                width: 68px;
+            }
+            .row-label {
+                width: 32px;
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark text-white pb-32">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="cinema-movie-detail.html" class="text-primary hover:underline flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back
+                </a>
+                <div class="text-center">
+                    <div id="navMovieTitle" class="text-lg font-bold"></div>
+                    <div id="navShowtime" class="text-xs text-gray-400"></div>
+                </div>
+                <div class="w-20"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Movie Info -->
+        <div class="bg-dark-card rounded-xl p-6 mb-8 border border-gray-800">
+            <div class="flex items-center gap-4">
+                <img id="moviePoster" src="" alt="" class="w-20 h-28 object-cover rounded-lg">
+                <div>
+                    <h1 id="movieTitle" class="text-2xl font-bold mb-2"></h1>
+                    <div class="text-sm text-gray-400 space-y-1">
+                        <div id="showDateTime"></div>
+                        <div id="hallInfo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="bg-dark-card rounded-xl p-6 mb-8 border border-gray-800">
+            <h2 class="text-lg font-semibold mb-4">Seat Legend</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="flex items-center gap-2">
+                    <div class="seat seat-available"></div>
+                    <span class="text-sm">Available</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="seat seat-selected"></div>
+                    <span class="text-sm">Selected</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="seat seat-unavailable"></div>
+                    <span class="text-sm">Unavailable</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="seat seat-vip seat-available"></div>
+                    <span class="text-sm">VIP</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seat Map -->
+        <div class="seat-map-container" id="seatMapContainer">
+            <div class="screen">
+                🎬 SCREEN 🎬
+            </div>
+            <div id="seatMap" class="inline-block" style="transform-origin: center;">
+                <!-- Seats will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Zoom Controls -->
+    <div class="zoom-controls hidden md:flex">
+        <button class="zoom-btn" onclick="zoomIn()">+</button>
+        <button class="zoom-btn" onclick="zoomOut()">−</button>
+        <button class="zoom-btn" onclick="resetZoom()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="sticky-footer">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-center sm:text-left">
+                    <div id="selectedSeatsDisplay" class="text-sm text-gray-400 mb-1">No seats selected</div>
+                    <div id="totalPrice" class="text-2xl font-bold text-primary">₦0</div>
+                </div>
+                <button id="continueBtn" onclick="proceedToSnacks()" disabled class="w-full sm:w-auto bg-primary hover:bg-blue-600 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-bold py-4 px-12 rounded-lg transition transform hover:scale-105 disabled:transform-none">
+                    Continue to Snacks
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let showtime = null;
+        let selectedSeats = [];
+        let currentZoom = 1;
+        const MAX_SEATS = 6;
+        
+        // Seat map configuration
+        const seatLayout = {
+            standard: [
+                { row: 'A', seats: 12, vip: false, couple: [5, 6] },
+                { row: 'B', seats: 12, vip: false, couple: [5, 6] },
+                { row: 'C', seats: 14, vip: false, couple: [] },
+                { row: 'D', seats: 14, vip: false, couple: [] },
+                { row: 'E', seats: 16, vip: false, couple: [] },
+                { row: 'F', seats: 16, vip: false, couple: [] },
+                { row: 'G', seats: 16, vip: true, couple: [7, 8] },
+                { row: 'H', seats: 16, vip: true, couple: [7, 8] },
+                { row: 'I', seats: 14, vip: true, couple: [] },
+                { row: 'J', seats: 12, vip: true, couple: [] },
+            ],
+            vip: [
+                { row: 'A', seats: 8, vip: true, couple: [3, 4] },
+                { row: 'B', seats: 10, vip: true, couple: [4, 5] },
+                { row: 'C', seats: 10, vip: true, couple: [4, 5] },
+                { row: 'D', seats: 12, vip: true, couple: [5, 6] },
+                { row: 'E', seats: 12, vip: true, couple: [5, 6] },
+            ]
+        };
+        
+        function generateRandomUnavailable(row, totalSeats) {
+            const unavailable = [];
+            const count = Math.floor(Math.random() * 3);
+            for (let i = 0; i < count; i++) {
+                unavailable.push(Math.floor(Math.random() * totalSeats) + 1);
+            }
+            return unavailable;
+        }
+        
+        function renderSeatMap() {
+            showtime = JSON.parse(localStorage.getItem('selectedShowtime'));
+            if (!showtime) {
+                window.location.href = 'cinema-booking.html';
+                return;
+            }
+            
+            // Update header info
+            document.getElementById('navMovieTitle').textContent = showtime.movieTitle;
+            document.getElementById('navShowtime').textContent = `${showtime.date} • ${showtime.time}`;
+            document.getElementById('moviePoster').src = showtime.moviePoster;
+            document.getElementById('movieTitle').textContent = showtime.movieTitle;
+            
+            const dateObj = new Date(showtime.date);
+            document.getElementById('showDateTime').textContent = `${dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} • ${showtime.time}`;
+            document.getElementById('hallInfo').textContent = `${showtime.hall} • ${showtime.format.toUpperCase()}`;
+            
+            // Generate seat map
+            const layout = showtime.format === 'vip' ? seatLayout.vip : seatLayout.standard;
+            const seatMap = document.getElementById('seatMap');
+            
+            seatMap.innerHTML = layout.map(rowConfig => {
+                const unavailableSeats = generateRandomUnavailable(rowConfig.row, rowConfig.seats);
+                const seats = [];
+                
+                for (let i = 1; i <= rowConfig.seats; i++) {
+                    const isCouple = rowConfig.couple.includes(i);
+                    if (isCouple && rowConfig.couple.indexOf(i) === rowConfig.couple.length - 1) continue; // Skip second seat of couple
+                    
+                    const seatNum = isCouple ? `${i}-${i+1}` : i;
+                    const isUnavailable = unavailableSeats.includes(i);
+                    const seatId = `${rowConfig.row}${seatNum}`;
+                    
+                    let seatClass = 'seat seat-available';
+                    if (isUnavailable) seatClass = 'seat seat-unavailable';
+                    if (rowConfig.vip && !isUnavailable) seatClass += ' seat-vip';
+                    if (isCouple) seatClass += ' seat-couple';
+                    
+                    seats.push(`
+                        <div class="${seatClass}" 
+                             data-seat="${seatId}" 
+                             data-row="${rowConfig.row}" 
+                             data-number="${seatNum}"
+                             data-vip="${rowConfig.vip}"
+                             data-couple="${isCouple}"
+                             onclick="toggleSeat(this)">
+                            ${seatNum}
+                        </div>
+                    `);
+                }
+                
+                return `
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <div class="row-label">${rowConfig.row}</div>
+                        <div class="flex gap-1">${seats.join('')}</div>
+                        <div class="row-label">${rowConfig.row}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleSeat(element) {
+            if (element.classList.contains('seat-unavailable')) return;
+            
+            const seatId = element.dataset.seat;
+            const isVip = element.dataset.vip === 'true';
+            const isCouple = element.dataset.couple === 'true';
+            const seatCount = isCouple ? 2 : 1;
+            
+            if (element.classList.contains('seat-selected')) {
+                // Deselect
+                element.classList.remove('seat-selected');
+                element.classList.add('seat-available');
+                selectedSeats = selectedSeats.filter(s => s.id !== seatId);
+            } else {
+                // Check max seats
+                const currentTotal = selectedSeats.reduce((sum, s) => sum + (s.couple ? 2 : 1), 0);
+                if (currentTotal + seatCount > MAX_SEATS) {
+                    alert(`Maximum ${MAX_SEATS} seats allowed per booking`);
+                    return;
+                }
+                
+                // Select
+                element.classList.remove('seat-available');
+                element.classList.add('seat-selected');
+                
+                const price = showtime.price + (isVip ? 1500 : 0);
+                selectedSeats.push({
+                    id: seatId,
+                    vip: isVip,
+                    couple: isCouple,
+                    price: price * seatCount
+                });
+                
+                // Auto scroll to selected seat
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            updateFooter();
+        }
+        
+        function updateFooter() {
+            const continueBtn = document.getElementById('continueBtn');
+            const selectedDisplay = document.getElementById('selectedSeatsDisplay');
+            const totalPriceDisplay = document.getElementById('totalPrice');
+            
+            if (selectedSeats.length === 0) {
+                continueBtn.disabled = true;
+                selectedDisplay.textContent = 'No seats selected';
+                totalPriceDisplay.textContent = '₦0';
+            } else {
+                continueBtn.disabled = false;
+                const seatLabels = selectedSeats.map(s => s.id).join(', ');
+                const totalSeats = selectedSeats.reduce((sum, s) => sum + (s.couple ? 2 : 1), 0);
+                selectedDisplay.textContent = `${totalSeats} seat${totalSeats > 1 ? 's' : ''}: ${seatLabels}`;
+                
+                const total = selectedSeats.reduce((sum, s) => sum + s.price, 0);
+                totalPriceDisplay.textContent = `₦${total.toLocaleString()}`;
+            }
+        }
+        
+        function zoomIn() {
+            currentZoom = Math.min(currentZoom + 0.2, 2);
+            document.getElementById('seatMap').style.transform = `scale(${currentZoom})`;
+        }
+        
+        function zoomOut() {
+            currentZoom = Math.max(currentZoom - 0.2, 0.6);
+            document.getElementById('seatMap').style.transform = `scale(${currentZoom})`;
+        }
+        
+        function resetZoom() {
+            currentZoom = 1;
+            document.getElementById('seatMap').style.transform = `scale(1)`;
+        }
+        
+        function proceedToSnacks() {
+            const booking = {
+                ...showtime,
+                seats: selectedSeats,
+                totalTicketPrice: selectedSeats.reduce((sum, s) => sum + s.price, 0)
+            };
+            
+            localStorage.setItem('cinemaBooking', JSON.stringify(booking));
+            window.location.href = 'cinema-snacks.html';
+        }
+        
+        document.addEventListener('DOMContentLoaded', renderSeatMap);
+    </script>
+</body>
+</html>

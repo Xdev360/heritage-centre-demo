@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Summary - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .summary-section {
+            background: #1C1C1C;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #2D2D2D;
+            margin-bottom: 1.5rem;
+        }
+        
+        .edit-btn {
+            color: #0A84FF;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .line-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #2D2D2D;
+        }
+        
+        .line-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="cinema-snacks.html" class="text-primary hover:underline flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back
+                </a>
+                <h1 class="text-xl font-bold">Booking Summary</h1>
+                <div class="w-20"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Summary Content -->
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Movie Details -->
+        <div class="summary-section">
+            <div class="flex items-start gap-4">
+                <img id="moviePoster" src="" alt="" class="w-24 h-36 object-cover rounded-lg">
+                <div class="flex-1">
+                    <h2 id="movieTitle" class="text-2xl font-bold mb-2"></h2>
+                    <div class="text-sm text-gray-400 space-y-1 mb-3">
+                        <div id="showDateTime"></div>
+                        <div id="hallInfo"></div>
+                        <div id="durationRating"></div>
+                    </div>
+                    <div class="text-sm text-gray-300">
+                        <strong>Show starts:</strong> <span id="startTime"></span><br>
+                        <strong>Show ends:</strong> <span id="endTime"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seats -->
+        <div class="summary-section">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Selected Seats</h3>
+                <a href="cinema-seat-selection.html" class="edit-btn">Change Seats</a>
+            </div>
+            <div id="seatsList"></div>
+            <div class="line-item font-semibold">
+                <span>Tickets Total</span>
+                <span id="ticketsTotal" class="text-primary"></span>
+            </div>
+        </div>
+
+        <!-- Snacks -->
+        <div class="summary-section" id="snacksSection">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Snacks & Drinks</h3>
+                <a href="cinema-snacks.html" class="edit-btn">Edit Items</a>
+            </div>
+            <div id="snacksList"></div>
+            <div class="line-item font-semibold">
+                <span>Snacks Total</span>
+                <span id="snacksTotal" class="text-primary"></span>
+            </div>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="summary-section">
+            <h3 class="text-xl font-semibold mb-4">Price Breakdown</h3>
+            <div class="line-item">
+                <span>Tickets</span>
+                <span id="ticketsSubtotal"></span>
+            </div>
+            <div class="line-item">
+                <span>Snacks & Drinks</span>
+                <span id="snacksSubtotal"></span>
+            </div>
+            <div class="line-item">
+                <span>Service Fee</span>
+                <span id="serviceFee"></span>
+            </div>
+            <div class="line-item">
+                <span class="text-sm text-gray-400">VAT (7.5%)</span>
+                <span id="vat" class="text-gray-400"></span>
+            </div>
+            <div class="line-item border-t-2 border-primary pt-4 mt-4">
+                <span class="text-2xl font-bold">Total Amount</span>
+                <span id="grandTotal" class="text-2xl font-bold text-primary"></span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+            <button onclick="proceedToCheckout()" class="flex-1 bg-primary hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-lg transition transform hover:scale-105">
+                Proceed to Payment
+            </button>
+        </div>
+
+        <!-- Terms -->
+        <div class="mt-6 text-xs text-gray-500 text-center">
+            <p>By continuing, you agree to our Terms of Service and Privacy Policy.</p>
+            <p class="mt-2">Refunds available up to 2 hours before showtime. See our Refund Policy for details.</p>
+        </div>
+    </div>
+
+    <script>
+        let booking = null;
+
+        function loadSummary() {
+            booking = JSON.parse(localStorage.getItem('cinemaBooking'));
+            if (!booking) {
+                window.location.href = 'cinema-booking.html';
+                return;
+            }
+
+            // Movie details
+            document.getElementById('moviePoster').src = booking.moviePoster;
+            document.getElementById('movieTitle').textContent = booking.movieTitle;
+            
+            const dateObj = new Date(booking.date);
+            document.getElementById('showDateTime').textContent = dateObj.toLocaleDateString('en-US', { 
+                weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' 
+            }) + ' at ' + booking.time;
+            
+            document.getElementById('hallInfo').textContent = `${booking.hall} • ${booking.format.toUpperCase()}`;
+            document.getElementById('durationRating').textContent = `${booking.duration} • ${booking.rating}`;
+            
+            // Calculate show times
+            const [hours, minutes] = booking.time.split(':');
+            const startTime = new Date(booking.date);
+            startTime.setHours(parseInt(hours), parseInt(minutes), 0);
+            
+            const endTime = new Date(startTime);
+            const durationMins = parseInt(booking.duration.split('h')[0]) * 60 + parseInt(booking.duration.split('h')[1] || '0');
+            endTime.setMinutes(endTime.getMinutes() + durationMins);
+            
+            document.getElementById('startTime').textContent = startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('endTime').textContent = endTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            // Seats
+            const seatsList = document.getElementById('seatsList');
+            seatsList.innerHTML = booking.seats.map(seat => `
+                <div class="line-item">
+                    <span>Seat ${seat.id} ${seat.vip ? '⭐ VIP' : ''} ${seat.couple ? '(Couple)' : ''}</span>
+                    <span>₦${seat.price.toLocaleString()}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('ticketsTotal').textContent = `₦${booking.totalTicketPrice.toLocaleString()}`;
+
+            // Snacks
+            const snacksSection = document.getElementById('snacksSection');
+            if (booking.snacks && booking.snacks.length > 0) {
+                const snacksList = document.getElementById('snacksList');
+                snacksList.innerHTML = booking.snacks.map(snack => `
+                    <div class="line-item">
+                        <span>${snack.name} x ${snack.quantity}</span>
+                        <span>₦${snack.total.toLocaleString()}</span>
+                    </div>
+                `).join('');
+                
+                document.getElementById('snacksTotal').textContent = `₦${booking.totalSnacksPrice.toLocaleString()}`;
+            } else {
+                snacksSection.style.display = 'none';
+            }
+
+            // Price breakdown
+            const subtotal = booking.totalTicketPrice + (booking.totalSnacksPrice || 0);
+            const serviceFee = 150;
+            const vat = Math.round(subtotal * 0.075);
+            const total = subtotal + serviceFee + vat;
+
+            document.getElementById('ticketsSubtotal').textContent = `₦${booking.totalTicketPrice.toLocaleString()}`;
+            document.getElementById('snacksSubtotal').textContent = `₦${(booking.totalSnacksPrice || 0).toLocaleString()}`;
+            document.getElementById('serviceFee').textContent = `₦${serviceFee}`;
+            document.getElementById('vat').textContent = `₦${vat}`;
+            document.getElementById('grandTotal').textContent = `₦${total.toLocaleString()}`;
+
+            // Store pricing
+            booking.serviceFee = serviceFee;
+            booking.vat = vat;
+            booking.grandTotal = total;
+            localStorage.setItem('cinemaBooking', JSON.stringify(booking));
+        }
+
+        function proceedToCheckout() {
+            window.location.href = 'cinema-checkout.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSummary);
+    </script>
+</body>
+</html>

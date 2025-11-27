@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Snacks - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .snack-card {
+            background: #1C1C1C;
+            border-radius: 1rem;
+            border: 2px solid #2D2D2D;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .snack-card:hover {
+            border-color: #0A84FF;
+            transform: translateY(-4px);
+        }
+        
+        .badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+        
+        .badge-popular { background: linear-gradient(135deg, #FF6B6B, #EE5A6F); color: white; }
+        .badge-new { background: linear-gradient(135deg, #4ECDC4, #44A08D); color: white; }
+        .badge-deal { background: linear-gradient(135deg, #FFD700, #FFA500); color: #0F0F0F; }
+        
+        .counter-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #0A84FF;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .counter-btn:hover {
+            background: #0066CC;
+            transform: scale(1.1);
+        }
+        
+        .counter-btn:disabled {
+            background: #374151;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, #1C1C1C, rgba(28, 28, 28, 0.95));
+            backdrop-filter: blur(10px);
+            border-top: 2px solid #0A84FF;
+            padding: 16px;
+            z-index: 40;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white pb-32">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="cinema-seat-selection.html" class="text-primary hover:underline flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Seats
+                </a>
+                <h1 class="text-xl font-bold">Add Snacks</h1>
+                <button onclick="skipSnacks()" class="text-gray-400 hover:text-white transition">Skip</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="bg-gradient-to-b from-dark-card to-dark py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-2">🍿 Enhance Your Experience</h2>
+            <p class="text-gray-400">Pre-order your favorite snacks and skip the queue!</p>
+        </div>
+    </div>
+
+    <!-- Snacks Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Combo Deals -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span>🎉</span> Combo Deals
+                <span class="text-sm font-normal text-gray-400 ml-2">(Best Value)</span>
+            </h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="combosGrid"></div>
+        </section>
+
+        <!-- Popcorn -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span>🍿</span> Popcorn
+            </h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="popcornGrid"></div>
+        </section>
+
+        <!-- Drinks -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span>🥤</span> Drinks
+            </h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="drinksGrid"></div>
+        </section>
+
+        <!-- Hot Food -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span>🌭</span> Hot Food
+            </h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="hotfoodGrid"></div>
+        </section>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="sticky-footer">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-center sm:text-left">
+                    <div id="itemCount" class="text-sm text-gray-400 mb-1">No items added</div>
+                    <div id="snacksTotal" class="text-2xl font-bold text-primary">₦0</div>
+                </div>
+                <button onclick="proceedToSummary()" class="w-full sm:w-auto bg-primary hover:bg-blue-600 text-white font-bold py-4 px-12 rounded-lg transition transform hover:scale-105">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const snacksData = {
+            combos: [
+                { id: 'c1', name: 'Movie Night Combo', items: 'Large Popcorn + 2 Drinks + Nachos', price: 4500, badge: 'deal', image: 'https://images.unsplash.com/photo-1585647347384-2593bc35786b?w=400&h=300&fit=crop' },
+                { id: 'c2', name: 'Couples Special', items: 'Large Popcorn + 2 Drinks + Chocolate', price: 3800, badge: 'popular', image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=400&h=300&fit=crop' },
+                { id: 'c3', name: 'Family Pack', items: '2 Large Popcorn + 4 Drinks + Hot Dogs', price: 8500, badge: 'deal', image: 'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=400&h=300&fit=crop' },
+            ],
+            popcorn: [
+                { id: 'p1', name: 'Small Popcorn', size: 'Small', price: 800, badge: null, image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=300&h=300&fit=crop' },
+                { id: 'p2', name: 'Medium Popcorn', size: 'Medium', price: 1200, badge: 'popular', image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=300&h=300&fit=crop' },
+                { id: 'p3', name: 'Large Popcorn', size: 'Large', price: 1800, badge: null, image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=300&h=300&fit=crop' },
+                { id: 'p4', name: 'Caramel Popcorn', size: 'Medium', price: 1500, badge: 'new', image: 'https://images.unsplash.com/photo-1585647347384-2593bc35786b?w=300&h=300&fit=crop' },
+            ],
+            drinks: [
+                { id: 'd1', name: 'Coca-Cola', size: 'Medium', price: 600, badge: null, image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&h=300&fit=crop' },
+                { id: 'd2', name: 'Sprite', size: 'Medium', price: 600, badge: null, image: 'https://images.unsplash.com/photo-1625740127312-40c384c7c0d0?w=300&h=300&fit=crop' },
+                { id: 'd3', name: 'Fanta', size: 'Medium', price: 600, badge: null, image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?w=300&h=300&fit=crop' },
+                { id: 'd4', name: 'Bottled Water', size: '50cl', price: 300, badge: null, image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=300&h=300&fit=crop' },
+                { id: 'd5', name: 'Iced Tea', size: 'Medium', price: 800, badge: 'new', image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=300&h=300&fit=crop' },
+            ],
+            hotfood: [
+                { id: 'h1', name: 'Hot Dog', size: 'Regular', price: 1500, badge: 'popular', image: 'https://images.unsplash.com/photo-1612392062798-2ec16c61e47c?w=300&h=300&fit=crop' },
+                { id: 'h2', name: 'Nachos & Cheese', size: 'Regular', price: 1800, badge: null, image: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=300&h=300&fit=crop' },
+                { id: 'h3', name: 'Chicken Tenders', size: '4 pieces', price: 2200, badge: 'new', image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=300&h=300&fit=crop' },
+                { id: 'h4', name: 'Pizza Slice', size: '1 slice', price: 1200, badge: null, image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=300&fit=crop' },
+            ]
+        };
+
+        let cart = {};
+
+        function renderSnacks() {
+            // Combos
+            document.getElementById('combosGrid').innerHTML = snacksData.combos.map(item => createSnackCard(item, true)).join('');
+            
+            // Popcorn
+            document.getElementById('popcornGrid').innerHTML = snacksData.popcorn.map(item => createSnackCard(item)).join('');
+            
+            // Drinks
+            document.getElementById('drinksGrid').innerHTML = snacksData.drinks.map(item => createSnackCard(item)).join('');
+            
+            // Hot Food
+            document.getElementById('hotfoodGrid').innerHTML = snacksData.hotfood.map(item => createSnackCard(item)).join('');
+        }
+
+        function createSnackCard(item, isCombo = false) {
+            const badgeHtml = item.badge ? `<div class="badge badge-${item.badge} absolute top-3 right-3">${item.badge}</div>` : '';
+            const subtitle = isCombo ? item.items : item.size;
+            
+            return `
+                <div class="snack-card">
+                    <div class="relative">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover">
+                        ${badgeHtml}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">${item.name}</h3>
+                        <p class="text-sm text-gray-400 mb-3">${subtitle}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">₦${item.price.toLocaleString()}</span>
+                            <div class="flex items-center gap-3" id="counter-${item.id}">
+                                <button class="counter-btn" onclick="updateCart('${item.id}', -1)" disabled>−</button>
+                                <span class="font-bold text-lg w-6 text-center">0</span>
+                                <button class="counter-btn" onclick="updateCart('${item.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateCart(itemId, delta) {
+            if (!cart[itemId]) cart[itemId] = 0;
+            cart[itemId] = Math.max(0, cart[itemId] + delta);
+            
+            // Update UI
+            const counter = document.getElementById(`counter-${itemId}`);
+            const countDisplay = counter.querySelector('span');
+            const minusBtn = counter.querySelectorAll('button')[0];
+            
+            countDisplay.textContent = cart[itemId];
+            minusBtn.disabled = cart[itemId] === 0;
+            
+            updateFooter();
+        }
+
+        function updateFooter() {
+            const totalItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+            let totalPrice = 0;
+            
+            // Calculate total
+            Object.entries(cart).forEach(([id, qty]) => {
+                if (qty > 0) {
+                    const item = Object.values(snacksData).flat().find(s => s.id === id);
+                    if (item) totalPrice += item.price * qty;
+                }
+            });
+            
+            document.getElementById('itemCount').textContent = totalItems === 0 ? 'No items added' : `${totalItems} item${totalItems > 1 ? 's' : ''} added`;
+            document.getElementById('snacksTotal').textContent = `₦${totalPrice.toLocaleString()}`;
+        }
+
+        function skipSnacks() {
+            cart = {};
+            proceedToSummary();
+        }
+
+        function proceedToSummary() {
+            const booking = JSON.parse(localStorage.getItem('cinemaBooking'));
+            
+            // Add snacks to booking
+            const snacks = [];
+            Object.entries(cart).forEach(([id, qty]) => {
+                if (qty > 0) {
+                    const item = Object.values(snacksData).flat().find(s => s.id === id);
+                    if (item) {
+                        snacks.push({
+                            ...item,
+                            quantity: qty,
+                            total: item.price * qty
+                        });
+                    }
+                }
+            });
+            
+            booking.snacks = snacks;
+            booking.totalSnacksPrice = snacks.reduce((sum, s) => sum + s.total, 0);
+            
+            localStorage.setItem('cinemaBooking', JSON.stringify(booking));
+            window.location.href = 'cinema-summary.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', renderSnacks);
+    </script>
+</body>
+</html>

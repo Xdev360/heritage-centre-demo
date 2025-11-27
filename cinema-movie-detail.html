@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        .badge {
+            padding: 0.375rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-pg { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .badge-13 { background: rgba(251, 191, 36, 0.2); color: #FBB928; }
+        .badge-18 { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+        .showtime-card {
+            background: #1C1C1C;
+            border: 2px solid #2D2D2D;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .showtime-card:hover {
+            border-color: #0A84FF;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+        }
+        .showtime-card.best-seller {
+            border-color: #FFD700;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), #1C1C1C);
+        }
+        .availability-low { color: #EF4444; }
+        .availability-medium { color: #FBB928; }
+        .availability-high { color: #22C55E; }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="cinema-booking.html" class="text-primary hover:underline flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Movies
+                </a>
+                <a href="index.html" class="text-2xl font-bold text-primary">Heritage Cinema</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Movie Details -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <!-- Poster -->
+            <div class="md:col-span-1">
+                <img id="moviePoster" src="" alt="" class="w-full rounded-2xl shadow-2xl">
+            </div>
+            
+            <!-- Details -->
+            <div class="md:col-span-2">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h1 id="movieTitle" class="text-4xl md:text-5xl font-bold mb-3"></h1>
+                        <div class="flex flex-wrap items-center gap-3 mb-4">
+                            <span id="movieGenre" class="text-gray-400 capitalize"></span>
+                            <span class="text-gray-600">•</span>
+                            <span id="movieDuration" class="text-gray-400"></span>
+                            <span class="text-gray-600">•</span>
+                            <span id="movieRating" class="badge"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-3">Synopsis</h2>
+                    <p id="movieSynopsis" class="text-gray-300 leading-relaxed"></p>
+                </div>
+                
+                <div class="mb-6">
+                    <button onclick="playTrailer()" class="bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg transition inline-flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                        </svg>
+                        Watch Trailer
+                    </button>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Director</h3>
+                        <p id="movieDirector" class="text-white"></p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 mb-2">Cast</h3>
+                        <p id="movieCast" class="text-white"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Showtimes -->
+        <div class="border-t border-gray-800 pt-8">
+            <h2 class="text-3xl font-bold mb-6">Select Showtime</h2>
+            <div id="showtimesContainer">
+                <!-- Showtimes will be grouped by date -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Trailer Modal -->
+    <div id="trailerModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl">
+            <button onclick="closeTrailer()" class="absolute -top-12 right-0 text-white hover:text-primary text-2xl font-bold">
+                ✕ Close
+            </button>
+            <div class="bg-dark-card rounded-xl p-8 text-center">
+                <svg class="w-24 h-24 mx-auto mb-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                </svg>
+                <h3 class="text-2xl font-bold mb-2">Trailer Preview</h3>
+                <p class="text-gray-400">This is a demo. In production, the trailer video would play here.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/cinema-booking.js"></script>
+    <script>
+        let currentMovie = null;
+
+        function loadMovieDetails() {
+            const movieId = parseInt(localStorage.getItem('selectedMovie'));
+            const selectedDate = localStorage.getItem('selectedDate');
+            
+            currentMovie = window.moviesData.find(m => m.id === movieId);
+            if (!currentMovie) {
+                window.location.href = 'cinema-booking.html';
+                return;
+            }
+            
+            // Populate movie details
+            document.getElementById('moviePoster').src = currentMovie.poster;
+            document.getElementById('moviePoster').alt = currentMovie.title;
+            document.getElementById('movieTitle').textContent = currentMovie.title;
+            document.getElementById('movieGenre').textContent = currentMovie.genre;
+            document.getElementById('movieDuration').textContent = currentMovie.duration;
+            document.getElementById('movieSynopsis').textContent = currentMovie.synopsis;
+            document.getElementById('movieDirector').textContent = currentMovie.director;
+            document.getElementById('movieCast').textContent = currentMovie.cast.join(', ');
+            
+            const ratingBadge = document.getElementById('movieRating');
+            ratingBadge.textContent = currentMovie.rating;
+            const ratingClass = currentMovie.rating === 'PG' ? 'badge-pg' : currentMovie.rating === '13+' ? 'badge-13' : 'badge-18';
+            ratingBadge.className = `badge ${ratingClass}`;
+            
+            // Group showtimes by date
+            const showtimesByDate = {};
+            currentMovie.showtimes.forEach(st => {
+                if (!showtimesByDate[st.date]) {
+                    showtimesByDate[st.date] = [];
+                }
+                showtimesByDate[st.date].push(st);
+            });
+            
+            // Render showtimes
+            const container = document.getElementById('showtimesContainer');
+            container.innerHTML = Object.entries(showtimesByDate).map(([date, times]) => {
+                const dateObj = new Date(date);
+                const today = new Date().toISOString().split('T')[0];
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowStr = tomorrow.toISOString().split('T')[0];
+                
+                let dateLabel = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                if (date === today) dateLabel = 'Today - ' + dateLabel;
+                if (date === tomorrowStr) dateLabel = 'Tomorrow - ' + dateLabel;
+                
+                return `
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 text-primary">${dateLabel}</h3>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${times.map((st, idx) => {
+                                const isBestSeller = st.availability === 'low' || idx === 0;
+                                const availabilityText = st.availability === 'low' ? 'Limited Seats' : 
+                                                        st.availability === 'medium' ? 'Good Availability' : 
+                                                        'Many Seats Available';
+                                const availabilityClass = `availability-${st.availability}`;
+                                
+                                return `
+                                    <div class="showtime-card ${isBestSeller ? 'best-seller' : ''}" onclick="selectShowtime('${date}', '${st.time}', '${st.hall}', '${st.format}', ${st.price})">
+                                        ${isBestSeller ? '<div class="text-xs font-bold text-gold mb-2">⭐ POPULAR</div>' : ''}
+                                        <div class="text-3xl font-bold mb-2">${st.time}</div>
+                                        <div class="text-sm text-gray-400 mb-1">${st.hall}</div>
+                                        <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-700">
+                                            <span class="text-xs font-semibold ${availabilityClass}">${availabilityText}</span>
+                                            <span class="text-lg font-bold">₦${st.price.toLocaleString()}</span>
+                                        </div>
+                                        <div class="mt-2 text-xs text-gray-500 uppercase">${st.format === 'vip' ? '🌟 VIP' : 'Standard'}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectShowtime(date, time, hall, format, price) {
+            const showtime = {
+                movieId: currentMovie.id,
+                movieTitle: currentMovie.title,
+                moviePoster: currentMovie.poster,
+                date: date,
+                time: time,
+                hall: hall,
+                format: format,
+                price: price,
+                duration: currentMovie.duration,
+                rating: currentMovie.rating
+            };
+            
+            localStorage.setItem('selectedShowtime', JSON.stringify(showtime));
+            window.location.href = 'cinema-seat-selection.html';
+        }
+
+        function playTrailer() {
+            document.getElementById('trailerModal').classList.remove('hidden');
+        }
+
+        function closeTrailer() {
+            document.getElementById('trailerModal').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMovieDetails);
+    </script>
+</body>
+</html>

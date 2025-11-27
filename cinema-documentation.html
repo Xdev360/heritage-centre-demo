@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema System Documentation - Heritage Centre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        .feature-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold mb-4">🎬 Heritage Cinema</h1>
+            <p class="text-2xl mb-2">Complete Booking System Documentation</p>
+            <p class="text-lg opacity-90">World-class UI/UX inspired by AMC, Vue, BookMyShow & FilmHouse</p>
+            <div class="mt-8 flex justify-center gap-4">
+                <a href="cinema-booking.html" class="bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition">
+                    🎟️ Try Live Demo
+                </a>
+                <a href="cinema-admin.html" class="bg-gray-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-700 transition">
+                    🔧 Admin Panel
+                </a>
+                <a href="cinema-ceo.html" class="bg-yellow-500 text-gray-900 font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition">
+                    📊 CEO Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+                <div class="text-4xl font-bold text-blue-600 mb-2">10</div>
+                <div class="text-gray-600">Total Pages</div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+                <div class="text-4xl font-bold text-green-600 mb-2">8</div>
+                <div class="text-gray-600">Demo Movies</div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+                <div class="text-4xl font-bold text-purple-600 mb-2">4</div>
+                <div class="text-gray-600">Cinema Halls</div>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-lg text-center">
+                <div class="text-4xl font-bold text-orange-600 mb-2">100%</div>
+                <div class="text-gray-600">Mobile Ready</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-4xl font-bold mb-12 text-center">✨ Complete Feature Set</h2>
+
+        <!-- Customer Journey -->
+        <div class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-gray-800">👤 Customer Journey (8 Pages)</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">1️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Cinema Landing</h4>
+                    <p class="text-gray-600 text-sm mb-3">Browse now showing movies with date selector, filters (Genre, Format, Time), and movie cards</p>
+                    <a href="cinema-booking.html" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-blue-100 text-blue-800">Sticky Nav</span>
+                        <span class="badge bg-green-100 text-green-800">Filters</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">2️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Movie Detail</h4>
+                    <p class="text-gray-600 text-sm mb-3">Large poster, synopsis, cast, trailer button, grouped showtimes with availability & pricing</p>
+                    <a href="#" onclick="alert('Select a movie from the landing page first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-purple-100 text-purple-800">Showtimes</span>
+                        <span class="badge bg-yellow-100 text-yellow-800">Popular Badge</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">3️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Seat Selection ⭐</h4>
+                    <p class="text-gray-600 text-sm mb-3">World-class zoomable seat map with color codes, VIP sections, couple seats, max 6 limit</p>
+                    <a href="#" onclick="alert('Select a showtime from movie detail first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-indigo-100 text-indigo-800">Zoom</span>
+                        <span class="badge bg-yellow-100 text-yellow-800">VIP</span>
+                        <span class="badge bg-pink-100 text-pink-800">Couple</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">4️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Snacks & Add-Ons</h4>
+                    <p class="text-gray-600 text-sm mb-3">Combo deals, popcorn, drinks, hot food with quantity counters and badges</p>
+                    <a href="#" onclick="alert('Complete seat selection first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-orange-100 text-orange-800">Combos</span>
+                        <span class="badge bg-green-100 text-green-800">Skip Option</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">5️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Booking Summary</h4>
+                    <p class="text-gray-600 text-sm mb-3">Clean receipt-style summary with all details, pricing breakdown, edit buttons</p>
+                    <a href="#" onclick="alert('Complete booking flow first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-gray-100 text-gray-800">Receipt Style</span>
+                        <span class="badge bg-blue-100 text-blue-800">VAT Calc</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">6️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Login/Checkout</h4>
+                    <p class="text-gray-600 text-sm mb-3">Guest checkout, OTP login, or create account - minimal fields design</p>
+                    <a href="#" onclick="alert('Complete summary review first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-purple-100 text-purple-800">OTP</span>
+                        <span class="badge bg-green-100 text-green-800">Guest</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">7️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Payment</h4>
+                    <p class="text-gray-600 text-sm mb-3">Card, Bank Transfer, USSD, Digital Wallet - secure & Nigerian-friendly</p>
+                    <a href="#" onclick="alert('Complete authentication first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-green-100 text-green-800">Paystack</span>
+                        <span class="badge bg-blue-100 text-blue-800">USSD</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">8️⃣</div>
+                    <h4 class="text-xl font-bold mb-2">Confirmation ✅</h4>
+                    <p class="text-gray-600 text-sm mb-3">Success animation, QR code, booking ref, download ticket, add to calendar</p>
+                    <a href="#" onclick="alert('Complete payment first'); return false;" class="text-blue-600 hover:underline text-sm font-semibold">View Page →</a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="badge bg-green-100 text-green-800">QR Code</span>
+                        <span class="badge bg-blue-100 text-blue-800">PDF</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin & Management -->
+        <div class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-gray-800">🔧 Admin & Management (2 Dashboards)</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">🎬</div>
+                    <h4 class="text-xl font-bold mb-2">Admin Dashboard</h4>
+                    <p class="text-gray-600 mb-4">Complete cinema staff management with:</p>
+                    <ul class="text-sm text-gray-700 space-y-2 mb-4">
+                        <li>✓ Stats: Today's bookings, revenue, active shows</li>
+                        <li>✓ Quick actions: Add movie, Add showtime</li>
+                        <li>✓ QR Scanner: Validate tickets at entrance</li>
+                        <li>✓ Bookings table with filters (Date, Movie, Hall)</li>
+                        <li>✓ CSV export for reports</li>
+                    </ul>
+                    <a href="cinema-admin.html" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition inline-block">
+                        Open Admin Panel
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="text-4xl mb-3">👑</div>
+                    <h4 class="text-xl font-bold mb-2">CEO Dashboard</h4>
+                    <p class="text-gray-600 mb-4">Executive analytics with Chart.js:</p>
+                    <ul class="text-sm text-gray-700 space-y-2 mb-4">
+                        <li>✓ KPIs: Revenue, Tickets, Avg Price, Snacks</li>
+                        <li>✓ Revenue Trend (7-day line chart)</li>
+                        <li>✓ Daily Bookings (bar chart)</li>
+                        <li>✓ Movie Performance Ranking</li>
+                        <li>✓ Hall Occupancy & Peak Hours charts</li>
+                        <li>✓ Top Movies table with trends</li>
+                        <li>✓ PDF export capability</li>
+                    </ul>
+                    <a href="cinema-ceo.html" class="bg-yellow-500 text-gray-900 font-semibold py-2 px-6 rounded-lg hover:bg-yellow-400 transition inline-block">
+                        Open CEO Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Features -->
+        <div class="mb-16">
+            <h3 class="text-3xl font-bold mb-8 text-gray-800">⚙️ Technical Highlights</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
+                    <h4 class="text-xl font-bold mb-4 text-blue-900">🎨 Design System</h4>
+                    <ul class="text-sm text-blue-800 space-y-2">
+                        <li>• Dark theme (#0F0F0F, #1C1C1C)</li>
+                        <li>• Primary blue (#0A84FF)</li>
+                        <li>• Gold VIP accent (#FFD700)</li>
+                        <li>• Poppins headings + Inter body</li>
+                        <li>• Glassmorphism effects</li>
+                        <li>• Smooth transitions</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
+                    <h4 class="text-xl font-bold mb-4 text-green-900">📱 Mobile-First</h4>
+                    <ul class="text-sm text-green-800 space-y-2">
+                        <li>• 100% responsive layouts</li>
+                        <li>• Touch-friendly (44px targets)</li>
+                        <li>• Mobile seat map optimization</li>
+                        <li>• Sticky navigation</li>
+                        <li>• Bottom sheet patterns</li>
+                        <li>• Horizontal scrolling</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
+                    <h4 class="text-xl font-bold mb-4 text-purple-900">🔧 Tech Stack</h4>
+                    <ul class="text-sm text-purple-800 space-y-2">
+                        <li>• HTML5 semantic markup</li>
+                        <li>• TailwindCSS (CDN)</li>
+                        <li>• Vanilla JavaScript ES6+</li>
+                        <li>• Chart.js for analytics</li>
+                        <li>• QRCode.js for tickets</li>
+                        <li>• LocalStorage data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl p-8 mb-16">
+            <h3 class="text-3xl font-bold mb-6 text-gray-800">🔐 Demo Credentials</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold text-lg mb-3">OTP Login:</h4>
+                    <div class="bg-white rounded-lg p-4 font-mono text-sm">
+                        <div>Email: <span class="text-blue-600">any@email.com</span></div>
+                        <div>OTP Code: <span class="text-green-600 font-bold">123456</span></div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-3">Test Card:</h4>
+                    <div class="bg-white rounded-lg p-4 font-mono text-sm">
+                        <div>Card: <span class="text-blue-600">4084 0840 8408 4081</span></div>
+                        <div>Expiry: <span class="text-blue-600">12/25</span> CVV: <span class="text-blue-600">123</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h3 class="text-3xl font-bold mb-6 text-gray-800">🚀 Getting Started</h3>
+            <div class="space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Browse Movies</h4>
+                        <p class="text-gray-600 text-sm">Visit <a href="cinema-booking.html" class="text-blue-600 underline">cinema-booking.html</a> to see all now showing movies</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Select Movie & Showtime</h4>
+                        <p class="text-gray-600 text-sm">Click any movie card → View showtimes → Choose your preferred time</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Pick Seats</h4>
+                        <p class="text-gray-600 text-sm">Click seats on the interactive map (max 6 seats)</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">4</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Add Snacks (Optional)</h4>
+                        <p class="text-gray-600 text-sm">Browse combo deals, popcorn, drinks - or skip this step</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">5</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Review & Checkout</h4>
+                        <p class="text-gray-600 text-sm">Check your summary → Choose Guest/Login → Select payment method</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold flex-shrink-0">✓</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Get Your Ticket!</h4>
+                        <p class="text-gray-600 text-sm">Receive QR code, booking reference, download PDF, add to calendar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="mb-2">Built with ❤️ for Heritage Centre</p>
+            <p class="text-sm text-gray-400">Modern Cinema Booking System • Version 1.0.0</p>
+            <div class="mt-4">
+                <a href="index.html" class="text-blue-400 hover:underline">← Back to Heritage Centre Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

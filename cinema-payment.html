@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        
+        .payment-option {
+            background: #1C1C1C;
+            border: 2px solid #2D2D2D;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-option:hover {
+            border-color: #0A84FF;
+            transform: translateX(4px);
+        }
+        
+        .payment-option.active {
+            border-color: #0A84FF;
+            background: rgba(10, 132, 255, 0.1);
+        }
+        
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #0A84FF;
+        }
+        
+        .card-input {
+            background: #0F0F0F;
+            border: 2px solid #2D2D2D;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .card-input:focus {
+            outline: none;
+            border-color: #0A84FF;
+        }
+        
+        .loader {
+            border: 4px solid #2D2D2D;
+            border-top: 4px solid #0A84FF;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="cinema-checkout.html" class="text-primary hover:underline flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back
+                </a>
+                <h1 class="text-xl font-bold">Secure Payment</h1>
+                <div class="w-20"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Payment Content -->
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Payment Methods -->
+            <div class="md:col-span-2">
+                <div class="bg-dark-card rounded-xl p-6 border border-gray-800">
+                    <h2 class="text-2xl font-bold mb-6">Select Payment Method</h2>
+                    
+                    <div class="space-y-3 mb-8">
+                        <label class="payment-option active">
+                            <div class="flex items-center gap-4">
+                                <input type="radio" name="payment" value="card" checked onchange="selectPayment('card')">
+                                <div class="flex-1">
+                                    <div class="font-semibold">Card Payment</div>
+                                    <div class="text-sm text-gray-400">Debit/Credit Card via Paystack</div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" class="h-6">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="h-6">
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <div class="flex items-center gap-4">
+                                <input type="radio" name="payment" value="transfer" onchange="selectPayment('transfer')">
+                                <div class="flex-1">
+                                    <div class="font-semibold">Bank Transfer</div>
+                                    <div class="text-sm text-gray-400">Direct transfer to our account</div>
+                                </div>
+                                <span class="text-2xl">🏦</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <div class="flex items-center gap-4">
+                                <input type="radio" name="payment" value="ussd" onchange="selectPayment('ussd')">
+                                <div class="flex-1">
+                                    <div class="font-semibold">USSD</div>
+                                    <div class="text-sm text-gray-400">Pay with your bank's USSD code</div>
+                                </div>
+                                <span class="text-2xl">📱</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <div class="flex items-center gap-4">
+                                <input type="radio" name="payment" value="wallet" onchange="selectPayment('wallet')">
+                                <div class="flex-1">
+                                    <div class="font-semibold">Digital Wallet</div>
+                                    <div class="text-sm text-gray-400">Apple Pay, Google Pay</div>
+                                </div>
+                                <span class="text-2xl">💳</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Card Form -->
+                    <div id="cardForm">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Card Number</label>
+                                <input type="text" class="card-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Expiry Date</label>
+                                    <input type="text" class="card-input" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">CVV</label>
+                                    <input type="text" class="card-input" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Cardholder Name</label>
+                                <input type="text" class="card-input" placeholder="John Doe">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Instructions -->
+                    <div id="transferForm" class="hidden">
+                        <div class="bg-dark p-4 rounded-lg space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Bank Name:</span>
+                                <span class="font-semibold">GTBank</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Account Name:</span>
+                                <span class="font-semibold">Heritage Cinema Ltd</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Account Number:</span>
+                                <span class="font-semibold text-primary">0123456789</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Amount:</span>
+                                <span class="font-semibold text-primary" id="transferAmount"></span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-4">Transfer the exact amount and click "I've Made Payment" below.</p>
+                    </div>
+
+                    <!-- USSD Instructions -->
+                    <div id="ussdForm" class="hidden">
+                        <div class="space-y-3">
+                            <div class="bg-dark p-4 rounded-lg">
+                                <div class="font-semibold mb-2">GTBank USSD</div>
+                                <div class="text-primary text-xl font-bold">*737*50*Amount*Account#</div>
+                            </div>
+                            <div class="bg-dark p-4 rounded-lg">
+                                <div class="font-semibold mb-2">Access Bank USSD</div>
+                                <div class="text-primary text-xl font-bold">*901*Amount*Account#</div>
+                            </div>
+                            <div class="bg-dark p-4 rounded-lg">
+                                <div class="font-semibold mb-2">Zenith Bank USSD</div>
+                                <div class="text-primary text-xl font-bold">*966*Amount*Account#</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-4">Dial your bank's USSD code to complete payment.</p>
+                    </div>
+
+                    <!-- Wallet Options -->
+                    <div id="walletForm" class="hidden">
+                        <div class="space-y-3">
+                            <button class="w-full bg-black text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-900 transition">
+                                <span class="text-2xl"></span>
+                                Pay with Apple Pay
+                            </button>
+                            <button class="w-full bg-white text-black font-semibold py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-100 transition">
+                                <span class="text-2xl">G</span>
+                                Pay with Google Pay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <button onclick="processPayment()" class="w-full mt-8 bg-primary hover:bg-blue-600 text-white font-bold py-4 rounded-lg transition transform hover:scale-105">
+                        <span id="payBtnText">Complete Payment</span>
+                    </button>
+
+                    <!-- Security Notice -->
+                    <div class="mt-6 flex items-center justify-center gap-2 text-sm text-gray-400">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Your payment is secure and encrypted</span>
+                    </div>
+                    <div class="mt-2 text-center text-xs text-red-400 font-semibold">
+                        ⚠️ DO NOT REFRESH THIS PAGE DURING PAYMENT
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="md:col-span-1">
+                <div class="bg-dark-card rounded-xl p-6 border border-gray-800 sticky top-4">
+                    <h3 class="text-xl font-bold mb-4">Order Summary</h3>
+                    <div class="space-y-3 text-sm mb-4 pb-4 border-b border-gray-800">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Tickets</span>
+                            <span id="summaryTickets"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Snacks</span>
+                            <span id="summarySnacks"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Service Fee</span>
+                            <span id="summaryFee"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">VAT</span>
+                            <span id="summaryVat"></span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">Total</span>
+                        <span id="summaryTotal" class="text-2xl font-bold text-primary"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center">
+        <div class="text-center">
+            <div class="loader mx-auto mb-6"></div>
+            <h3 class="text-2xl font-bold mb-2">Processing Payment...</h3>
+            <p class="text-gray-400">Please do not close or refresh this page</p>
+        </div>
+    </div>
+
+    <script>
+        let booking = null;
+        let paymentMethod = 'card';
+
+        function loadPayment() {
+            booking = JSON.parse(localStorage.getItem('cinemaBooking'));
+            if (!booking) {
+                window.location.href = 'cinema-booking.html';
+                return;
+            }
+
+            // Populate summary
+            document.getElementById('summaryTickets').textContent = `₦${booking.totalTicketPrice.toLocaleString()}`;
+            document.getElementById('summarySnacks').textContent = `₦${(booking.totalSnacksPrice || 0).toLocaleString()}`;
+            document.getElementById('summaryFee').textContent = `₦${booking.serviceFee}`;
+            document.getElementById('summaryVat').textContent = `₦${booking.vat}`;
+            document.getElementById('summaryTotal').textContent = `₦${booking.grandTotal.toLocaleString()}`;
+            document.getElementById('transferAmount').textContent = `₦${booking.grandTotal.toLocaleString()}`;
+        }
+
+        function selectPayment(method) {
+            paymentMethod = method;
+            
+            // Update active state
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+            event.target.closest('.payment-option').classList.add('active');
+            
+            // Show/hide forms
+            document.getElementById('cardForm').classList.toggle('hidden', method !== 'card');
+            document.getElementById('transferForm').classList.toggle('hidden', method !== 'transfer');
+            document.getElementById('ussdForm').classList.toggle('hidden', method !== 'ussd');
+            document.getElementById('walletForm').classList.toggle('hidden', method !== 'wallet');
+            
+            // Update button text
+            const btnText = document.getElementById('payBtnText');
+            if (method === 'card') btnText.textContent = 'Complete Payment';
+            else if (method === 'transfer') btnText.textContent = "I've Made Payment";
+            else if (method === 'ussd') btnText.textContent = "I've Completed USSD Payment";
+            else btnText.textContent = 'Complete Payment';
+        }
+
+        function processPayment() {
+            // Show loading
+            document.getElementById('loadingModal').classList.remove('hidden');
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Generate booking reference
+                const bookingRef = 'HC' + Date.now().toString().slice(-8);
+                booking.bookingReference = bookingRef;
+                booking.paymentMethod = paymentMethod;
+                booking.paymentStatus = 'completed';
+                booking.bookingDate = new Date().toISOString();
+                
+                // Save to localStorage
+                localStorage.setItem('cinemaBooking', JSON.stringify(booking));
+                
+                // Save to bookings history
+                const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
+                bookings.push(booking);
+                localStorage.setItem('cinemaBookings', JSON.stringify(bookings));
+                
+                // Redirect to confirmation
+                window.location.href = 'cinema-confirmation.html';
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPayment);
+    </script>
+</body>
+</html>

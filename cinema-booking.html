@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Now Showing - Heritage Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F0F0F',
+                        'dark-card': '#1C1C1C',
+                        primary: '#0A84FF',
+                        gold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+        .scroll-container { scrollbar-width: thin; scrollbar-color: #0A84FF #1C1C1C; }
+        .scroll-container::-webkit-scrollbar { height: 6px; }
+        .scroll-container::-webkit-scrollbar-track { background: #1C1C1C; }
+        .scroll-container::-webkit-scrollbar-thumb { background: #0A84FF; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-dark text-white">
+    <!-- Navigation -->
+    <nav class="bg-dark-card border-b border-gray-800 sticky top-0 z-50 backdrop-blur-lg bg-opacity-90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="text-2xl font-bold text-primary">Heritage Cinema</a>
+                <div class="flex gap-6">
+                    <a href="index.html" class="text-gray-400 hover:text-white transition">Home</a>
+                    <a href="cinema-booking.html" class="text-white font-semibold">Movies</a>
+                    <a href="account.html" class="text-gray-400 hover:text-white transition">My Bookings</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="relative h-96 bg-gradient-to-b from-dark-card to-dark overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1200')] bg-cover bg-center opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">Now Showing</h1>
+            <p class="text-xl text-gray-300">Experience cinema like never before</p>
+        </div>
+    </div>
+
+    <!-- Sticky Date Selector -->
+    <div id="dateSelector" class="bg-dark-card border-b border-gray-800 sticky top-16 z-40 backdrop-blur-lg bg-opacity-95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex gap-3 overflow-x-auto scroll-container pb-2" id="dateButtons">
+                <!-- Date buttons will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-dark-card border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-wrap gap-3">
+                <button class="filter-btn active" data-filter="all">All Movies</button>
+                <button class="filter-btn" data-filter="action">Action</button>
+                <button class="filter-btn" data-filter="comedy">Comedy</button>
+                <button class="filter-btn" data-filter="drama">Drama</button>
+                <button class="filter-btn" data-filter="horror">Horror</button>
+                <button class="filter-btn" data-filter="scifi">Sci-Fi</button>
+                <select id="formatFilter" class="bg-dark text-white border border-gray-700 rounded-lg px-4 py-2 hover:border-primary transition">
+                    <option value="all">All Formats</option>
+                    <option value="standard">Standard</option>
+                    <option value="vip">VIP</option>
+                </select>
+                <select id="timeFilter" class="bg-dark text-white border border-gray-700 rounded-lg px-4 py-2 hover:border-primary transition">
+                    <option value="all">All Times</option>
+                    <option value="morning">Morning (Before 12PM)</option>
+                    <option value="afternoon">Afternoon (12PM - 5PM)</option>
+                    <option value="evening">Evening (After 5PM)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movies Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="moviesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Movie cards will be dynamically generated -->
+        </div>
+    </div>
+
+    <style>
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            background: #1C1C1C;
+            border: 1px solid #374151;
+            color: #9CA3AF;
+            font-weight: 500;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .filter-btn:hover {
+            border-color: #0A84FF;
+            color: white;
+        }
+        .filter-btn.active {
+            background: #0A84FF;
+            border-color: #0A84FF;
+            color: white;
+        }
+        .date-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            background: #1C1C1C;
+            border: 2px solid #374151;
+            color: #9CA3AF;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+            min-width: 120px;
+            text-align: center;
+        }
+        .date-btn:hover {
+            border-color: #0A84FF;
+            transform: translateY(-2px);
+        }
+        .date-btn.active {
+            background: #0A84FF;
+            border-color: #0A84FF;
+            color: white;
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.4);
+        }
+        .movie-card {
+            background: #1C1C1C;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid #2D2D2D;
+            transition: all 0.3s;
+        }
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+            border-color: #0A84FF;
+        }
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-filling {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+        .badge-pg { background: rgba(34, 197, 94, 0.2); color: #22C55E; }
+        .badge-13 { background: rgba(251, 191, 36, 0.2); color: #FBB928; }
+        .badge-18 { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+    </style>
+
+    <script src="js/cinema-booking.js"></script>
+</body>
+</html>
