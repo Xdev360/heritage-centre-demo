@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spa Admin Dashboard — Heritage Centre</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .admin-tabs { display: flex; gap: var(--space-2); border-bottom: 2px solid var(--neutral-200); margin-bottom: var(--space-6); flex-wrap: wrap; }
+    .admin-tab { padding: var(--space-3) var(--space-5); border: none; background: none; color: var(--neutral-600); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .admin-tab:hover { color: var(--primary-600); }
+    .admin-tab.active { color: var(--primary-600); border-bottom-color: var(--primary-600); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .stat-card { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2); }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { background: var(--neutral-50); padding: var(--space-3); text-align: left; font-weight: 600; border-bottom: 2px solid var(--neutral-200); }
+    .data-table td { padding: var(--space-3); border-bottom: 1px solid var(--neutral-200); }
+    .service-item { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-3); }
+  </style>
+</head>
+<body data-page="spa-admin">
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="nav-logo-icon">HC</div><span>Heritage Centre</span></a>
+      <nav class="nav-main">
+        <a href="spa-admin.html" class="nav-link active">Spa Admin</a>
+        <a href="admin-login.html" class="nav-link">Switch Department</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <div style="margin-bottom: var(--space-8);">
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">💆 Royal Retreat Spa Admin</h1>
+        <p style="color: var(--neutral-600);">Manage appointments, services, pricing, and payment approvals</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="stat-pending">0</div><div>Pending Payments</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-appointments">0</div><div>Today's Appointments</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-services">6</div><div>Active Services</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-revenue">₦0</div><div>Today's Revenue</div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('payments')">💳 Payments</button>
+        <button class="admin-tab" onclick="switchTab('appointments')">📅 Appointments</button>
+        <button class="admin-tab" onclick="switchTab('services')">✨ Services</button>
+        <button class="admin-tab" onclick="switchTab('pricing')">💰 Pricing</button>
+      </div>
+
+      <!-- Payments Tab -->
+      <div id="tab-payments" class="tab-content active">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Payment Approvals</h3>
+          <table class="data-table">
+            <thead><tr><th>Ref</th><th>Customer</th><th>Service</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="payments-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No payments pending</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Appointments Tab -->
+      <div id="tab-appointments" class="tab-content">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <h3>Appointments & Bookings</h3>
+            <button class="btn btn-primary btn-sm" onclick="addAppointment()">+ New Appointment</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Time</th><th>Customer</th><th>Service</th><th>Therapist</th><th>Duration</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="appointments-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No appointments scheduled</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Services Tab -->
+      <div id="tab-services" class="tab-content">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <h3>Services Management</h3>
+            <button class="btn btn-primary btn-sm" onclick="addService()">+ Add Service</button>
+          </div>
+          <div id="services-list">
+            <div class="service-item">
+              <div style="display:flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                  <h4 style="margin-bottom: var(--space-2);">Swedish Massage</h4>
+                  <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Relaxing full-body massage with essential oils</p>
+                  <span style="font-weight: 700; color: var(--primary-600);">₦8,000</span> <span style="color: var(--neutral-500);">• 60 min</span>
+                </div>
+                <div style="display:flex; gap: var(--space-2);">
+                  <button class="btn btn-ghost btn-sm" onclick="editService('swedish')">Edit</button>
+                  <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="removeService('swedish')">Remove</button>
+                </div>
+              </div>
+            </div>
+            <div class="service-item">
+              <div style="display:flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                  <h4 style="margin-bottom: var(--space-2);">Deep Tissue Massage</h4>
+                  <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Intense muscle therapy for chronic pain relief</p>
+                  <span style="font-weight: 700; color: var(--primary-600);">₦12,000</span> <span style="color: var(--neutral-500);">• 90 min</span>
+                </div>
+                <div style="display:flex; gap: var(--space-2);">
+                  <button class="btn btn-ghost btn-sm" onclick="editService('deep')">Edit</button>
+                  <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="removeService('deep')">Remove</button>
+                </div>
+              </div>
+            </div>
+            <div class="service-item">
+              <div style="display:flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                  <h4 style="margin-bottom: var(--space-2);">Hydration Facial</h4>
+                  <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Deep cleansing and moisturizing facial treatment</p>
+                  <span style="font-weight: 700; color: var(--primary-600);">₦10,000</span> <span style="color: var(--neutral-500);">• 75 min</span>
+                </div>
+                <div style="display:flex; gap: var(--space-2);">
+                  <button class="btn btn-ghost btn-sm" onclick="editService('facial')">Edit</button>
+                  <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="removeService('facial')">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Tab -->
+      <div id="tab-pricing" class="tab-content">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <h3>Package Pricing</h3>
+            <button class="btn btn-primary btn-sm" onclick="updatePricing()">Save Changes</button>
+          </div>
+          <div style="display: grid; gap: var(--space-4);">
+            <div class="field"><label>Quick Escape (60 min)</label><input type="number" class="input" id="package-quick" value="8000" /></div>
+            <div class="field"><label>Full Day Bliss (4 hours)</label><input type="number" class="input" id="package-full" value="18000" /></div>
+            <div class="field"><label>Couples Retreat (3 hours)</label><input type="number" class="input" id="package-couples" value="30000" /></div>
+            <div class="field"><label>Manicure</label><input type="number" class="input" id="service-manicure" value="3000" /></div>
+            <div class="field"><label>Pedicure</label><input type="number" class="input" id="service-pedicure" value="3500" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    function checkAuth() {
+      const dept = localStorage.getItem('hc_department');
+      if (dept !== 'spa' && dept !== 'ceo') {
+        alert('Access denied. Spa admin privileges required.');
+        window.location.href = 'admin-login.html';
+      }
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    function logout() {
+      localStorage.removeItem('hc_user');
+      localStorage.removeItem('hc_user_role');
+      localStorage.removeItem('hc_department');
+      window.location.href = 'index.html';
+    }
+
+    function addService() { alert('Add Service feature - integrate with your backend'); }
+    function editService(id) { alert(`Edit service: ${id}`); }
+    function removeService(id) { if(confirm('Remove this service?')) alert(`Service ${id} removed`); }
+    function addAppointment() { alert('Add Appointment feature'); }
+    function updatePricing() { alert('Pricing updated successfully!'); }
+
+    function loadStats() {
+      const payments = JSON.parse(localStorage.getItem('hc_all_pending_payments') || '[]');
+      const spaPayments = payments.filter(p => p.serviceType && p.serviceType.toLowerCase().includes('spa'));
+      document.getElementById('stat-pending').textContent = spaPayments.filter(p => p.status === 'pending').length;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      loadStats();
+    });
+  </script>
+</body>
+</html>

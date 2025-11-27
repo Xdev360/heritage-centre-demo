@@ -33,50 +33,74 @@
   </header>
 
   <main>
-    <section class="container" style="padding: var(--space-10) var(--space-4); max-width: 960px;">
+    <section class="container" style="padding: var(--space-10) var(--space-4); max-width: 1200px;">
       <div style="text-align: center; margin-bottom: var(--space-8);">
         <div style="width: 72px; height: 72px; margin: 0 auto var(--space-4); background: var(--neutral-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid var(--neutral-200);">🔒</div>
-        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">Administration Login</h1>
-        <p class="subtle">Choose your role to continue. This area is restricted to authorized personnel.</p>
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">Department Administration</h1>
+        <p class="subtle">Select your department to access the admin dashboard. Restricted to authorized personnel only.</p>
       </div>
 
-      <div class="admin-grid">
-        <!-- Admin Login -->
-        <div class="login-card">
-          <div style="display:flex; align-items:center; justify-content: space-between; margin-bottom: var(--space-2);">
-            <h2>Admin Login</h2>
-            <span class="badge" style="background: var(--neutral-100); color: var(--neutral-700); padding: 4px 8px; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--neutral-200);">Operations</span>
-          </div>
-          <p class="subtle" style="margin-bottom: var(--space-5);">Access ticketing, payments verification, and operations dashboard.</p>
-          <div class="field">
-            <label>Email</label>
-            <input id="admin-email" type="email" class="input" placeholder="admin@heritage.ng" />
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <input id="admin-password" type="password" class="input" placeholder="••••••••" />
-            <div class="hint">For demo purposes, any credentials will work.</div>
-          </div>
-          <button class="btn btn-primary" style="width: 100%;" onclick="login('admin')">Sign in as Admin</button>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); margin-bottom: var(--space-6);">
+        <!-- Cinema Admin -->
+        <div class="login-card" style="cursor: pointer; transition: all 0.2s;" onclick="showLoginForm('cinema')">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🎬</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">Cinema Admin</h3>
+          <p class="subtle" style="font-size: 0.875rem;">Manage movies, showtimes, seats, and payments</p>
         </div>
 
-        <!-- CEO Login -->
-        <div class="login-card">
-          <div style="display:flex; align-items:center; justify-content: space-between; margin-bottom: var(--space-2);">
-            <h2>CEO Login</h2>
-            <span class="badge" style="background: var(--neutral-100); color: var(--neutral-700); padding: 4px 8px; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--neutral-200);">Executive</span>
-          </div>
-          <p class="subtle" style="margin-bottom: var(--space-5);">Access analytics, revenue insights, and executive dashboards.</p>
+        <!-- Arcade Admin -->
+        <div class="login-card" style="cursor: pointer; transition: all 0.2s;" onclick="showLoginForm('arcade')">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🎮</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">Arcade Admin</h3>
+          <p class="subtle" style="font-size: 0.875rem;">Manage game cards, bookings, and pricing</p>
+        </div>
+
+        <!-- Spa Admin -->
+        <div class="login-card" style="cursor: pointer; transition: all 0.2s;" onclick="showLoginForm('spa')">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">💆</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">Spa Admin</h3>
+          <p class="subtle" style="font-size: 0.875rem;">Manage appointments, services, and pricing</p>
+        </div>
+
+        <!-- Lounge Admin -->
+        <div class="login-card" style="cursor: pointer; transition: all 0.2s;" onclick="showLoginForm('lounge')">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🎉</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">Lounge Admin</h3>
+          <p class="subtle" style="font-size: 0.875rem;">Manage reservations, tables, and orders</p>
+        </div>
+
+        <!-- Restaurant Admin -->
+        <div class="login-card" style="cursor: pointer; transition: all 0.2s;" onclick="showLoginForm('restaurant')">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🍽️</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">Restaurant Admin</h3>
+          <p class="subtle" style="font-size: 0.875rem;">Manage menu, orders, delivery, and payments</p>
+        </div>
+
+        <!-- CEO Dashboard -->
+        <div class="login-card" style="cursor: pointer; transition: all 0.2s; border: 2px solid var(--primary-200);" onclick="showLoginForm('ceo')">
+          <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">👔</div>
+          <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">CEO Dashboard</h3>
+          <p class="subtle" style="font-size: 0.875rem;">Executive analytics and revenue insights</p>
+        </div>
+      </div>
+
+      <!-- Login Form Modal (Hidden by default) -->
+      <div id="login-modal" style="display: none;">
+        <div class="card" style="max-width: 400px; margin: 0 auto; padding: var(--space-6);">
+          <h3 style="font-size: 1.25rem; margin-bottom: var(--space-4);" id="modal-title">Login</h3>
           <div class="field">
             <label>Email</label>
-            <input id="ceo-email" type="email" class="input" placeholder="ceo@heritage.ng" />
+            <input id="login-email" type="email" class="input" placeholder="admin@heritage.ng" />
           </div>
           <div class="field">
             <label>Password</label>
-            <input id="ceo-password" type="password" class="input" placeholder="••••••••" />
+            <input id="login-password" type="password" class="input" placeholder="••••••••" />
             <div class="hint">For demo purposes, any credentials will work.</div>
           </div>
-          <button class="btn btn-secondary" style="width: 100%;" onclick="login('ceo')">Sign in as CEO</button>
+          <div style="display: flex; gap: var(--space-3);">
+            <button class="btn btn-primary" style="flex: 1;" onclick="submitLogin()">Sign In</button>
+            <button class="btn btn-ghost" onclick="closeLoginForm()">Cancel</button>
+          </div>
         </div>
       </div>
 
@@ -95,21 +119,59 @@
   </footer>
 
   <script>
-    function login(role) {
-      const email = (role === 'admin') ? (document.getElementById('admin-email').value || 'admin@heritage.ng') : (document.getElementById('ceo-email').value || 'ceo@heritage.ng');
-      const name = role === 'admin' ? 'Admin User' : 'CEO User';
+    let selectedDepartment = '';
+    const departmentRoutes = {
+      cinema: 'cinema-admin.html',
+      arcade: 'arcade-admin.html',
+      spa: 'spa-admin.html',
+      lounge: 'lounge-admin.html',
+      restaurant: 'restaurant-admin.html',
+      ceo: 'cinema-ceo.html'
+    };
 
-      // Mock authentication: set user and role
-      localStorage.setItem('hc_user', JSON.stringify({ name, email }));
-      localStorage.setItem('hc_user_role', role);
-
-      // Redirect based on role
-      if (role === 'admin') {
-        window.location.href = 'cinema-admin.html';
-      } else {
-        window.location.href = 'cinema-ceo.html';
-      }
+    function showLoginForm(department) {
+      selectedDepartment = department;
+      const titles = {
+        cinema: 'Cinema Admin Login',
+        arcade: 'Arcade Admin Login',
+        spa: 'Spa Admin Login',
+        lounge: 'Lounge Admin Login',
+        restaurant: 'Restaurant Admin Login',
+        ceo: 'CEO Login'
+      };
+      document.getElementById('modal-title').textContent = titles[department] || 'Login';
+      document.getElementById('login-modal').style.display = 'block';
+      document.getElementById('login-email').focus();
     }
+
+    function closeLoginForm() {
+      document.getElementById('login-modal').style.display = 'none';
+      document.getElementById('login-email').value = '';
+      document.getElementById('login-password').value = '';
+      selectedDepartment = '';
+    }
+
+    function submitLogin() {
+      if (!selectedDepartment) return;
+      
+      const email = document.getElementById('login-email').value || `${selectedDepartment}@heritage.ng`;
+      const name = selectedDepartment.charAt(0).toUpperCase() + selectedDepartment.slice(1) + ' Admin';
+
+      // Set user and role in localStorage
+      localStorage.setItem('hc_user', JSON.stringify({ name, email }));
+      localStorage.setItem('hc_user_role', selectedDepartment);
+      localStorage.setItem('hc_department', selectedDepartment);
+
+      // Redirect to department dashboard
+      window.location.href = departmentRoutes[selectedDepartment] || 'index.html';
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('login-password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') submitLogin();
+      });
+    });
   </script>
 </body>
 </html>

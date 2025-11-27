@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lounge Admin Dashboard — Heritage Centre</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .admin-tabs { display: flex; gap: var(--space-2); border-bottom: 2px solid var(--neutral-200); margin-bottom: var(--space-6); flex-wrap: wrap; }
+    .admin-tab { padding: var(--space-3) var(--space-5); border: none; background: none; color: var(--neutral-600); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .admin-tab:hover { color: var(--primary-600); }
+    .admin-tab.active { color: var(--primary-600); border-bottom-color: var(--primary-600); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .stat-card { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2); }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { background: var(--neutral-50); padding: var(--space-3); text-align: left; font-weight: 600; border-bottom: 2px solid var(--neutral-200); }
+    .data-table td { padding: var(--space-3); border-bottom: 1px solid var(--neutral-200); }
+    .table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--space-3); }
+    .table-card { background: white; border: 2px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-4); text-align: center; cursor: pointer; transition: all 0.2s; }
+    .table-card.available { border-color: var(--success-300); }
+    .table-card.reserved { border-color: var(--warning-300); background: var(--warning-50); }
+    .table-card.occupied { border-color: var(--error-300); background: var(--error-50); }
+  </style>
+</head>
+<body data-page="lounge-admin">
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="nav-logo-icon">HC</div><span>Heritage Centre</span></a>
+      <nav class="nav-main">
+        <a href="lounge-admin.html" class="nav-link active">Lounge Admin</a>
+        <a href="admin-login.html" class="nav-link">Switch Department</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <div style="margin-bottom: var(--space-8);">
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">🎉 Lounge & Events Admin</h1>
+        <p style="color: var(--neutral-600);">Manage table reservations, orders, and event bookings</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="stat-reservations">0</div><div>Active Reservations</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-tables">12</div><div>Available Tables</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-orders">0</div><div>Pending Orders</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-revenue">₦0</div><div>Today's Revenue</div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('reservations')">📅 Reservations</button>
+        <button class="admin-tab" onclick="switchTab('tables')">🪑 Table Status</button>
+        <button class="admin-tab" onclick="switchTab('orders')">🍸 Table Orders</button>
+        <button class="admin-tab" onclick="switchTab('events')">🎊 Events</button>
+      </div>
+
+      <!-- Reservations Tab -->
+      <div id="tab-reservations" class="tab-content active">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <h3>Table Reservations</h3>
+            <button class="btn btn-primary btn-sm" onclick="addReservation()">+ New Reservation</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Ref</th><th>Customer</th><th>Table</th><th>Date & Time</th><th>Guests</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="reservations-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No reservations yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tables Tab -->
+      <div id="tab-tables" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Table Availability</h3>
+          <div class="table-grid">
+            <div class="table-card available" onclick="toggleTable('T1')"><div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🪑</div><strong>Table 1</strong><div style="font-size: 0.75rem; color: var(--neutral-600);">4 Seats</div><div style="margin-top: var(--space-2); font-size: 0.75rem; color: var(--success-600);">Available</div></div>
+            <div class="table-card reserved" onclick="toggleTable('T2')"><div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🪑</div><strong>Table 2</strong><div style="font-size: 0.75rem; color: var(--neutral-600);">6 Seats</div><div style="margin-top: var(--space-2); font-size: 0.75rem; color: var(--warning-600);">Reserved</div></div>
+            <div class="table-card available" onclick="toggleTable('T3')"><div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🪑</div><strong>Table 3</strong><div style="font-size: 0.75rem; color: var(--neutral-600);">4 Seats</div><div style="margin-top: var(--space-2); font-size: 0.75rem; color: var(--success-600);">Available</div></div>
+            <div class="table-card occupied" onclick="toggleTable('T4')"><div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🪑</div><strong>Table 4</strong><div style="font-size: 0.75rem; color: var(--neutral-600);">8 Seats</div><div style="margin-top: var(--space-2); font-size: 0.75rem; color: var(--error-600);">Occupied</div></div>
+            <div class="table-card available" onclick="toggleTable('T5')"><div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🪑</div><strong>Table 5</strong><div style="font-size: 0.75rem; color: var(--neutral-600);">2 Seats</div><div style="margin-top: var(--space-2); font-size: 0.75rem; color: var(--success-600);">Available</div></div>
+            <div class="table-card available" onclick="toggleTable('T6')"><div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🪑</div><strong>Table 6</strong><div style="font-size: 0.75rem; color: var(--neutral-600);">4 Seats</div><div style="margin-top: var(--space-2); font-size: 0.75rem; color: var(--success-600);">Available</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Tab -->
+      <div id="tab-orders" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Table Orders</h3>
+          <table class="data-table">
+            <thead><tr><th>Order #</th><th>Table</th><th>Items</th><th>Amount</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="orders-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No active orders</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Events Tab -->
+      <div id="tab-events" class="tab-content">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <h3>Event Bookings</h3>
+            <button class="btn btn-primary btn-sm" onclick="addEvent()">+ New Event</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Event Name</th><th>Client</th><th>Date</th><th>Guests</th><th>Package</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="events-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No upcoming events</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    function checkAuth() {
+      const dept = localStorage.getItem('hc_department');
+      if (dept !== 'lounge' && dept !== 'ceo') {
+        alert('Access denied. Lounge admin privileges required.');
+        window.location.href = 'admin-login.html';
+      }
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    function logout() {
+      localStorage.removeItem('hc_user');
+      localStorage.removeItem('hc_user_role');
+      localStorage.removeItem('hc_department');
+      window.location.href = 'index.html';
+    }
+
+    function addReservation() { alert('Add Reservation feature'); }
+    function addEvent() { alert('Add Event feature'); }
+    function toggleTable(id) { alert(`Manage table: ${id}`); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+    });
+  </script>
+</body>
+</html>

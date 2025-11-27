@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurant Admin Dashboard — Heritage Centre</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .admin-tabs { display: flex; gap: var(--space-2); border-bottom: 2px solid var(--neutral-200); margin-bottom: var(--space-6); flex-wrap: wrap; }
+    .admin-tab { padding: var(--space-3) var(--space-5); border: none; background: none; color: var(--neutral-600); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .admin-tab:hover { color: var(--primary-600); }
+    .admin-tab.active { color: var(--primary-600); border-bottom-color: var(--primary-600); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .stat-card { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2); }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { background: var(--neutral-50); padding: var(--space-3); text-align: left; font-weight: 600; border-bottom: 2px solid var(--neutral-200); }
+    .data-table td { padding: var(--space-3); border-bottom: 1px solid var(--neutral-200); }
+    .menu-item { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-4); display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); }
+    .menu-grid { display: grid; gap: var(--space-3); }
+  </style>
+</head>
+<body data-page="restaurant-admin">
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="nav-logo-icon">HC</div><span>Heritage Centre</span></a>
+      <nav class="nav-main">
+        <a href="restaurant-admin.html" class="nav-link active">Restaurant Admin</a>
+        <a href="admin-login.html" class="nav-link">Switch Department</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <div style="margin-bottom: var(--space-8);">
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">🍽️ Restaurant Admin Dashboard</h1>
+        <p style="color: var(--neutral-600);">Manage menu, orders, delivery, and payments</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-value" id="stat-pending">0</div><div>Pending Orders</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-deliveries">0</div><div>Out for Delivery</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-menu">15</div><div>Menu Items</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-revenue">₦0</div><div>Today's Revenue</div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('menu')">📋 Menu Management</button>
+        <button class="admin-tab" onclick="switchTab('orders')">📦 Orders</button>
+        <button class="admin-tab" onclick="switchTab('delivery')">🚚 Delivery</button>
+        <button class="admin-tab" onclick="switchTab('payments')">💳 Payments</button>
+        <button class="admin-tab" onclick="switchTab('analytics')">📊 Analytics</button>
+      </div>
+
+      <!-- Menu Tab -->
+      <div id="tab-menu" class="tab-content active">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <h3>Menu Items</h3>
+            <button class="btn btn-primary btn-sm" onclick="addMenuItem()">+ Add New Item</button>
+          </div>
+          <div class="menu-grid">
+            <div class="menu-item">
+              <div>
+                <h4 style="margin-bottom: var(--space-1);">Jollof Rice with Chicken</h4>
+                <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Main Dish • Available</p>
+                <div style="display: flex; gap: var(--space-2);">
+                  <input type="number" value="2500" style="width: 100px; padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦ Price">
+                  <select style="padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);"><option>Available</option><option>Out of Stock</option></select>
+                </div>
+              </div>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-ghost btn-sm">Edit</button>
+                <button class="btn btn-ghost btn-sm" style="color: var(--error-600);">Remove</button>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div>
+                <h4 style="margin-bottom: var(--space-1);">Fried Rice & Grilled Fish</h4>
+                <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Main Dish • Available</p>
+                <div style="display: flex; gap: var(--space-2);">
+                  <input type="number" value="3500" style="width: 100px; padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦ Price">
+                  <select style="padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);"><option>Available</option><option>Out of Stock</option></select>
+                </div>
+              </div>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-ghost btn-sm">Edit</button>
+                <button class="btn btn-ghost btn-sm" style="color: var(--error-600);">Remove</button>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div>
+                <h4 style="margin-bottom: var(--space-1);">Pounded Yam & Egusi Soup</h4>
+                <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Traditional • Available</p>
+                <div style="display: flex; gap: var(--space-2);">
+                  <input type="number" value="3000" style="width: 100px; padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦ Price">
+                  <select style="padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);"><option>Available</option><option>Out of Stock</option></select>
+                </div>
+              </div>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-ghost btn-sm">Edit</button>
+                <button class="btn btn-ghost btn-sm" style="color: var(--error-600);">Remove</button>
+              </div>
+            </div>
+            <div class="menu-item">
+              <div>
+                <h4 style="margin-bottom: var(--space-1);">Chapman Cocktail</h4>
+                <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Beverage • Available</p>
+                <div style="display: flex; gap: var(--space-2);">
+                  <input type="number" value="1200" style="width: 100px; padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦ Price">
+                  <select style="padding: var(--space-2); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);"><option>Available</option><option>Out of Stock</option></select>
+                </div>
+              </div>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-ghost btn-sm">Edit</button>
+                <button class="btn btn-ghost btn-sm" style="color: var(--error-600);">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Tab -->
+      <div id="tab-orders" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Incoming Orders</h3>
+          <table class="data-table">
+            <thead><tr><th>Order #</th><th>Customer</th><th>Items</th><th>Type</th><th>Amount</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="orders-list"><tr><td colspan="8" style="text-align:center; color: var(--neutral-500);">No active orders</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Delivery Tab -->
+      <div id="tab-delivery" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Delivery Tracking</h3>
+          <table class="data-table">
+            <thead><tr><th>Order #</th><th>Customer</th><th>Address</th><th>Driver</th><th>Status</th><th>ETA</th><th>Action</th></tr></thead>
+            <tbody id="delivery-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No active deliveries</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Payments Tab -->
+      <div id="tab-payments" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Payment Confirmations</h3>
+          <table class="data-table">
+            <thead><tr><th>Transaction ID</th><th>Order #</th><th>Customer</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="payments-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No pending payments</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div id="tab-analytics" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-4);">Order Analytics</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div style="padding: var(--space-4); border: 1px solid var(--neutral-200); border-radius: var(--radius-lg);">
+              <h4 style="margin-bottom: var(--space-3); color: var(--neutral-600);">Order Types</h4>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);"><span>Dine-In</span><strong>45%</strong></div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);"><span>Takeaway</span><strong>30%</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Delivery</span><strong>25%</strong></div>
+            </div>
+            <div style="padding: var(--space-4); border: 1px solid var(--neutral-200); border-radius: var(--radius-lg);">
+              <h4 style="margin-bottom: var(--space-3); color: var(--neutral-600);">Top Dishes</h4>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);"><span>Jollof Rice</span><strong>120 orders</strong></div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-2);"><span>Fried Rice</span><strong>85 orders</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span>Pounded Yam</span><strong>60 orders</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    function checkAuth() {
+      const dept = localStorage.getItem('hc_department');
+      if (dept !== 'restaurant' && dept !== 'ceo') {
+        alert('Access denied. Restaurant admin privileges required.');
+        window.location.href = 'admin-login.html';
+      }
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    function logout() {
+      localStorage.removeItem('hc_user');
+      localStorage.removeItem('hc_user_role');
+      localStorage.removeItem('hc_department');
+      window.location.href = 'index.html';
+    }
+
+    function addMenuItem() { alert('Add Menu Item feature'); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+    });
+  </script>
+</body>
+</html>
