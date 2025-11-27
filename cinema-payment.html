@@ -333,29 +333,46 @@
         }
 
         function processPayment() {
-            // Show loading
-            document.getElementById('loadingModal').classList.remove('hidden');
-            
-            // Simulate payment processing
-            setTimeout(() => {
-                // Generate booking reference
-                const bookingRef = 'HC' + Date.now().toString().slice(-8);
-                booking.bookingReference = bookingRef;
-                booking.paymentMethod = paymentMethod;
-                booking.paymentStatus = 'completed';
-                booking.bookingDate = new Date().toISOString();
-                
-                // Save to localStorage
-                localStorage.setItem('cinemaBooking', JSON.stringify(booking));
-                
-                // Save to bookings history
-                const bookings = JSON.parse(localStorage.getItem('cinemaBookings') || '[]');
-                bookings.push(booking);
-                localStorage.setItem('cinemaBookings', JSON.stringify(bookings));
-                
-                // Redirect to confirmation
-                window.location.href = 'cinema-confirmation.html';
-            }, 3000);
+               // Redirect to peer-to-peer payment confirmation system
+               // Generate booking reference
+               const bookingRef = 'HC' + Date.now().toString().slice(-8) + Math.random().toString(36).substring(2, 6).toUpperCase();
+           
+               // Get user info for payment record
+               const user = JSON.parse(localStorage.getItem('hc_user') || '{}');
+           
+               // Construct payment URL with booking details
+               const paymentUrl = new URL('payment-confirmation.html', window.location.origin);
+               paymentUrl.searchParams.set('bookingId', bookingRef);
+               paymentUrl.searchParams.set('amount', booking.grandTotal);
+               paymentUrl.searchParams.set('service', `Cinema: ${booking.movieTitle || 'Movie Booking'}`);
+               paymentUrl.searchParams.set('datetime', booking.showtime || new Date().toISOString());
+           
+               // Save booking with pending payment status
+               booking.bookingReference = bookingRef;
+               booking.paymentMethod = 'bank_transfer';
+               booking.paymentStatus = 'pending';
+               booking.bookingDate = new Date().toISOString();
+           
+               // Create payment data object
+               const paymentData = {
+                   bookingId: bookingRef,
+                   amount: booking.grandTotal,
+                   serviceType: `Cinema: ${booking.movieTitle || 'Movie Booking'}`,
+                   datetime: booking.showtime || new Date().toISOString(),
+                   status: 'awaiting_transfer',
+                   createdAt: new Date().toISOString(),
+                   expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+                   customerName: user.name || 'Guest',
+                   customerEmail: user.email || '',
+                   bookingDetails: booking
+               };
+           
+               // Save to localStorage
+               localStorage.setItem(`hc_pending_payment_${bookingRef}`, JSON.stringify(paymentData));
+               localStorage.setItem('cinemaBooking', JSON.stringify(booking));
+           
+               // Redirect to payment confirmation
+               window.location.href = paymentUrl.toString();
         }
 
         document.addEventListener('DOMContentLoaded', loadPayment);

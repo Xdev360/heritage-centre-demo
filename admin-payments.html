@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Verification — Admin Dashboard</title>
+  <meta name="description" content="Verify and approve pending customer payments" />
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .payment-card {
+      background: white;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      margin-bottom: var(--space-4);
+      transition: all 0.2s;
+    }
+    .payment-card:hover {
+      border-color: var(--primary-300);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .payment-card.pending {
+      border-left: 4px solid var(--warning-500);
+    }
+    .payment-card.approved {
+      border-left: 4px solid var(--success-500);
+      opacity: 0.7;
+    }
+    .payment-card.rejected {
+      border-left: 4px solid var(--error-500);
+      opacity: 0.7;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-badge.pending {
+      background: var(--warning-100);
+      color: var(--warning-800);
+    }
+    .status-badge.approved {
+      background: var(--success-100);
+      color: var(--success-800);
+    }
+    .status-badge.rejected {
+      background: var(--error-100);
+      color: var(--error-800);
+    }
+    .payment-detail {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-2) 0;
+      font-size: 0.938rem;
+    }
+    .payment-detail-label {
+      color: var(--neutral-600);
+      font-weight: 500;
+    }
+    .payment-detail-value {
+      font-weight: 600;
+      color: var(--neutral-900);
+    }
+    .filter-tabs {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
+      border-bottom: 2px solid var(--neutral-200);
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: var(--space-3) var(--space-5);
+      border: none;
+      background: none;
+      color: var(--neutral-600);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    .filter-tab:hover {
+      color: var(--primary-600);
+    }
+    .filter-tab.active {
+      color: var(--primary-600);
+      border-bottom-color: var(--primary-600);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary-600);
+      margin-bottom: var(--space-2);
+    }
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--neutral-600);
+      font-weight: 600;
+    }
+    .empty-state {
+      text-align: center;
+      padding: var(--space-12);
+      color: var(--neutral-500);
+    }
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: var(--space-4);
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body data-page="admin">
+  <!-- Navigation -->
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+      <nav class="nav-main">
+        <a href="cinema-admin.html" class="nav-link">Admin Dashboard</a>
+        <a href="admin-payments.html" class="nav-link active">Payment Verification</a>
+        <a href="cinema-ceo.html" class="nav-link">Analytics</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="profile-dropdown">
+          <button class="profile-trigger">
+            <div class="profile-avatar">A</div>
+            <span>Admin</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <!-- Header -->
+      <div style="margin-bottom: var(--space-8);">
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">💳 Payment Verification</h1>
+        <p style="color: var(--neutral-600); font-size: 1.125rem;">
+          Review and approve pending customer payments
+        </p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-pending">0</div>
+          <div class="stat-label">Pending Verification</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-approved">0</div>
+          <div class="stat-label">Approved Today</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">₦0</div>
+          <div class="stat-label">Total Pending Amount</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-rejected">0</div>
+          <div class="stat-label">Rejected</div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all" onclick="filterPayments('all')">
+          All Payments
+        </button>
+        <button class="filter-tab" data-filter="pending" onclick="filterPayments('pending')">
+          Pending Only
+        </button>
+        <button class="filter-tab" data-filter="approved" onclick="filterPayments('approved')">
+          Approved
+        </button>
+        <button class="filter-tab" data-filter="rejected" onclick="filterPayments('rejected')">
+          Rejected
+        </button>
+      </div>
+
+      <!-- Payments List -->
+      <div id="payments-container">
+        <!-- Payment cards will be dynamically inserted here -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <div class="empty-state-icon">📭</div>
+        <h3 style="font-size: 1.25rem; margin-bottom: var(--space-2);">No Payments Found</h3>
+        <p style="font-size: 0.938rem;">There are no payments matching the selected filter.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4); margin-top: var(--space-12);">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem;">
+        © 2024 Heritage Centre Admin Dashboard. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script>
+    let allPayments = [];
+    let currentFilter = 'all';
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAdminAccess();
+      loadPayments();
+      displayStats();
+      displayPayments();
+      
+      // Auto-refresh every 30 seconds
+      setInterval(() => {
+        loadPayments();
+        displayStats();
+        displayPayments();
+      }, 30000);
+    });
+
+    // Check admin access
+    function checkAdminAccess() {
+      const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
+      const role = localStorage.getItem('hc_user_role') || '';
+      
+      if (!user || (role !== 'admin' && role !== 'ceo')) {
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Load all payments
+    function loadPayments() {
+      allPayments = JSON.parse(localStorage.getItem('hc_all_pending_payments') || '[]');
+      
+      // Sort by creation date (newest first)
+      allPayments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
+    // Display statistics
+    function displayStats() {
+      const pending = allPayments.filter(p => p.status === 'pending').length;
+      const approved = allPayments.filter(p => p.status === 'approved' && isToday(p.approvedAt)).length;
+      const rejected = allPayments.filter(p => p.status === 'rejected').length;
+      const totalPending = allPayments
+        .filter(p => p.status === 'pending')
+        .reduce((sum, p) => sum + (p.amount || 0), 0);
+      
+      document.getElementById('stat-pending').textContent = pending;
+      document.getElementById('stat-approved').textContent = approved;
+      document.getElementById('stat-rejected').textContent = rejected;
+      document.getElementById('stat-total').textContent = formatCurrency(totalPending);
+    }
+
+    // Display payments
+    function displayPayments() {
+      const container = document.getElementById('payments-container');
+      const emptyState = document.getElementById('empty-state');
+      
+      let filtered = allPayments;
+      
+      if (currentFilter !== 'all') {
+        filtered = allPayments.filter(p => p.status === currentFilter);
+      }
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      container.innerHTML = filtered.map(payment => createPaymentCard(payment)).join('');
+    }
+
+    // Create payment card HTML
+    function createPaymentCard(payment) {
+      const statusClass = payment.status || 'pending';
+      const statusLabel = statusClass.charAt(0).toUpperCase() + statusClass.slice(1);
+      const isPending = payment.status === 'pending';
+      const timeAgo = getTimeAgo(payment.confirmedAt || payment.createdAt);
+      
+      return `
+        <div class="payment-card ${statusClass}" id="payment-${payment.bookingId}">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-4);">
+            <div>
+              <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">
+                ${payment.serviceType || 'Booking'}
+              </h3>
+              <span class="status-badge ${statusClass}">${statusLabel}</span>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-600);">
+                ${formatCurrency(payment.amount)}
+              </div>
+              <div style="font-size: 0.75rem; color: var(--neutral-500);">${timeAgo}</div>
+            </div>
+          </div>
+          
+          <div style="border-top: 1px solid var(--neutral-200); padding-top: var(--space-4);">
+            <div class="payment-detail">
+              <span class="payment-detail-label">Booking Reference:</span>
+              <span class="payment-detail-value">${payment.bookingId}</span>
+            </div>
+            <div class="payment-detail">
+              <span class="payment-detail-label">Customer Name:</span>
+              <span class="payment-detail-value">${payment.customerName || 'Not provided'}</span>
+            </div>
+            <div class="payment-detail">
+              <span class="payment-detail-label">Email:</span>
+              <span class="payment-detail-value">${payment.customerEmail || 'Not provided'}</span>
+            </div>
+            <div class="payment-detail">
+              <span class="payment-detail-label">Booking Date/Time:</span>
+              <span class="payment-detail-value">${formatDateTime(payment.datetime)}</span>
+            </div>
+            <div class="payment-detail">
+              <span class="payment-detail-label">Transfer Confirmed:</span>
+              <span class="payment-detail-value">${formatDateTime(payment.confirmedAt)}</span>
+            </div>
+            ${payment.approvedAt ? `
+              <div class="payment-detail">
+                <span class="payment-detail-label">Approved At:</span>
+                <span class="payment-detail-value">${formatDateTime(payment.approvedAt)}</span>
+              </div>
+            ` : ''}
+            ${payment.rejectedAt ? `
+              <div class="payment-detail">
+                <span class="payment-detail-label">Rejected At:</span>
+                <span class="payment-detail-value">${formatDateTime(payment.rejectedAt)}</span>
+              </div>
+              <div class="payment-detail">
+                <span class="payment-detail-label">Rejection Reason:</span>
+                <span class="payment-detail-value">${payment.rejectionReason || 'Not specified'}</span>
+              </div>
+            ` : ''}
+          </div>
+          
+          ${isPending ? `
+            <div style="display: flex; gap: var(--space-3); margin-top: var(--space-5);">
+              <button 
+                class="btn btn-success" 
+                style="flex: 1;"
+                onclick="approvePayment('${payment.bookingId}')"
+              >
+                ✓ Approve Payment
+              </button>
+              <button 
+                class="btn btn-error" 
+                style="flex: 1;"
+                onclick="rejectPayment('${payment.bookingId}')"
+              >
+                ✗ Reject Payment
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Filter payments
+    function filterPayments(filter) {
+      currentFilter = filter;
+      
+      // Update active tab
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+      
+      displayPayments();
+    }
+
+    // Approve payment
+    function approvePayment(bookingId) {
+      const confirmed = confirm(
+        `Are you sure you want to APPROVE this payment?\n\n` +
+        `Booking Reference: ${bookingId}\n\n` +
+        `This action will:\n` +
+        `✓ Mark the payment as approved\n` +
+        `✓ Notify the customer\n` +
+        `✓ Activate their booking\n\n` +
+        `Make sure you have verified the bank transfer in your account before approving.`
+      );
+      
+      if (!confirmed) return;
+      
+      // Update payment status
+      const paymentIndex = allPayments.findIndex(p => p.bookingId === bookingId);
+      if (paymentIndex >= 0) {
+        allPayments[paymentIndex].status = 'approved';
+        allPayments[paymentIndex].approvedAt = new Date().toISOString();
+        allPayments[paymentIndex].approvedBy = 'Admin';
+        
+        // Save to localStorage
+        localStorage.setItem('hc_all_pending_payments', JSON.stringify(allPayments));
+        
+        // Also update individual payment record
+        localStorage.setItem(`hc_pending_payment_${bookingId}`, JSON.stringify(allPayments[paymentIndex]));
+        
+        // Show success message
+        showNotification('Payment approved successfully! Customer will be notified.', 'success');
+        
+        // Refresh display
+        loadPayments();
+        displayStats();
+        displayPayments();
+      }
+    }
+
+    // Reject payment
+    function rejectPayment(bookingId) {
+      const reason = prompt(
+        `Please enter the reason for rejecting this payment:\n\n` +
+        `(This will be shown to the customer)`
+      );
+      
+      if (!reason) return;
+      
+      const confirmed = confirm(
+        `Are you sure you want to REJECT this payment?\n\n` +
+        `Booking Reference: ${bookingId}\n` +
+        `Reason: ${reason}\n\n` +
+        `The customer will be notified of the rejection.`
+      );
+      
+      if (!confirmed) return;
+      
+      // Update payment status
+      const paymentIndex = allPayments.findIndex(p => p.bookingId === bookingId);
+      if (paymentIndex >= 0) {
+        allPayments[paymentIndex].status = 'rejected';
+        allPayments[paymentIndex].rejectedAt = new Date().toISOString();
+        allPayments[paymentIndex].rejectedBy = 'Admin';
+        allPayments[paymentIndex].rejectionReason = reason;
+        
+        // Save to localStorage
+        localStorage.setItem('hc_all_pending_payments', JSON.stringify(allPayments));
+        
+        // Also update individual payment record
+        localStorage.setItem(`hc_pending_payment_${bookingId}`, JSON.stringify(allPayments[paymentIndex]));
+        
+        // Show success message
+        showNotification('Payment rejected. Customer will be notified.', 'error');
+        
+        // Refresh display
+        loadPayments();
+        displayStats();
+        displayPayments();
+      }
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        background: ${type === 'success' ? 'var(--success-500)' : type === 'error' ? 'var(--error-500)' : 'var(--primary-500)'};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        font-weight: 600;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Utility functions
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN',
+        minimumFractionDigits: 2
+      }).format(amount || 0);
+    }
+
+    function formatDateTime(isoString) {
+      if (!isoString) return 'N/A';
+      const date = new Date(isoString);
+      return date.toLocaleDateString('en-NG', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    function getTimeAgo(isoString) {
+      if (!isoString) return '';
+      const date = new Date(isoString);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      
+      if (seconds < 60) return 'Just now';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+      return `${Math.floor(seconds / 86400)}d ago`;
+    }
+
+    function isToday(isoString) {
+      if (!isoString) return false;
+      const date = new Date(isoString);
+      const today = new Date();
+      return date.toDateString() === today.toDateString();
+    }
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

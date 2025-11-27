@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Status — Heritage Centre</title>
+  <meta name="description" content="Track your payment verification status" />
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .status-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .status-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto var(--space-6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+    .status-icon.pending {
+      background: var(--warning-100);
+      color: var(--warning-600);
+    }
+    .status-icon.approved {
+      background: var(--success-100);
+      color: var(--success-600);
+    }
+    .status-icon.rejected {
+      background: var(--error-100);
+      color: var(--error-600);
+    }
+    .timeline {
+      margin: var(--space-8) 0;
+      position: relative;
+    }
+    .timeline-item {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+      position: relative;
+    }
+    .timeline-item:before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 32px;
+      bottom: -24px;
+      width: 2px;
+      background: var(--neutral-200);
+    }
+    .timeline-item:last-child:before {
+      display: none;
+    }
+    .timeline-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--neutral-300);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .timeline-dot.completed {
+      background: var(--success-500);
+      border-color: var(--success-500);
+    }
+    .timeline-dot.current {
+      background: var(--primary-500);
+      border-color: var(--primary-500);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+    }
+    .timeline-content {
+      flex: 1;
+      text-align: left;
+    }
+    .timeline-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: var(--space-1);
+    }
+    .timeline-time {
+      font-size: 0.75rem;
+      color: var(--neutral-500);
+    }
+    .refresh-notice {
+      background: var(--primary-50);
+      border: 1px solid var(--primary-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      margin: var(--space-6) 0;
+      font-size: 0.875rem;
+      color: var(--primary-800);
+    }
+  </style>
+</head>
+<body data-page="payment">
+  <!-- Navigation -->
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="bookings.html" class="nav-link">My Bookings</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+        <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" style="margin-bottom: var(--space-6);">
+        <a href="index.html" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="bookings.html" class="breadcrumb-item">Bookings</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Payment Status</span>
+      </nav>
+
+      <div class="status-container">
+        <!-- Status Icon -->
+        <div class="status-icon pending" id="status-icon">⏳</div>
+
+        <!-- Status Title -->
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-3);" id="status-title">
+          Payment Verification Pending
+        </h1>
+
+        <!-- Status Description -->
+        <p style="color: var(--neutral-600); font-size: 1.125rem; margin-bottom: var(--space-6);" id="status-description">
+          Your payment is being verified by our team. This typically takes up to 24 hours.
+        </p>
+
+        <!-- Booking Reference Card -->
+        <div class="card" style="margin-bottom: var(--space-6);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <span style="color: var(--neutral-600);">Booking Reference:</span>
+            <strong id="booking-ref-display">—</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-4);">
+            <span style="color: var(--neutral-600);">Amount Paid:</span>
+            <strong style="color: var(--primary-600); font-size: 1.25rem;" id="amount-display">₦0.00</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--neutral-600);">Service:</span>
+            <strong id="service-display">—</strong>
+          </div>
+        </div>
+
+        <!-- Auto-refresh Notice (Pending only) -->
+        <div class="refresh-notice" id="refresh-notice">
+          🔄 This page automatically checks for updates every 15 seconds. Keep it open to see real-time status changes.
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot completed" id="dot-initiated"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Payment Initiated</div>
+              <div class="timeline-time" id="time-initiated">—</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot completed" id="dot-confirmed"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Transfer Confirmed by You</div>
+              <div class="timeline-time" id="time-confirmed">—</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot current" id="dot-verification"></div>
+            <div class="timeline-content">
+              <div class="timeline-title" id="title-verification">Admin Verification</div>
+              <div class="timeline-time" id="time-verification">In progress...</div>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot" id="dot-completed"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Booking Confirmed</div>
+              <div class="timeline-time" id="time-completed">Pending</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rejection Reason (if rejected) -->
+        <div class="card" id="rejection-card" style="display: none; background: var(--error-50); border: 2px solid var(--error-200);">
+          <h3 style="color: var(--error-800); font-size: 1.125rem; margin-bottom: var(--space-3);">
+            Rejection Reason
+          </h3>
+          <p style="color: var(--error-700);" id="rejection-reason">—</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-8);">
+          <a href="bookings.html" class="btn btn-primary btn-lg" style="flex: 1; min-width: 200px;" id="view-bookings-btn">
+            View My Bookings
+          </a>
+          <button class="btn btn-ghost btn-lg" style="flex: 1; min-width: 200px;" onclick="location.reload()">
+            🔄 Refresh Status
+          </button>
+        </div>
+
+        <!-- Help Section -->
+        <div style="margin-top: var(--space-8); padding: var(--space-6); background: var(--neutral-50); border-radius: var(--radius-lg);">
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-3);">
+            Need Help?
+          </h3>
+          <p style="color: var(--neutral-600); font-size: 0.938rem; margin-bottom: var(--space-4);">
+            If your payment hasn't been approved within 24 hours, please contact us:
+          </p>
+          <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <a href="mailto:support@heritagecentre.ng" style="color: var(--primary-600); text-decoration: none; font-weight: 600;">
+              📧 support@heritagecentre.ng
+            </a>
+            <a href="tel:+2341234567890" style="color: var(--primary-600); text-decoration: none; font-weight: 600;">
+              📞 +234 123 456 7890
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4); margin-top: var(--space-12);">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem;">
+        © 2024 Heritage Centre. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script>
+    let paymentData = null;
+    let bookingId = null;
+    let refreshInterval = null;
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPaymentStatus();
+      displayPaymentStatus();
+      
+      // Auto-refresh every 15 seconds if pending
+      if (paymentData && paymentData.status === 'pending') {
+        refreshInterval = setInterval(() => {
+          loadPaymentStatus();
+          displayPaymentStatus();
+        }, 15000);
+      }
+    });
+
+    // Load payment status
+    function loadPaymentStatus() {
+      const urlParams = new URLSearchParams(window.location.search);
+      bookingId = urlParams.get('bookingId');
+      
+      if (!bookingId) {
+        alert('Invalid payment reference. Redirecting to home...');
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      // Load from localStorage
+      const stored = localStorage.getItem(`hc_pending_payment_${bookingId}`);
+      
+      if (!stored) {
+        alert('Payment record not found. Please contact support.');
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      paymentData = JSON.parse(stored);
+    }
+
+    // Display payment status
+    function displayPaymentStatus() {
+      if (!paymentData) return;
+      
+      const status = paymentData.status || 'pending';
+      
+      // Update basic info
+      document.getElementById('booking-ref-display').textContent = paymentData.bookingId;
+      document.getElementById('amount-display').textContent = formatCurrency(paymentData.amount);
+      document.getElementById('service-display').textContent = paymentData.serviceType || 'Booking';
+      
+      // Update timeline
+      document.getElementById('time-initiated').textContent = formatDateTime(paymentData.createdAt);
+      document.getElementById('time-confirmed').textContent = formatDateTime(paymentData.confirmedAt);
+      
+      // Update based on status
+      if (status === 'pending') {
+        updateForPending();
+      } else if (status === 'approved') {
+        updateForApproved();
+      } else if (status === 'rejected') {
+        updateForRejected();
+      }
+    }
+
+    // Update UI for pending status
+    function updateForPending() {
+      document.getElementById('status-icon').className = 'status-icon pending';
+      document.getElementById('status-icon').textContent = '⏳';
+      document.getElementById('status-title').textContent = 'Payment Verification Pending';
+      document.getElementById('status-description').textContent = 'Your payment is being verified by our team. This typically takes up to 24 hours.';
+      document.getElementById('refresh-notice').style.display = 'block';
+      
+      document.getElementById('dot-verification').className = 'timeline-dot current';
+      document.getElementById('time-verification').textContent = 'In progress...';
+    }
+
+    // Update UI for approved status
+    function updateForApproved() {
+      document.getElementById('status-icon').className = 'status-icon approved';
+      document.getElementById('status-icon').textContent = '✅';
+      document.getElementById('status-title').textContent = 'Payment Approved!';
+      document.getElementById('status-description').textContent = 'Your payment has been verified and your booking is confirmed.';
+      document.getElementById('refresh-notice').style.display = 'none';
+      
+      document.getElementById('dot-verification').className = 'timeline-dot completed';
+      document.getElementById('title-verification').textContent = 'Admin Verification — Approved';
+      document.getElementById('time-verification').textContent = formatDateTime(paymentData.approvedAt);
+      
+      document.getElementById('dot-completed').className = 'timeline-dot completed';
+      document.getElementById('time-completed').textContent = formatDateTime(paymentData.approvedAt);
+      
+      // Stop auto-refresh
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+      
+      // Show confetti or celebration animation
+      showCelebration();
+    }
+
+    // Update UI for rejected status
+    function updateForRejected() {
+      document.getElementById('status-icon').className = 'status-icon rejected';
+      document.getElementById('status-icon').textContent = '❌';
+      document.getElementById('status-title').textContent = 'Payment Rejected';
+      document.getElementById('status-description').textContent = 'Unfortunately, your payment could not be verified. Please see details below.';
+      document.getElementById('refresh-notice').style.display = 'none';
+      
+      document.getElementById('dot-verification').className = 'timeline-dot';
+      document.getElementById('dot-verification').style.background = 'var(--error-500)';
+      document.getElementById('dot-verification').style.borderColor = 'var(--error-500)';
+      document.getElementById('title-verification').textContent = 'Admin Verification — Rejected';
+      document.getElementById('time-verification').textContent = formatDateTime(paymentData.rejectedAt);
+      
+      // Show rejection reason
+      const rejectionCard = document.getElementById('rejection-card');
+      rejectionCard.style.display = 'block';
+      document.getElementById('rejection-reason').textContent = paymentData.rejectionReason || 'No reason provided.';
+      
+      // Stop auto-refresh
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    }
+
+    // Show celebration animation
+    function showCelebration() {
+      // Simple celebration notification
+      const celebration = document.createElement('div');
+      celebration.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        z-index: 10000;
+        animation: popIn 0.5s ease-out;
+      `;
+      celebration.innerHTML = `
+        <div style="font-size: 4rem; margin-bottom: 16px;">🎉</div>
+        <h2 style="font-size: 1.5rem; margin-bottom: 8px; color: var(--success-600);">Payment Approved!</h2>
+        <p style="color: var(--neutral-600);">Your booking is confirmed</p>
+      `;
+      
+      document.body.appendChild(celebration);
+      
+      setTimeout(() => {
+        celebration.style.animation = 'popOut 0.3s ease-out';
+        setTimeout(() => celebration.remove(), 300);
+      }, 3000);
+    }
+
+    // Utility functions
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN',
+        minimumFractionDigits: 2
+      }).format(amount || 0);
+    }
+
+    function formatDateTime(isoString) {
+      if (!isoString) return 'N/A';
+      const date = new Date(isoString);
+      return date.toLocaleDateString('en-NG', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    });
+
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes popIn {
+        from {
+          transform: translate(-50%, -50%) scale(0.5);
+          opacity: 0;
+        }
+        to {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+      }
+      @keyframes popOut {
+        from {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        to {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
