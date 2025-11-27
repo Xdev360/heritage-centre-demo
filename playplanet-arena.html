@@ -132,16 +132,21 @@
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
-              <div class="option-card" data-type="card" data-amount="5000" data-chips="35">
-                <div style="text-align: center;">
-                  <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙</div>
-                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">35 Chips</div>
-                  <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦5,000</div>
-                  <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
-                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 35 Chips', 5000, {chips: 35})">Add to Cart</button>
+            <div id="card-packages-container">
+              <p style="text-align: center; color: var(--neutral-500); padding: var(--space-4);">Loading available cards...</p>
+            </div>
+
+            <div style="display: none;" id="original-packages">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
+                <div class="option-card" data-type="card" data-amount="5000" data-chips="35">
+                  <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙</div>
+                    <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">35 Chips</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦5,000</div>
+                    <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+                    <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 35 Chips', 5000, {chips: 35})">Add to Cart</button>
+                  </div>
                 </div>
-              </div>
 
               <div class="option-card" data-type="card" data-amount="10000" data-chips="70">
                 <div style="text-align: center;">
@@ -163,13 +168,14 @@
                 </div>
               </div>
 
-              <div class="option-card" data-type="card" data-amount="20000" data-chips="140">
-                <div style="text-align: center;">
-                  <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙🪙🪙</div>
-                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">140 Chips</div>
-                  <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦20,000</div>
-                  <div style="font-size: 0.875rem; color: var(--success-600); font-weight: 600; margin-bottom: var(--space-3);">Best Value!</div>
-                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 140 Chips', 20000, {chips: 140})">Add to Cart</button>
+                <div class="option-card" data-type="card" data-amount="20000" data-chips="140">
+                  <div style="text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙🪙🪙</div>
+                    <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">140 Chips</div>
+                    <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦20,000</div>
+                    <div style="font-size: 0.875rem; color: var(--success-600); font-weight: 600; margin-bottom: var(--space-3);">Best Value!</div>
+                    <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 140 Chips', 20000, {chips: 140})">Add to Cart</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -240,8 +246,11 @@
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4);">
-              
+            <div id="vr-games-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4);">
+              <p style="text-align: center; color: var(--neutral-500); padding: var(--space-4);">Loading VR games...</p>
+            </div>
+
+            <div style="display: none;" id="original-vr-games">
               <div class="game-card" onclick="addToCart('vr', 'VR: Beat Saber', 2500, {game: 'Beat Saber', category: 'Interactive/Rhythm', duration: 15})">
                 <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🎵</div>
                 <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Beat Saber</h4>
@@ -323,7 +332,6 @@
                 <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Realistic ping pong simulation</p>
                 <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~15 min • ₦2,500</div>
               </div>
-
             </div>
           </div>
 
@@ -360,6 +368,11 @@
                 <input type="text" id="customer-name" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.938rem;" placeholder="Full name">
               </div>
 
+              <div style="margin-bottom: var(--space-4);">
+                <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">Email Address *</label>
+                <input type="email" id="customer-email" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.938rem;" placeholder="email@example.com">
+              </div>
+
               <div style="margin-bottom: var(--space-5);">
                 <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">Phone Number *</label>
                 <input type="tel" id="customer-phone" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.938rem;" placeholder="080XXXXXXXX">
@@ -387,7 +400,152 @@
   </footer>
 
   <script>
+    const CARDS_KEY = 'pp_arcade_cards';
+    const VR_GAMES_KEY = 'pp_vr_games';
+    const PAYMENTS_KEY = 'pp_arcade_payments';
+    
     let cart = [];
+    let selectedCardNumber = null;
+
+    // Initialize VR Games from admin or use defaults
+    function loadVRGames() {
+      let games = JSON.parse(localStorage.getItem(VR_GAMES_KEY) || '[]');
+      
+      // Use admin-managed games if available, otherwise use defaults
+      if (games.length === 0) {
+        games = [
+          {id: 1, title: 'Beat Saber', category: 'Interactive', duration: 15, image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=400&q=80'},
+          {id: 2, title: 'Superhot VR', category: 'Shooting', duration: 20, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&q=80'},
+          {id: 3, title: 'Walking Dead VR', category: 'Horror', duration: 25, image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80'},
+          {id: 4, title: 'Moss', category: 'Adventure', duration: 20, image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&q=80'},
+          {id: 5, title: 'Half-Life: Alyx', category: 'Shooting', duration: 30, image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&q=80'},
+          {id: 6, title: 'Job Simulator', category: 'Interactive', duration: 15, image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&q=80'},
+          {id: 7, title: 'Pavlov VR', category: 'Shooting', duration: 20, image: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&q=80'},
+          {id: 8, title: 'Table Tennis VR', category: 'Interactive', duration: 15, image: 'https://images.unsplash.com/photo-1534158914592-062992fbe900?w=400&q=80'}
+        ];
+      }
+
+      const grid = document.getElementById('vr-games-grid');
+      let html = '';
+
+      games.forEach(game => {
+        const categoryClass = `badge-${game.category.toLowerCase()}`;
+        html += `
+          <div class="game-card" onclick="addToCart('vr', 'VR: ${game.title}', 2500, {game: '${game.title}', category: '${game.category}', duration: ${game.duration}})">
+            <img src="${game.image}" alt="${game.title}" style="width: 100%; height: 140px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: var(--space-3);">
+            <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">${game.title}</h4>
+            <div style="margin-bottom: var(--space-2);">
+              <span class="category-badge ${categoryClass}">${game.category}</span>
+            </div>
+            <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~${game.duration} min • ₦2,500</div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+    }
+
+    // Load card packages with card number selection
+    function loadCardPackages() {
+      const container = document.getElementById('card-packages-container');
+      let cards = JSON.parse(localStorage.getItem(CARDS_KEY) || '[]');
+      const availableCards = cards.filter(c => c.status === 'available');
+
+      if (availableCards.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="padding: var(--space-6); text-align: center; background: var(--warning-50); border: 2px solid var(--warning-300);">
+            <div style="font-size: 2rem; margin-bottom: var(--space-3);">⚠️</div>
+            <h4 style="margin-bottom: var(--space-2);">No Cards Available</h4>
+            <p style="color: var(--neutral-600);">All PlayPlanet cards are currently sold out. Please contact staff for assistance.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `
+        <div style="margin-bottom: var(--space-5); padding: var(--space-4); background: var(--primary-50); border-radius: var(--radius-lg); border: 1px solid var(--primary-200);">
+          <label style="display: block; margin-bottom: var(--space-3); font-weight: 600;">Select Your Card Number:</label>
+          <select id="card-number-select" style="width: 100%; padding: var(--space-3); border: 2px solid var(--primary-300); border-radius: var(--radius-md); font-size: 1rem; font-weight: 600; background: white;">
+            <option value="">-- Choose a Card Number --</option>
+            ${availableCards.map(card => `<option value="${card.cardNumber}">PP-${card.cardNumber}</option>`).join('')}
+          </select>
+          <p style="margin-top: var(--space-2); font-size: 0.875rem; color: var(--neutral-600);">
+            <strong>${availableCards.length}</strong> cards available
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
+          <div class="option-card" data-type="card" data-amount="5000" data-chips="35">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">35 Chips</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦5,000</div>
+              <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+              <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addCardToCart(5000, 35, 'Play Card + 35 Chips')">Add to Cart</button>
+            </div>
+          </div>
+
+          <div class="option-card" data-type="card" data-amount="10000" data-chips="70">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">70 Chips</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦10,000</div>
+              <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+              <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addCardToCart(10000, 70, 'Play Card + 70 Chips')">Add to Cart</button>
+            </div>
+          </div>
+
+          <div class="option-card" data-type="card" data-amount="15000" data-chips="105">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙🪙</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">105 Chips</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦15,000</div>
+              <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+              <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addCardToCart(15000, 105, 'Play Card + 105 Chips')">Add to Cart</button>
+            </div>
+          </div>
+
+          <div class="option-card" data-type="card" data-amount="20000" data-chips="140">
+            <div style="text-align: center;">
+              <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙🪙🪙</div>
+              <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">140 Chips</div>
+              <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦20,000</div>
+              <div style="font-size: 0.875rem; color: var(--success-600); font-weight: 600; margin-bottom: var(--space-3);">Best Value!</div>
+              <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addCardToCart(20000, 140, 'Play Card + 140 Chips')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+
+      // Store selected card number when changed
+      document.getElementById('card-number-select').addEventListener('change', function() {
+        selectedCardNumber = this.value;
+      });
+    }
+
+    // Add card with card number to cart
+    function addCardToCart(amount, chips, name) {
+      const cardSelect = document.getElementById('card-number-select');
+      if (!cardSelect || !cardSelect.value) {
+        alert('Please select a card number first!');
+        cardSelect?.focus();
+        return;
+      }
+
+      const cardNumber = cardSelect.value;
+      selectedCardNumber = cardNumber;
+
+      // Check if card already in cart
+      const existingCard = cart.find(item => item.type === 'card');
+      if (existingCard) {
+        alert('You can only purchase one Play Card per order. Remove the existing card first.');
+        return;
+      }
+
+      addToCart('card', name + ` (PP-${cardNumber})`, amount, {chips: chips, cardNumber: cardNumber});
+    }
 
     function addToCart(type, name, amount, details = {}) {
       const item = {
@@ -473,10 +631,18 @@
       }
 
       const name = document.getElementById('customer-name').value.trim();
+      const email = document.getElementById('customer-email').value.trim();
       const phone = document.getElementById('customer-phone').value.trim();
 
-      if (!name || !phone) {
-        alert('Please fill in your name and phone number');
+      if (!name || !email || !phone) {
+        alert('Please fill in all required fields: name, email, and phone number');
+        return;
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
         return;
       }
 
@@ -489,19 +655,32 @@
       // Create booking summary
       const itemsSummary = cart.map(item => item.name).join(', ');
 
-      // Store booking details
+      // Get card number if card purchase exists
+      const cardItem = cart.find(item => item.type === 'card');
+      const cardNumber = cardItem?.details?.cardNumber || null;
+      const chips = cardItem?.details?.chips || 0;
+
+      // Store booking details for admin
       const booking = {
-        id: bookingId,
+        bookingId: bookingId,
         type: 'arena_order',
         service: 'PlayPlanet Arena Order',
         items: cart,
         itemsSummary: itemsSummary,
         customerName: name,
+        customerEmail: email,
         customerPhone: phone,
+        cardNumber: cardNumber,
+        chips: chips,
         amount: total,
         timestamp: new Date().toISOString(),
         status: 'pending'
       };
+
+      // Save to payments storage for admin review
+      let payments = JSON.parse(localStorage.getItem(PAYMENTS_KEY) || '[]');
+      payments.push(booking);
+      localStorage.setItem(PAYMENTS_KEY, JSON.stringify(payments));
 
       localStorage.setItem('current_booking', JSON.stringify(booking));
 
@@ -509,8 +688,12 @@
       window.location.href = `payment-confirmation.html?bookingId=${bookingId}&amount=${total}&service=${encodeURIComponent('PlayPlanet Arena - ' + cart.length + ' items')}&datetime=${encodeURIComponent(new Date().toLocaleString())}`;
     }
 
-    // Initialize
-    updateCart();
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCardPackages();
+      loadVRGames();
+      updateCart();
+    });
   </script>
 </body>
 </html>

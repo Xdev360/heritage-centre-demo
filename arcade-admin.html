@@ -3,21 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arcade Admin Dashboard — Heritage Centre</title>
+  <title>PlayPlanet Admin Dashboard — Heritage Centre</title>
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    .admin-tabs { display: flex; gap: var(--space-2); border-bottom: 2px solid var(--neutral-200); margin-bottom: var(--space-6); flex-wrap: wrap; }
-    .admin-tab { padding: var(--space-3) var(--space-5); border: none; background: none; color: var(--neutral-600); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .admin-tabs { display: flex; gap: var(--space-2); border-bottom: 2px solid var(--neutral-200); margin-bottom: var(--space-6); flex-wrap: wrap; overflow-x: auto; }
+    .admin-tab { padding: var(--space-3) var(--space-4); border: none; background: none; color: var(--neutral-600); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; white-space: nowrap; }
     .admin-tab:hover { color: var(--primary-600); }
     .admin-tab.active { color: var(--primary-600); border-bottom-color: var(--primary-600); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
-    .stat-card { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .stat-card { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; cursor: pointer; transition: all 0.2s; }
+    .stat-card:hover { border-color: var(--primary-400); transform: translateY(-2px); }
     .stat-value { font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2); }
-    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.938rem; }
     .data-table th { background: var(--neutral-50); padding: var(--space-3); text-align: left; font-weight: 600; border-bottom: 2px solid var(--neutral-200); }
     .data-table td { padding: var(--space-3); border-bottom: 1px solid var(--neutral-200); }
+    .status-badge { padding: var(--space-1) var(--space-3); border-radius: var(--radius-md); font-size: 0.813rem; font-weight: 600; }
+    .status-available { background: var(--success-100); color: var(--success-700); }
+    .status-sold { background: var(--neutral-100); color: var(--neutral-700); }
+    .status-pending { background: var(--warning-100); color: var(--warning-700); }
+    .status-approved { background: var(--success-100); color: var(--success-700); }
+    .status-rejected { background: var(--error-100); color: var(--error-700); }
+    .notification-badge { position: absolute; top: -8px; right: -8px; background: var(--error-600); color: white; padding: 2px 6px; border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 700; }
+    .game-card-preview { width: 80px; height: 80px; border-radius: var(--radius-md); object-fit: cover; }
+    .search-bar { width: 100%; max-width: 400px; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 1rem; }
   </style>
 </head>
 <body data-page="arcade-admin">
@@ -25,10 +35,11 @@
     <div class="nav-container">
       <a href="index.html" class="nav-logo"><div class="nav-logo-icon">HC</div><span>Heritage Centre</span></a>
       <nav class="nav-main">
-        <a href="arcade-admin.html" class="nav-link active">Arcade Admin</a>
+        <a href="arcade-admin.html" class="nav-link active">PlayPlanet Admin</a>
         <a href="admin-login.html" class="nav-link">Switch Department</a>
       </nav>
       <div class="nav-actions">
+        <span id="user-name" style="margin-right: var(--space-3); color: var(--neutral-600);"></span>
         <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
       </div>
     </div>
@@ -36,128 +47,254 @@
 
   <main>
     <div class="container" style="padding: var(--space-8) var(--space-4);">
-      <div style="margin-bottom: var(--space-8);">
-        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">🎮 Arcade Center Admin</h1>
-        <p style="color: var(--neutral-600);">Manage game cards, bookings, pricing, and payment confirmations</p>
+      <div style="margin-bottom: var(--space-8); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div>
+          <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">🎮 PlayPlanet Admin Dashboard</h1>
+          <p style="color: var(--neutral-600);">Manage cards, payments, bookings, and pricing</p>
+        </div>
+        <div style="position: relative;">
+          <button class="btn btn-primary" onclick="showNotifications()">
+            🔔 Notifications
+            <span class="notification-badge" id="notif-badge" style="display: none;">0</span>
+          </button>
+        </div>
       </div>
 
       <!-- Stats -->
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-value" id="stat-pending">0</div><div>Pending Payments</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-bookings">0</div><div>Active Bookings</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-cards">0</div><div>Active Game Cards</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-revenue">₦0</div><div>Today's Revenue</div></div>
+        <div class="stat-card" onclick="switchTab('pending-payments')">
+          <div class="stat-value" id="stat-pending">0</div>
+          <div>Pending Payments</div>
+        </div>
+        <div class="stat-card" onclick="switchTab('approved-payments')">
+          <div class="stat-value" id="stat-approved">0</div>
+          <div>Approved Today</div>
+        </div>
+        <div class="stat-card" onclick="switchTab('card-management')">
+          <div class="stat-value" id="stat-available">0</div>
+          <div>Available Cards</div>
+        </div>
+        <div class="stat-card" onclick="switchTab('card-management')">
+          <div class="stat-value" id="stat-sold">0</div>
+          <div>Cards Sold</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-revenue">₦0</div>
+          <div>Total Revenue</div>
+        </div>
       </div>
 
       <!-- Tabs -->
       <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchTab('payments')">💳 Payments</button>
-        <button class="admin-tab" onclick="switchTab('bookings')">📅 Bookings</button>
-        <button class="admin-tab" onclick="switchTab('cards')">🎫 Game Cards</button>
-        <button class="admin-tab" onclick="switchTab('pricing')">💰 Pricing</button>
+        <button class="admin-tab active" onclick="switchTab('pending-payments')">⏳ Pending Payments</button>
+        <button class="admin-tab" onclick="switchTab('approved-payments')">✅ Approved Payments</button>
+        <button class="admin-tab" onclick="switchTab('card-management')">🎫 Card Management</button>
+        <button class="admin-tab" onclick="switchTab('price-settings')">💰 Price Settings</button>
+        <button class="admin-tab" onclick="switchTab('vr-games')">🥽 VR Games</button>
+        <button class="admin-tab" onclick="switchTab('search')">🔍 Search</button>
       </div>
 
-      <!-- Payments Tab -->
-      <div id="tab-payments" class="tab-content active">
+      <!-- Pending Payments Tab -->
+      <div id="tab-pending-payments" class="tab-content active">
         <div class="card">
-          <h3 style="margin-bottom: var(--space-4);">Payment Confirmations</h3>
+          <h3 style="margin-bottom: var(--space-4);">Pending Payment Approvals</h3>
           <table class="data-table">
-            <thead><tr><th>Ref</th><th>Customer</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="payments-list"><tr><td colspan="6" style="text-align:center; color: var(--neutral-500);">No payments pending</td></tr></tbody>
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Card #</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="pending-payments-list">
+              <tr><td colspan="10" style="text-align:center; color: var(--neutral-500); padding: var(--space-8);">No pending payments</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Bookings Tab -->
-      <div id="tab-bookings" class="tab-content">
+      <!-- Approved Payments Tab -->
+      <div id="tab-approved-payments" class="tab-content">
         <div class="card">
-          <h3 style="margin-bottom: var(--space-4);">Arcade Bookings</h3>
+          <h3 style="margin-bottom: var(--space-4);">Approved Payments</h3>
           <table class="data-table">
-            <thead><tr><th>Booking ID</th><th>Customer</th><th>Package</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="bookings-list"><tr><td colspan="6" style="text-align:center; color: var(--neutral-500);">No bookings yet</td></tr></tbody>
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Card #</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Approved Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="approved-payments-list">
+              <tr><td colspan="9" style="text-align:center; color: var(--neutral-500); padding: var(--space-8);">No approved payments yet</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Game Cards Tab -->
-      <div id="tab-cards" class="tab-content">
+      <!-- Card Management Tab -->
+      <div id="tab-card-management" class="tab-content">
         <div class="card">
-          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
-            <h3>Game Cards Management</h3>
-            <button class="btn btn-primary btn-sm" onclick="addCard()">+ Add Card</button>
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <h3>Card Number Management</h3>
+            <button class="btn btn-primary" onclick="showPreloadModal()">📥 Preload Card Numbers</button>
           </div>
+
+          <div style="background: var(--neutral-50); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-6);">
+            <p style="margin: 0; color: var(--neutral-700);"><strong>Total Cards:</strong> <span id="total-cards">0</span> | <strong>Available:</strong> <span id="available-cards">0</span> | <strong>Sold:</strong> <span id="sold-cards">0</span></p>
+          </div>
+
           <table class="data-table">
-            <thead><tr><th>Card Number</th><th>Balance</th><th>Customer</th><th>Issued</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="cards-list"><tr><td colspan="6" style="text-align:center; color: var(--neutral-500);">No active cards</td></tr></tbody>
+            <thead>
+              <tr>
+                <th>Card Number</th>
+                <th>Status</th>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Customer Phone</th>
+                <th>Chips</th>
+                <th>Purchase Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="cards-list">
+              <tr><td colspan="8" style="text-align:center; color: var(--neutral-500); padding: var(--space-8);">No cards loaded. Click "Preload Card Numbers" to start.</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Pricing Tab -->
-      <div id="tab-pricing" class="tab-content">
+      <!-- Price Settings Tab -->
+      <div id="tab-price-settings" class="tab-content">
         <div class="card">
-          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
-            <h3>Pricing Management</h3>
-            <button class="btn btn-primary btn-sm" onclick="updatePricing()">Save Changes</button>
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-6);">
+            <h3>Price & Service Settings</h3>
+            <button class="btn btn-primary" onclick="savePricing()">💾 Save All Prices</button>
           </div>
-          <div style="display: grid; gap: var(--space-4);">
-            <div class="field"><label>Hourly Play Rate</label><input type="number" class="input" id="hourly-rate" value="2000" /></div>
-            <div class="field"><label>Game Card Activation Fee</label><input type="number" class="input" id="card-fee" value="500" /></div>
-            <div class="field"><label>Birthday Package (Basic)</label><input type="number" class="input" id="package-basic" value="15000" /></div>
-            <div class="field"><label>Birthday Package (Premium)</label><input type="number" class="input" id="package-premium" value="25000" /></div>
-            <div class="field"><label>Birthday Package (VIP)</label><input type="number" class="input" id="package-vip" value="40000" /></div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6);">
+            <!-- Card Prices -->
+            <div>
+              <h4 style="margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 2px solid var(--neutral-200);">Play Card + Chips Packages</h4>
+              <div style="display: grid; gap: var(--space-3);">
+                <div>
+                  <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">35 Chips Package</label>
+                  <input type="number" id="price-card-35" value="5000" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+                </div>
+                <div>
+                  <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">70 Chips Package</label>
+                  <input type="number" id="price-card-70" value="10000" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+                </div>
+                <div>
+                  <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">105 Chips Package</label>
+                  <input type="number" id="price-card-105" value="15000" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+                </div>
+                <div>
+                  <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">140 Chips Package</label>
+                  <input type="number" id="price-card-140" value="20000" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+                </div>
+              </div>
+            </div>
+
+            <!-- PS5 Prices -->
+            <div>
+              <h4 style="margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 2px solid var(--neutral-200);">PS5 Gaming Sessions</h4>
+              <div style="display: grid; gap: var(--space-3);">
+                <div>
+                  <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">Solo Session (1 Player)</label>
+                  <input type="number" id="price-ps5-solo" value="1000" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+                </div>
+                <div>
+                  <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">Duo Session (2 Players)</label>
+                  <input type="number" id="price-ps5-duo" value="2000" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+                </div>
+              </div>
+            </div>
+
+            <!-- VR Price -->
+            <div>
+              <h4 style="margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 2px solid var(--neutral-200);">VR Gaming</h4>
+              <div>
+                <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">VR Session (All Games)</label>
+                <input type="number" id="price-vr" value="2500" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);" placeholder="₦">
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- VR Games Tab -->
+      <div id="tab-vr-games" class="tab-content">
+        <div class="card">
+          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-6);">
+            <h3>VR Games Library</h3>
+            <button class="btn btn-primary" onclick="showAddGameModal()">➕ Add VR Game</button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-4);" id="vr-games-grid">
+            <!-- Games will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Tab -->
+      <div id="tab-search" class="tab-content">
+        <div class="card">
+          <h3 style="margin-bottom: var(--space-6);">Search Cards & Customers</h3>
+          
+          <input type="text" id="search-input" class="search-bar" placeholder="Search by card number, customer name, email, or phone..." oninput="performSearch()">
+
+          <div id="search-results" style="margin-top: var(--space-6);">
+            <p style="text-align: center; color: var(--neutral-500); padding: var(--space-8);">Enter a search term to find cards and customers</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
   <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
     <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
-      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre. All rights reserved.</p>
+      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre PlayPlanet. All rights reserved.</p>
     </div>
   </footer>
 
-  <script>
-    function checkAuth() {
-      const dept = localStorage.getItem('hc_department');
-      if (dept !== 'arcade' && dept !== 'ceo') {
-        alert('Access denied. Arcade admin privileges required.');
-        window.location.href = 'admin-login.html';
-      }
-    }
+  <!-- Preload Cards Modal -->
+  <div id="preload-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="card" style="max-width: 500px; margin: var(--space-4);">
+      <h3 style="margin-bottom: var(--space-4);">Preload Card Numbers</h3>
+      <p style="color: var(--neutral-600); margin-bottom: var(--space-4);">Generate a batch of card numbers for online bookings</p>
+      
+      <div style="margin-bottom: var(--space-4);">
+        <label style="display: block; margin-bottom: var(--space-2); font-weight: 600;">Start Number</label>
+        <input type="number" id="card-start" value="1" min="1" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);">
+      </div>
 
-    function switchTab(tab) {
-      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById(`tab-${tab}`).classList.add('active');
-    }
+      <div style="margin-bottom: var(--space-6);">
+        <label style="display: block; margin-bottom: var(--space-2); font-weight: 600;">End Number</label>
+        <input type="number" id="card-end" value="100" min="1" style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md);">
+      </div>
 
-    function logout() {
-      localStorage.removeItem('hc_user');
-      localStorage.removeItem('hc_user_role');
-      localStorage.removeItem('hc_department');
-      window.location.href = 'index.html';
-    }
+      <div style="display: flex; gap: var(--space-3);">
+        <button class="btn btn-primary" onclick="preloadCards()">Generate Cards</button>
+        <button class="btn btn-ghost" onclick="closePreloadModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
-    function addCard() { alert('Add Game Card feature - integrate with your backend'); }
-    function updatePricing() { alert('Pricing updated successfully!'); }
-
-    // Load data
-    function loadStats() {
-      const payments = JSON.parse(localStorage.getItem('hc_all_pending_payments') || '[]');
-      const arcadePayments = payments.filter(p => p.serviceType && p.serviceType.toLowerCase().includes('arcade'));
-      document.getElementById('stat-pending').textContent = arcadePayments.filter(p => p.status === 'pending').length;
-      document.getElementById('stat-bookings').textContent = '0'; // Placeholder
-      document.getElementById('stat-cards').textContent = '0'; // Placeholder
-      document.getElementById('stat-revenue').textContent = '₦0'; // Placeholder
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAuth();
-      loadStats();
-    });
-  </script>
+  <script src="js/arcade-admin.js"></script>
 </body>
 </html>
