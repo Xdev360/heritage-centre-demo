@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enter Arena — PlayPlanet Arcade</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .section-block {
+      background: white;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+    .option-card {
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+      position: relative;
+    }
+    .option-card:hover {
+      border-color: var(--primary-400);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+    .option-card.selected {
+      border-color: var(--primary-600);
+      background: var(--primary-50);
+    }
+    .game-card {
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    .game-card:hover {
+      border-color: var(--primary-400);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+    .cart-sidebar {
+      position: sticky;
+      top: 100px;
+      background: white;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3);
+      background: var(--neutral-50);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+    }
+    .category-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: var(--space-2);
+    }
+    .badge-interactive { background: var(--success-100); color: var(--success-700); }
+    .badge-shooting { background: var(--error-100); color: var(--error-700); }
+    .badge-horror { background: var(--neutral-800); color: white; }
+    .badge-adventure { background: var(--primary-100); color: var(--primary-700); }
+    .badge-sports { background: var(--warning-100); color: var(--warning-700); }
+    .empty-cart {
+      text-align: center;
+      padding: var(--space-8) var(--space-4);
+      color: var(--neutral-500);
+    }
+  </style>
+</head>
+<body data-page="arcade-arena">
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="playplanet.html" class="nav-link active">Arcade</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="account.html" class="btn btn-ghost btn-sm">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" style="padding: var(--space-6) var(--space-4);">
+      <nav class="breadcrumbs">
+        <a href="index.html" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="playplanet.html" class="breadcrumb-item">PlayPlanet</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Enter Arena</span>
+      </nav>
+    </div>
+
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <div style="text-align: center; margin-bottom: var(--space-10);">
+        <h1 style="font-size: 3rem; margin-bottom: var(--space-3);">🎮 Enter the Arena</h1>
+        <p style="color: var(--neutral-600); font-size: 1.25rem;">Build your gaming experience • Add to cart • Pay once</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 380px; gap: var(--space-8); align-items: start;">
+        <!-- Main Content -->
+        <div>
+          
+          <!-- A. Buy Play Card with Chips -->
+          <div class="section-block" id="section-card">
+            <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6);">
+              <div style="width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary-500), var(--primary-600)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem;">💳</div>
+              <div>
+                <h2 style="font-size: 1.75rem; margin-bottom: var(--space-1);">A. Buy Play Card + Chips</h2>
+                <p style="color: var(--neutral-600);">One-time card purchase with chips included</p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4);">
+              <div class="option-card" data-type="card" data-amount="5000" data-chips="35">
+                <div style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙</div>
+                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">35 Chips</div>
+                  <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦5,000</div>
+                  <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 35 Chips', 5000, {chips: 35})">Add to Cart</button>
+                </div>
+              </div>
+
+              <div class="option-card" data-type="card" data-amount="10000" data-chips="70">
+                <div style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙</div>
+                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">70 Chips</div>
+                  <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦10,000</div>
+                  <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 70 Chips', 10000, {chips: 70})">Add to Cart</button>
+                </div>
+              </div>
+
+              <div class="option-card" data-type="card" data-amount="15000" data-chips="105">
+                <div style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙🪙</div>
+                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">105 Chips</div>
+                  <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦15,000</div>
+                  <div style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: var(--space-3);">Card + Chips</div>
+                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 105 Chips', 15000, {chips: 105})">Add to Cart</button>
+                </div>
+              </div>
+
+              <div class="option-card" data-type="card" data-amount="20000" data-chips="140">
+                <div style="text-align: center;">
+                  <div style="font-size: 2rem; margin-bottom: var(--space-2);">🪙🪙🪙🪙</div>
+                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2);">140 Chips</div>
+                  <div style="font-size: 1.25rem; font-weight: 700; color: var(--neutral-700); margin-bottom: var(--space-2);">₦20,000</div>
+                  <div style="font-size: 0.875rem; color: var(--success-600); font-weight: 600; margin-bottom: var(--space-3);">Best Value!</div>
+                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('card', 'Play Card + 140 Chips', 20000, {chips: 140})">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- B. Book PS5 Sessions -->
+          <div class="section-block" id="section-ps5">
+            <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6);">
+              <div style="width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary-500), var(--primary-600)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎮</div>
+              <div>
+                <h2 style="font-size: 1.75rem; margin-bottom: var(--space-1);">B. Book PS5 Gaming</h2>
+                <p style="color: var(--neutral-600);">Next-gen PlayStation 5 experience</p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5);">
+              <div class="option-card" data-type="ps5" data-players="1" data-amount="1000">
+                <div style="text-align: center;">
+                  <div style="font-size: 3rem; margin-bottom: var(--space-3);">🎮</div>
+                  <h4 style="font-size: 1.5rem; margin-bottom: var(--space-2);">Solo Session</h4>
+                  <p style="color: var(--neutral-600); margin-bottom: var(--space-3);">One player gaming</p>
+                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-4);">₦1,000</div>
+                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('ps5', 'PS5 Solo Session (1 Player)', 1000, {players: 1})">Add to Cart</button>
+                </div>
+              </div>
+
+              <div class="option-card" data-type="ps5" data-players="2" data-amount="2000">
+                <div style="text-align: center;">
+                  <div style="font-size: 3rem; margin-bottom: var(--space-3);">🎮🎮</div>
+                  <h4 style="font-size: 1.5rem; margin-bottom: var(--space-2);">Duo Session</h4>
+                  <p style="color: var(--neutral-600); margin-bottom: var(--space-3);">Two players together</p>
+                  <div style="font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-4);">₦2,000</div>
+                  <button class="btn btn-primary btn-sm" style="width: 100%;" onclick="addToCart('ps5', 'PS5 Duo Session (2 Players)', 2000, {players: 2})">Add to Cart</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--space-6); background: var(--neutral-50);">
+              <h4 style="margin-bottom: var(--space-4); font-size: 1rem;">🎮 Popular Games Available</h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-3);">
+                <div style="padding: var(--space-2); background: white; border-radius: var(--radius-md); text-align: center; font-size: 0.875rem;">
+                  <div style="font-weight: 600;">FIFA 24</div>
+                  <div style="color: var(--neutral-600); font-size: 0.75rem;">Sports</div>
+                </div>
+                <div style="padding: var(--space-2); background: white; border-radius: var(--radius-md); text-align: center; font-size: 0.875rem;">
+                  <div style="font-weight: 600;">Spider-Man</div>
+                  <div style="color: var(--neutral-600); font-size: 0.75rem;">Action</div>
+                </div>
+                <div style="padding: var(--space-2); background: white; border-radius: var(--radius-md); text-align: center; font-size: 0.875rem;">
+                  <div style="font-weight: 600;">God of War</div>
+                  <div style="color: var(--neutral-600); font-size: 0.75rem;">Adventure</div>
+                </div>
+                <div style="padding: var(--space-2); background: white; border-radius: var(--radius-md); text-align: center; font-size: 0.875rem;">
+                  <div style="font-weight: 600;">GT7</div>
+                  <div style="color: var(--neutral-600); font-size: 0.75rem;">Racing</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- C. Book VR Gaming -->
+          <div class="section-block" id="section-vr">
+            <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6);">
+              <div style="width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary-500), var(--primary-600)); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem;">🥽</div>
+              <div>
+                <h2 style="font-size: 1.75rem; margin-bottom: var(--space-1);">C. Book VR Gaming</h2>
+                <p style="color: var(--neutral-600);">₦2,500 per session • Choose your game</p>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4);">
+              
+              <div class="game-card" onclick="addToCart('vr', 'VR: Beat Saber', 2500, {game: 'Beat Saber', category: 'Interactive/Rhythm', duration: 15})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🎵</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Beat Saber</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-interactive">Interactive</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Rhythm-based lightsaber action</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~15 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Superhot VR', 2500, {game: 'Superhot VR', category: 'Shooting/Action', duration: 20})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🔫</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Superhot VR</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-shooting">Shooting</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Time moves when you move</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~20 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Walking Dead VR', 2500, {game: 'The Walking Dead: Saints & Sinners', category: 'Horror/Survival', duration: 25})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🧟</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Walking Dead VR</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-horror">Horror</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Zombie apocalypse survival</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~25 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Moss', 2500, {game: 'Moss', category: 'Adventure/Puzzle', duration: 20})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🐭</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Moss</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-adventure">Adventure</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Guide a brave mouse hero</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~20 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Half-Life Alyx', 2500, {game: 'Half-Life: Alyx', category: 'Shooting/Adventure', duration: 30})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">👽</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Half-Life: Alyx</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-shooting">Shooting</span>
+                  <span class="category-badge badge-adventure">Adventure</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Epic story-driven VR</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~30 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Job Simulator', 2500, {game: 'Job Simulator', category: 'Interactive/Comedy', duration: 15})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🤖</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Job Simulator</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-interactive">Interactive</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Robot-run world jobs</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~15 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Pavlov VR', 2500, {game: 'Pavlov VR', category: 'Shooting/Multiplayer', duration: 20})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">⚔️</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Pavlov VR</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-shooting">Shooting</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Counter-Strike VR combat</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~20 min • ₦2,500</div>
+              </div>
+
+              <div class="game-card" onclick="addToCart('vr', 'VR: Table Tennis', 2500, {game: 'Eleven Table Tennis', category: 'Sports/Interactive', duration: 15})">
+                <div style="font-size: 1.5rem; margin-bottom: var(--space-2);">🏓</div>
+                <h4 style="font-size: 1rem; margin-bottom: var(--space-2); font-weight: 700;">Table Tennis VR</h4>
+                <div style="margin-bottom: var(--space-2);">
+                  <span class="category-badge badge-sports">Sports</span>
+                  <span class="category-badge badge-interactive">Interactive</span>
+                </div>
+                <p style="color: var(--neutral-600); font-size: 0.813rem; margin-bottom: var(--space-2);">Realistic ping pong simulation</p>
+                <div style="font-weight: 600; color: var(--primary-600); font-size: 0.875rem;">⏱️ ~15 min • ₦2,500</div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-sidebar">
+          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-5); display: flex; align-items: center; gap: var(--space-2);">
+            🛒 Your Cart
+            <span id="cart-count" style="background: var(--primary-600); color: white; padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 700;">0</span>
+          </h3>
+
+          <div id="cart-items">
+            <div class="empty-cart">
+              <div style="font-size: 3rem; margin-bottom: var(--space-3); opacity: 0.5;">🛒</div>
+              <p>Your cart is empty</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-2);">Add items to get started</p>
+            </div>
+          </div>
+
+          <div id="cart-summary" style="display: none;">
+            <div style="border-top: 2px solid var(--neutral-200); margin: var(--space-5) 0; padding-top: var(--space-5);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-3);">
+                <span style="font-weight: 600; color: var(--neutral-700);">Subtotal:</span>
+                <span id="cart-subtotal" style="font-weight: 700; color: var(--neutral-900);">₦0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-5);">
+                <span style="font-weight: 800; font-size: 1.125rem;">Total:</span>
+                <span id="cart-total" style="font-weight: 800; font-size: 1.5rem; color: var(--primary-600);">₦0</span>
+              </div>
+
+              <div style="margin-bottom: var(--space-4);">
+                <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">Your Name *</label>
+                <input type="text" id="customer-name" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.938rem;" placeholder="Full name">
+              </div>
+
+              <div style="margin-bottom: var(--space-5);">
+                <label style="display: block; margin-bottom: var(--space-2); font-weight: 600; font-size: 0.875rem;">Phone Number *</label>
+                <input type="tel" id="customer-phone" required style="width: 100%; padding: var(--space-3); border: 1px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.938rem;" placeholder="080XXXXXXXX">
+              </div>
+
+              <button id="checkout-btn" class="btn btn-primary btn-lg" style="width: 100%;" onclick="proceedToCheckout()">
+                Proceed to Payment →
+              </button>
+              <button class="btn btn-ghost btn-sm" style="width: 100%; margin-top: var(--space-3);" onclick="clearCart()">
+                Clear Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4); margin-top: var(--space-12);">
+    <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre PlayPlanet. All rights reserved.</p>
+      <span style="color: var(--neutral-300);">•</span>
+      <a href="admin-login.html" style="color: var(--neutral-500); text-decoration: none; font-size: 0.875rem;">Administration Login</a>
+    </div>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function addToCart(type, name, amount, details = {}) {
+      const item = {
+        id: Date.now() + Math.random(),
+        type: type,
+        name: name,
+        amount: amount,
+        details: details
+      };
+      
+      cart.push(item);
+      updateCart();
+      
+      // Visual feedback
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '✓ Added!';
+      btn.style.background = 'var(--success-600)';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+      }, 1000);
+    }
+
+    function removeFromCart(itemId) {
+      cart = cart.filter(item => item.id !== itemId);
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItemsEl = document.getElementById('cart-items');
+      const cartCountEl = document.getElementById('cart-count');
+      const cartSummaryEl = document.getElementById('cart-summary');
+      
+      cartCountEl.textContent = cart.length;
+      
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = `
+          <div class="empty-cart">
+            <div style="font-size: 3rem; margin-bottom: var(--space-3); opacity: 0.5;">🛒</div>
+            <p>Your cart is empty</p>
+            <p style="font-size: 0.875rem; margin-top: var(--space-2);">Add items to get started</p>
+          </div>
+        `;
+        cartSummaryEl.style.display = 'none';
+        return;
+      }
+      
+      cartSummaryEl.style.display = 'block';
+      
+      let html = '';
+      let total = 0;
+      
+      cart.forEach(item => {
+        total += item.amount;
+        html += `
+          <div class="cart-item">
+            <div style="flex: 1;">
+              <div style="font-weight: 600; font-size: 0.938rem; margin-bottom: var(--space-1);">${item.name}</div>
+              <div style="font-size: 0.875rem; color: var(--neutral-600);">₦${item.amount.toLocaleString()}</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="removeFromCart(${item.id})" style="color: var(--error-600); padding: var(--space-1);">✕</button>
+          </div>
+        `;
+      });
+      
+      cartItemsEl.innerHTML = html;
+      document.getElementById('cart-subtotal').textContent = `₦${total.toLocaleString()}`;
+      document.getElementById('cart-total').textContent = `₦${total.toLocaleString()}`;
+    }
+
+    function clearCart() {
+      if (confirm('Are you sure you want to clear your cart?')) {
+        cart = [];
+        updateCart();
+      }
+    }
+
+    function proceedToCheckout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty. Please add items before proceeding.');
+        return;
+      }
+
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
+
+      if (!name || !phone) {
+        alert('Please fill in your name and phone number');
+        return;
+      }
+
+      // Calculate total
+      const total = cart.reduce((sum, item) => sum + item.amount, 0);
+
+      // Generate booking ID
+      const bookingId = 'ARC-ARENA-' + Date.now();
+
+      // Create booking summary
+      const itemsSummary = cart.map(item => item.name).join(', ');
+
+      // Store booking details
+      const booking = {
+        id: bookingId,
+        type: 'arena_order',
+        service: 'PlayPlanet Arena Order',
+        items: cart,
+        itemsSummary: itemsSummary,
+        customerName: name,
+        customerPhone: phone,
+        amount: total,
+        timestamp: new Date().toISOString(),
+        status: 'pending'
+      };
+
+      localStorage.setItem('current_booking', JSON.stringify(booking));
+
+      // Redirect to payment confirmation with P2P system
+      window.location.href = `payment-confirmation.html?bookingId=${bookingId}&amount=${total}&service=${encodeURIComponent('PlayPlanet Arena - ' + cart.length + ' items')}&datetime=${encodeURIComponent(new Date().toLocaleString())}`;
+    }
+
+    // Initialize
+    updateCart();
+  </script>
+</body>
+</html>
