@@ -2,43 +2,180 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Royal Retreat — Heritage Centre</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Retreat Spa & Beauty — Heritage Centre</title>
+  <meta name="description" content="Luxury spa and beauty treatments. Professional massages, rejuvenating facials, and wellness packages in serene private rooms." />
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="index.html" class="text-xl font-bold">Heritage Centre</a>
-      <nav class="space-x-4">
-        <a href="index.html" class="text-gray-600">Home</a>
-        <a href="bookings.html" class="text-gray-600">Bookings</a>
+<body data-page="spa">
+  <!-- Navigation (copy from playplanet.html) -->
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="nav-logo-icon">HC</div><span>Heritage Centre</span></a>
+      <nav class="nav-main">
+        <a href="index.html" class="nav-link" data-page="home">Home</a>
+        <a href="cinema-booking.html" class="nav-link" data-page="cinema">Cinema</a>
+        <a href="playplanet.html" class="nav-link" data-page="arcade">Arcade</a>
+        <a href="spa.html" class="nav-link active" data-page="spa">Spa & Beauty</a>
+        <a href="lounge.html" class="nav-link" data-page="lounge">Lounge & Events</a>
+        <a href="restaurant.html" class="nav-link" data-page="restaurant">Restaurant</a>
+        <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
       </nav>
+      <div class="nav-actions">
+        <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+        <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+        <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
+          <button class="profile-trigger" id="profile-trigger">
+            <div class="profile-avatar" id="profile-avatar">U</div><span id="profile-name">User</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="profile-menu" id="profile-menu">
+            <a href="account.html" class="profile-menu-item">My Dashboard</a>
+            <a href="bookings.html" class="profile-menu-item">My Bookings</a>
+            <a href="loyalty.html" class="profile-menu-item">Loyalty Rewards</a>
+            <div class="profile-menu-divider"></div>
+            <a href="about.html" class="profile-menu-item">About Us</a>
+            <a href="cinema-admin.html" class="profile-menu-item" id="admin-link" style="display: none;">Admin Dashboard</a>
+            <a href="cinema-ceo.html" class="profile-menu-item" id="ceo-link" style="display: none;">CEO Analytics</a>
+            <div class="profile-menu-divider"></div>
+            <a href="#" class="profile-menu-item" id="logout-btn">Sign Out</a>
+          </div>
+        </div>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-menu-link">Home</a>
+      <a href="cinema-booking.html" class="mobile-menu-link">Cinema</a>
+      <a href="playplanet.html" class="mobile-menu-link">Arcade</a>
+      <a href="spa.html" class="mobile-menu-link">Spa & Beauty</a>
+      <a href="lounge.html" class="mobile-menu-link">Lounge & Events</a>
+      <a href="restaurant.html" class="mobile-menu-link">Restaurant</a>
+      <a href="contact.html" class="mobile-menu-link">Contact</a>
     </div>
   </header>
 
-  <main class="container mx-auto px-4 py-8">
-    <article class="bg-white rounded-lg shadow p-6">
-      <div class="md:flex md:items-center">
-        <img src="https://images.unsplash.com/photo-1556228453-0c9a88a6b0a8?w=1200&q=80" alt="Spa" class="w-full md:w-1/3 rounded-lg object-cover shadow-md mb-4 md:mb-0" />
-        <div class="md:ml-6">
-          <h1 class="text-2xl font-bold mb-2">Royal Retreat — Spa & Beauty</h1>
-          <p class="text-gray-600 mb-4">Relax and rejuvenate at Royal Retreat. Our experienced therapists offer a curated selection of massages, facials, and beauty treatments in luxurious private rooms. Add-ons include aromatherapy and couple packages.</p>
-          <ul class="text-gray-700 mb-4 list-disc list-inside">
-            <li>Professional therapists and premium products</li>
-            <li>Private treatment rooms and couple experiences</li>
-            <li>Gift vouchers and seasonal packages</li>
-          </ul>
-          <div class="flex space-x-3">
-            <a href="bookings.html?dept=spa" class="px-4 py-2 bg-yellow-600 text-white rounded shadow">Book Services</a>
-            <a href="index.html" class="px-4 py-2 border rounded text-gray-700">Back to Home</a>
+  <main>
+    <div class="container" style="padding-top: var(--space-6);">
+      <nav class="breadcrumbs">
+        <a href="index.html" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Royal Retreat Spa</span>
+      </nav>
+    </div>
+
+    <section class="container" style="padding: var(--space-8) var(--space-4);">
+      <div class="card" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; padding: 0; overflow: hidden; border: none;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+          <div style="padding: var(--space-12) var(--space-8);">
+            <div style="display: inline-block; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: var(--space-2) var(--space-4); border-radius: var(--radius-lg); font-size: 0.875rem; font-weight: 600; margin-bottom: var(--space-4); border: 1px solid rgba(255, 255, 255, 0.3);">💆 Luxury Wellness</div>
+            <h1 style="color: white; font-size: 3rem; font-weight: 800; line-height: 1.1; margin-bottom: var(--space-4);">Royal Retreat Spa</h1>
+            <p style="font-size: 1.125rem; line-height: 1.6; margin-bottom: var(--space-8); opacity: 0.95;">Escape to tranquility. Professional therapists, premium products, and serene private rooms await your wellness journey.</p>
+            <div style="display: flex; gap: var(--space-4); flex-wrap: wrap;">
+              <a href="bookings.html?dept=spa" class="btn btn-lg" style="background: white; color: #ec4899;">Book Treatment →</a>
+              <a href="#packages" class="btn btn-outline btn-lg" style="border-color: white; color: white;">View Packages</a>
+            </div>
+          </div>
+          <div style="position: relative; height: 100%; min-height: 400px;">
+            <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=1000&q=80" alt="Royal Retreat Spa" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
           </div>
         </div>
       </div>
-    </article>
+    </section>
+
+    <section class="container section">
+      <div style="text-align: center; margin-bottom: var(--space-10);">
+        <h2 style="font-size: 2rem; margin-bottom: var(--space-4);">Our Signature Treatments</h2>
+        <p style="color: var(--neutral-600); font-size: 1.125rem;">Rejuvenate your body, mind, and spirit</p>
+      </div>
+      <div class="grid grid-cols-3" style="gap: var(--space-8);">
+        <div class="card" style="text-align: center;">
+          <div style="width: 72px; height: 72px; margin: 0 auto var(--space-5); background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem;">💆</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: var(--space-3);">Therapeutic Massage</h3>
+          <p style="color: var(--neutral-600); font-size: 0.938rem; line-height: 1.6;">Swedish, deep tissue, hot stone, and aromatherapy massages tailored to your needs.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="width: 72px; height: 72px; margin: 0 auto var(--space-5); background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem;">✨</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: var(--space-3);">Facial Treatments</h3>
+          <p style="color: var(--neutral-600); font-size: 0.938rem; line-height: 1.6;">Anti-aging, hydration, deep cleansing facials using premium international skincare brands.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="width: 72px; height: 72px; margin: 0 auto var(--space-5); background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; font-size: 2rem;">💅</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: var(--space-3);">Beauty Services</h3>
+          <p style="color: var(--neutral-600); font-size: 0.938rem; line-height: 1.6;">Manicure, pedicure, waxing, and makeup by certified beauty professionals.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="packages" style="background: white;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--space-10);">
+          <h2 style="font-size: 2rem; margin-bottom: var(--space-4);">Wellness Packages</h2>
+          <p style="color: var(--neutral-600); font-size: 1.125rem;">Complete experiences designed for total relaxation</p>
+        </div>
+        <div class="grid grid-cols-3" style="gap: var(--space-6); max-width: 1000px; margin: 0 auto;">
+          <div class="card" style="border: 2px solid var(--neutral-200);">
+            <div style="text-align: center; padding: var(--space-2);">
+              <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-2);">Quick Escape</h3>
+              <div style="font-size: 2.5rem; font-weight: 700; color: #ec4899; margin-bottom: var(--space-4);">₦8,000</div>
+              <p style="color: var(--neutral-500); font-size: 0.875rem; margin-bottom: var(--space-4);">60 minutes</p>
+              <ul style="text-align: left; color: var(--neutral-600); font-size: 0.938rem; line-height: 2; list-style: none; padding: 0;">
+                <li>✓ Choice of massage or facial</li>
+                <li>✓ Complimentary tea</li>
+                <li>✓ Relaxation lounge access</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="border: 2px solid #ec4899; position: relative;">
+            <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #ec4899; color: white; padding: var(--space-1) var(--space-4); border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Popular</div>
+            <div style="text-align: center; padding: var(--space-2);">
+              <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-2);">Full Day Bliss</h3>
+              <div style="font-size: 2.5rem; font-weight: 700; color: #ec4899; margin-bottom: var(--space-4);">₦18,000</div>
+              <p style="color: var(--neutral-500); font-size: 0.875rem; margin-bottom: var(--space-4);">4 hours</p>
+              <ul style="text-align: left; color: var(--neutral-600); font-size: 0.938rem; line-height: 2; list-style: none; padding: 0;">
+                <li>✓ Full body massage</li>
+                <li>✓ Premium facial treatment</li>
+                <li>✓ Manicure & pedicure</li>
+                <li>✓ Gourmet lunch included</li>
+                <li>✓ Aromatherapy session</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="border: 2px solid var(--neutral-200);">
+            <div style="text-align: center; padding: var(--space-2);">
+              <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-2);">Couples Retreat</h3>
+              <div style="font-size: 2.5rem; font-weight: 700; color: #ec4899; margin-bottom: var(--space-4);">₦30,000</div>
+              <p style="color: var(--neutral-500); font-size: 0.875rem; margin-bottom: var(--space-4);">3 hours for 2</p>
+              <ul style="text-align: left; color: var(--neutral-600); font-size: 0.938rem; line-height: 2; list-style: none; padding: 0;">
+                <li>✓ Private couple's suite</li>
+                <li>✓ Side-by-side massage</li>
+                <li>✓ Champagne & chocolates</li>
+                <li>✓ Jacuzzi access</li>
+                <li>✓ Rose petal aromatherapy</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section">
+      <div class="card" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); color: white; padding: var(--space-12); text-align: center; border: none;">
+        <h2 style="color: white; font-size: 2.5rem; margin-bottom: var(--space-4);">Ready to Relax?</h2>
+        <p style="font-size: 1.125rem; margin-bottom: var(--space-8); opacity: 0.95;">Book your spa experience today and discover your sanctuary of wellness</p>
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+          <a href="bookings.html?dept=spa" class="btn btn-lg" style="background: white; color: #ec4899;">Book Now</a>
+          <a href="index.html" class="btn btn-outline btn-lg" style="border-color: white; color: white;">Back to Home</a>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="text-align: center;"><p style="color: var(--neutral-500); font-size: 0.875rem;">© 2024 Heritage Centre Royal Retreat Spa. All rights reserved.</p></div>
+  </footer>
+
+  <script src="js/nav.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

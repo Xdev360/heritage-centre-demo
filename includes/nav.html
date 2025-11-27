@@ -1,0 +1,165 @@
+<!-- ========================================
+     REUSABLE NAVIGATION COMPONENT
+     Include this in all pages via JavaScript
+     ======================================== -->
+<header class="header" id="main-header">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">HC</div>
+      <span>Heritage Centre</span>
+    </a>
+
+    <nav class="nav-main" id="main-nav">
+      <a href="index.html" class="nav-link" data-page="home">Home</a>
+      <a href="cinema-booking.html" class="nav-link" data-page="cinema">Cinema</a>
+      <a href="playplanet.html" class="nav-link" data-page="arcade">Arcade</a>
+      <a href="spa.html" class="nav-link" data-page="spa">Spa & Beauty</a>
+      <a href="lounge.html" class="nav-link" data-page="lounge">Lounge & Events</a>
+      <a href="restaurant.html" class="nav-link" data-page="restaurant">Restaurant</a>
+      <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+      <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+      
+      <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
+        <button class="profile-trigger" id="profile-trigger">
+          <div class="profile-avatar" id="profile-avatar">U</div>
+          <span id="profile-name">User</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="profile-menu" id="profile-menu">
+          <a href="account.html" class="profile-menu-item">My Dashboard</a>
+          <a href="bookings.html" class="profile-menu-item">My Bookings</a>
+          <a href="loyalty.html" class="profile-menu-item">Loyalty Rewards</a>
+          <div class="profile-menu-divider"></div>
+          <a href="about.html" class="profile-menu-item">About Us</a>
+          <a href="cinema-admin.html" class="profile-menu-item" id="admin-link" style="display: none;">Admin Dashboard</a>
+          <a href="cinema-ceo.html" class="profile-menu-item" id="ceo-link" style="display: none;">CEO Analytics</a>
+          <div class="profile-menu-divider"></div>
+          <a href="#" class="profile-menu-item" id="logout-btn">Sign Out</a>
+        </div>
+      </div>
+
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="mobile-menu-link">Home</a>
+    <a href="cinema-booking.html" class="mobile-menu-link">Cinema</a>
+    <a href="playplanet.html" class="mobile-menu-link">Arcade</a>
+    <a href="spa.html" class="mobile-menu-link">Spa & Beauty</a>
+    <a href="lounge.html" class="mobile-menu-link">Lounge & Events</a>
+    <a href="restaurant.html" class="mobile-menu-link">Restaurant</a>
+    <a href="superstore.html" class="mobile-menu-link">Superstore</a>
+    <a href="contact.html" class="mobile-menu-link">Contact</a>
+    <div style="height: 1px; background: var(--neutral-200); margin: var(--space-4) 0;"></div>
+    <a href="account.html" class="mobile-menu-link" id="mobile-signin">Sign In</a>
+    <a href="account.html" class="mobile-menu-link" id="mobile-account">My Account</a>
+  </div>
+</header>
+
+<script>
+// Navigation functionality
+(function() {
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const profileTrigger = document.getElementById('profile-trigger');
+  const profileMenu = document.getElementById('profile-menu');
+  const header = document.getElementById('main-header');
+
+  // Mobile menu toggle
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenuToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+  }
+
+  // Profile dropdown
+  if (profileTrigger) {
+    profileTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileMenu.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!profileMenu.contains(e.target) && !profileTrigger.contains(e.target)) {
+        profileMenu.classList.remove('open');
+      }
+    });
+  }
+
+  // Sticky header on scroll
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // User authentication state
+  function updateUIForUser() {
+    const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
+    const role = localStorage.getItem('hc_user_role') || '';
+    const signinBtn = document.getElementById('signin-btn');
+    const createBtn = document.getElementById('create-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const profileName = document.getElementById('profile-name');
+    const profileAvatar = document.getElementById('profile-avatar');
+    const adminLink = document.getElementById('admin-link');
+    const ceoLink = document.getElementById('ceo-link');
+
+    if (user && user.name) {
+      signinBtn.style.display = 'none';
+      createBtn.style.display = 'none';
+      profileDropdown.style.display = 'block';
+      profileName.textContent = user.name.split(' ')[0];
+      profileAvatar.textContent = user.name.charAt(0).toUpperCase();
+      if (role === 'admin') {
+        adminLink.style.display = 'block';
+      }
+      if (role === 'ceo') {
+        ceoLink.style.display = 'block';
+      }
+    } else {
+      signinBtn.style.display = 'inline-flex';
+      createBtn.style.display = 'inline-flex';
+      profileDropdown.style.display = 'none';
+    }
+  }
+
+  // Logout
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('hc_user');
+      localStorage.removeItem('hc_user_role');
+      updateUIForUser();
+      window.location.href = 'index.html';
+    });
+  }
+
+  // Set active page
+  const currentPage = document.body.getAttribute('data-page');
+  if (currentPage) {
+    const navLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+    if (navLink) {
+      navLink.classList.add('active');
+    }
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', updateUIForUser);
+  window.addEventListener('storage', updateUIForUser);
+})();
+</script>

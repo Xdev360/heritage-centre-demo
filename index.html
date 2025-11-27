@@ -2,164 +2,487 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Heritage Center — Demo</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heritage Centre — Premium Lifestyle & Entertainment Hub</title>
+  <meta name="description" content="Nigeria's premier lifestyle destination featuring cinema, arcade, spa, lounge, and fine dining experiences." />
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4 py-4 flex items-center">
-      <!-- Left: Logo -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">HC</div>
-        <a href="index.html" class="text-xl font-bold text-gray-800">Heritage Centre</a>
-      </div>
+<body>
+  <!-- ========================================
+       NAVIGATION HEADER
+       ======================================== -->
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <!-- Logo -->
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
 
-      <!-- Center: Main Navigation (equal-width links on md+ screens) -->
-      <nav class="hidden md:flex md:flex-1 md:justify-center">
-        <div class="flex w-full max-w-3xl">
-          <a href="index.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Home</a>
-
-          <!-- Discover dropdown container -->
-          <div class="flex-1 text-center relative">
-            <button id="discover-btn" class="w-full text-center text-gray-700 hover:text-yellow-600 flex items-center justify-center space-x-2"> 
-              <span>Discover</span>
-              <span class="text-sm">▾</span>
-            </button>
-            <div id="discover-menu" class="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white shadow rounded border hidden w-56 text-left z-40">
-              <a href="playplanet.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">PlayPlanet (Arcade)</a>
-              <a href="spa.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Royal Retreat (Spa & Beauty)</a>
-              <a href="cinema.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cinema</a>
-              <a href="lounge.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Lounge & Events</a>
-              <a href="restaurant.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Restaurant</a>
-              <a href="superstore.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Superstore</a>
-            </div>
-          </div>
-
-          <a href="bookings.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Bookings</a>
-          <a href="events.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Events</a>
-          <a href="about.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">About</a>
-          <a href="contact.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Contact</a>
-        </div>
+      <!-- Main Navigation (Desktop) -->
+      <nav class="nav-main" id="main-nav">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="cinema-booking.html" class="nav-link">Cinema</a>
+        <a href="playplanet.html" class="nav-link">Arcade</a>
+        <a href="spa.html" class="nav-link">Spa & Beauty</a>
+        <a href="lounge.html" class="nav-link">Lounge & Events</a>
+        <a href="restaurant.html" class="nav-link">Restaurant</a>
+        <a href="contact.html" class="nav-link">Contact</a>
       </nav>
 
-      <!-- Right: Actions (Sign In / Create) and optional links -->
-      <div class="ml-auto flex items-center space-x-3">
-        <a id="loyalty-link" href="loyalty.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">Loyalty</a>
-        <a id="dashboard-link" href="account.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">My Dashboard</a>
+      <!-- Actions -->
+      <div class="nav-actions">
+        <!-- Sign In (shown when not logged in) -->
+        <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+        
+        <!-- Create Account (shown when not logged in) -->
+        <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+        
+        <!-- Profile Dropdown (shown when logged in) -->
+        <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
+          <button class="profile-trigger" id="profile-trigger">
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            <span id="profile-name">User</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          
+          <div class="profile-menu" id="profile-menu">
+            <a href="account.html" class="profile-menu-item">My Dashboard</a>
+            <a href="bookings.html" class="profile-menu-item">My Bookings</a>
+            <a href="loyalty.html" class="profile-menu-item">Loyalty Rewards</a>
+            <div class="profile-menu-divider"></div>
+            <a href="about.html" class="profile-menu-item">About Us</a>
+            <a href="#" class="profile-menu-item" id="admin-link" style="display: none;">Admin Dashboard</a>
+            <a href="#" class="profile-menu-item" id="ceo-link" style="display: none;">CEO Analytics</a>
+            <div class="profile-menu-divider"></div>
+            <a href="#" class="profile-menu-item" id="logout-btn">Sign Out</a>
+          </div>
+        </div>
 
-        <a id="signin-btn" href="account.html" class="px-3 py-2 text-gray-700 rounded hover:bg-gray-100">Sign In</a>
-        <a id="create-btn" href="account.html" class="px-4 py-2 bg-yellow-600 text-white rounded shadow">Create an Account</a>
-
-        <a id="admin-link" href="admin.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">Admin</a>
-        <a id="ceo-link" href="ceo.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">CEO</a>
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-menu-link">Home</a>
+      <a href="cinema-booking.html" class="mobile-menu-link">Cinema</a>
+      <a href="playplanet.html" class="mobile-menu-link">Arcade (PlayPlanet)</a>
+      <a href="spa.html" class="mobile-menu-link">Spa & Beauty</a>
+      <a href="lounge.html" class="mobile-menu-link">Lounge & Events</a>
+      <a href="restaurant.html" class="mobile-menu-link">Restaurant</a>
+      <a href="superstore.html" class="mobile-menu-link">Superstore</a>
+      <a href="contact.html" class="mobile-menu-link">Contact</a>
+      <div style="height: 1px; background: var(--neutral-200); margin: var(--space-4) 0;"></div>
+      <a href="account.html" class="mobile-menu-link" id="mobile-signin">Sign In</a>
+      <a href="account.html" class="mobile-menu-link" id="mobile-account">My Account</a>
+      <a href="bookings.html" class="mobile-menu-link" id="mobile-bookings" style="display: none;">My Bookings</a>
+      <a href="loyalty.html" class="mobile-menu-link" id="mobile-loyalty" style="display: none;">Loyalty Rewards</a>
+      <a href="about.html" class="mobile-menu-link">About Us</a>
     </div>
   </header>
 
-  <script>
-    // Header interactions: Discover dropdown and conditional links based on localStorage
-    document.addEventListener('click', function(e){
-      const menu = document.getElementById('discover-menu');
-      const btn = document.getElementById('discover-btn');
-      if(!btn || !menu) return;
-      if(btn.contains(e.target)){
-        menu.classList.toggle('hidden');
-      } else {
-        if(!menu.contains(e.target)) menu.classList.add('hidden');
-      }
-    });
-
-    function updateHeaderForUser(){
-      const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
-      const role = localStorage.getItem('hc_user_role') || '';
-      const loyalty = document.getElementById('loyalty-link');
-      const dash = document.getElementById('dashboard-link');
-      const signin = document.getElementById('signin-btn');
-      const create = document.getElementById('create-btn');
-      const admin = document.getElementById('admin-link');
-      const ceo = document.getElementById('ceo-link');
-
-      if(user){
-        // show user links
-        if(loyalty) loyalty.classList.remove('hidden');
-        if(dash) dash.classList.remove('hidden');
-        if(signin) signin.classList.add('hidden');
-        if(create) create.textContent = 'My Account';
-      } else {
-        if(loyalty) loyalty.classList.add('hidden');
-        if(dash) dash.classList.add('hidden');
-        if(signin) signin.classList.remove('hidden');
-        if(create) create.textContent = 'Create an Account';
-      }
-
-      // role-based links
-      if(role === 'admin'){
-        if(admin) admin.classList.remove('hidden');
-      } else {
-        if(admin) admin.classList.add('hidden');
-      }
-      if(role === 'ceo'){
-        if(ceo) ceo.classList.remove('hidden');
-      } else {
-        if(ceo) ceo.classList.add('hidden');
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', updateHeaderForUser);
-    // also update after storage changes in another tab
-    window.addEventListener('storage', updateHeaderForUser);
-  </script>
-
-  <main class="container mx-auto px-4 py-8">
-    <!-- Hero -->
-    <section class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-white p-8 mb-8 flex flex-col md:flex-row items-center">
-      <div class="md:w-1/2">
-        <h1 class="text-3xl md:text-4xl font-bold mb-2">Heritage Center — Lifestyle Hub</h1>
-        <p class="mb-4 text-indigo-100">Play, relax, watch and celebrate — all under one roof. Explore demos of each department.</p>
-        <div class="space-x-2">
-          <a href="playplanet.html" class="bg-white text-indigo-700 px-4 py-2 rounded shadow font-semibold">Book PlayPlanet</a>
-          <a href="spa.html" class="bg-white text-indigo-700 px-4 py-2 rounded shadow font-semibold">Book Royal Retreat</a>
-          <a href="cinema.html" class="bg-white text-indigo-700 px-4 py-2 rounded shadow font-semibold">Book Cinema</a>
+  <!-- ========================================
+       MAIN CONTENT
+       ======================================== -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" style="margin: var(--space-6) var(--space-4);">
+      <div class="hero-content">
+        <div class="hero-badge">✨ Nigeria's Premier Lifestyle Destination</div>
+        <h1 class="hero-title">Experience Excellence<br/>Under One Roof</h1>
+        <p class="hero-description">
+          From blockbuster movies to arcade thrills, luxury spa treatments to fine dining — Heritage Centre delivers world-class entertainment and relaxation for the whole family.
+        </p>
+        <div class="hero-actions">
+          <a href="cinema-booking.html" class="btn btn-primary btn-lg">Browse Movies</a>
+          <a href="#services" class="btn btn-secondary btn-lg">Explore Services</a>
         </div>
-      </div>
-      <div class="md:w-1/2 mt-6 md:mt-0">
-        <img src="https://images.unsplash.com/photo-1541558618392-efb8a0e20d57?w=800&q=80" alt="lifestyle" class="rounded-lg shadow-lg" />
       </div>
     </section>
 
-    <!-- Sections -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div id="play" class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-2">PlayPlanet (Arcade)</h2>
-        <p class="text-gray-600 mb-4">Arcade games, card top-ups, and family fun.</p>
-        <a href="playplanet.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
-      </div>
+    <!-- Services Section -->
+    <section class="section" id="services">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--space-12);">
+          <h2 style="font-size: 2.5rem; margin-bottom: var(--space-4);">Our Premium Services</h2>
+          <p style="color: var(--neutral-600); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+            Discover a world of entertainment, wellness, and culinary excellence
+          </p>
+        </div>
 
-      <div id="spa" class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-2">Royal Retreat (Spa)</h2>
-        <p class="text-gray-600 mb-4">Relax with massages, facials, and premium treatments.</p>
-        <a href="spa.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
-      </div>
+        <div class="grid grid-cols-3" style="gap: var(--space-8);">
+          <!-- Cinema Card -->
+          <a href="cinema-booking.html" class="service-card" style="text-decoration: none;">
+            <span class="service-card-badge">Popular</span>
+            <img 
+              src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80" 
+              alt="Cinema Experience" 
+              class="service-card-image"
+              loading="lazy"
+            />
+            <div class="service-card-content">
+              <h3 class="service-card-title">🎬 Cinema</h3>
+              <p class="service-card-description">
+                Immerse yourself in the latest blockbusters with premium sound, comfortable seating, and VIP lounge options. Book your perfect movie experience today.
+              </p>
+              <button class="btn btn-primary" style="width: 100%;">Browse Movies</button>
+            </div>
+          </a>
 
-      <div id="cinema" class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-2">Cinema</h2>
-        <p class="text-gray-600 mb-4">Latest movies in a comfortable setting.</p>
-        <a href="cinema.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
-      </div>
+          <!-- Arcade Card -->
+          <a href="playplanet.html" class="service-card" style="text-decoration: none;">
+            <span class="service-card-badge">Family Fun</span>
+            <img 
+              src="https://images.unsplash.com/photo-1511882150382-421056c89033?w=800&q=80" 
+              alt="PlayPlanet Arcade" 
+              class="service-card-image"
+              loading="lazy"
+            />
+            <div class="service-card-content">
+              <h3 class="service-card-title">🎮 PlayPlanet Arcade</h3>
+              <p class="service-card-description">
+                Unleash your competitive spirit with cutting-edge arcade games, VR experiences, and classic favorites. Perfect for all ages and skill levels.
+              </p>
+              <button class="btn btn-primary" style="width: 100%;">Start Playing</button>
+            </div>
+          </a>
 
-      <div id="lounge" class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-2">Lounge & Events</h2>
-        <p class="text-gray-600 mb-4">Private events, live music, and fine dining.</p>
-        <a href="lounge.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
+          <!-- Spa Card -->
+          <a href="spa.html" class="service-card" style="text-decoration: none;">
+            <span class="service-card-badge">Luxury</span>
+            <img 
+              src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" 
+              alt="Royal Retreat Spa" 
+              class="service-card-image"
+              loading="lazy"
+            />
+            <div class="service-card-content">
+              <h3 class="service-card-title">💆 Royal Retreat Spa</h3>
+              <p class="service-card-description">
+                Indulge in therapeutic massages, rejuvenating facials, and premium beauty treatments. Your sanctuary of relaxation and wellness awaits.
+              </p>
+              <button class="btn btn-primary" style="width: 100%;">Book Treatment</button>
+            </div>
+          </a>
+
+          <!-- Lounge Card -->
+          <a href="lounge.html" class="service-card" style="text-decoration: none;">
+            <img 
+              src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80" 
+              alt="Lounge & Events" 
+              class="service-card-image"
+              loading="lazy"
+            />
+            <div class="service-card-content">
+              <h3 class="service-card-title">🎉 Lounge & Events</h3>
+              <p class="service-card-description">
+                Host unforgettable celebrations, corporate events, and intimate gatherings. Features live music, cocktail bar, and premium event planning.
+              </p>
+              <button class="btn btn-primary" style="width: 100%;">Plan Event</button>
+            </div>
+          </a>
+
+          <!-- Restaurant Card -->
+          <a href="restaurant.html" class="service-card" style="text-decoration: none;">
+            <img 
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" 
+              alt="Fine Dining Restaurant" 
+              class="service-card-image"
+              loading="lazy"
+            />
+            <div class="service-card-content">
+              <h3 class="service-card-title">🍽️ Fine Dining Restaurant</h3>
+              <p class="service-card-description">
+                Savor exquisite cuisine crafted by award-winning chefs. From continental to local delicacies, every meal is a celebration of flavor.
+              </p>
+              <button class="btn btn-primary" style="width: 100%;">View Menu</button>
+            </div>
+          </a>
+
+          <!-- Superstore Card -->
+          <a href="superstore.html" class="service-card" style="text-decoration: none;">
+            <img 
+              src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&q=80" 
+              alt="Premium Superstore" 
+              class="service-card-image"
+              loading="lazy"
+            />
+            <div class="service-card-content">
+              <h3 class="service-card-title">🛒 Premium Superstore</h3>
+              <p class="service-card-description">
+                Shop curated selections of gourmet foods, lifestyle products, and exclusive brands. Convenience meets quality at our superstore.
+              </p>
+              <button class="btn btn-primary" style="width: 100%;">Shop Now</button>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="section" style="background: white;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--space-12);">
+          <h2 style="font-size: 2.5rem; margin-bottom: var(--space-4);">Why Heritage Centre?</h2>
+          <p style="color: var(--neutral-600); font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+            More than a venue — it's a complete lifestyle experience
+          </p>
+        </div>
+
+        <div class="grid grid-cols-3" style="gap: var(--space-8);">
+          <div class="card" style="text-align: center;">
+            <div style="width: 64px; height: 64px; margin: 0 auto var(--space-4); background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+              ⭐
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: var(--space-3);">World-Class Standards</h3>
+            <p style="color: var(--neutral-600); font-size: 0.938rem;">
+              Premium facilities and services that rival international benchmarks from AMC, IMAX, and Vue Cinema.
+            </p>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div style="width: 64px; height: 64px; margin: 0 auto var(--space-4); background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+              🏆
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: var(--space-3);">All-in-One Destination</h3>
+            <p style="color: var(--neutral-600); font-size: 0.938rem;">
+              Entertainment, dining, wellness, and shopping — everything your family needs in a single location.
+            </p>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div style="width: 64px; height: 64px; margin: 0 auto var(--space-4); background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+              💳
+            </div>
+            <h3 style="font-size: 1.25rem; margin-bottom: var(--space-3);">Easy Online Booking</h3>
+            <p style="color: var(--neutral-600); font-size: 0.938rem;">
+              Skip the queues with our seamless digital booking system. Select seats, add snacks, and pay online.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section">
+      <div class="container">
+        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: var(--space-12); text-align: center;">
+          <h2 style="color: white; font-size: 2rem; margin-bottom: var(--space-4);">Ready to Experience Heritage Centre?</h2>
+          <p style="font-size: 1.125rem; margin-bottom: var(--space-8); opacity: 0.95;">
+            Join thousands of satisfied customers who make Heritage Centre their go-to destination
+          </p>
+          <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <a href="cinema-booking.html" class="btn btn-lg" style="background: white; color: #667eea;">Book Cinema Tickets</a>
+            <a href="account.html" class="btn btn-outline btn-lg" style="border-color: white; color: white;">Create Account</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="bg-white mt-8 py-6 shadow-inner">
-    <div class="container mx-auto px-4 text-sm text-gray-500">Demo project — no real bookings. Uses localStorage for demo data.</div>
+  <!-- ========================================
+       FOOTER
+       ======================================== -->
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-12) var(--space-4);">
+    <div class="container">
+      <div class="grid grid-cols-4" style="gap: var(--space-8); margin-bottom: var(--space-8);">
+        <!-- About -->
+        <div>
+          <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-4);">Heritage Centre</h4>
+          <p style="color: var(--neutral-600); font-size: 0.875rem; line-height: 1.6;">
+            Nigeria's premier lifestyle and entertainment destination, delivering world-class experiences since 2024.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-4);">Services</h4>
+          <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+            <a href="cinema-booking.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Cinema</a>
+            <a href="playplanet.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Arcade</a>
+            <a href="spa.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Spa & Beauty</a>
+            <a href="lounge.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Lounge & Events</a>
+          </div>
+        </div>
+
+        <!-- Support -->
+        <div>
+          <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-4);">Support</h4>
+          <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+            <a href="contact.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Contact Us</a>
+            <a href="about.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">About Us</a>
+            <a href="bookings.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">My Bookings</a>
+            <a href="loyalty.html" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Loyalty Program</a>
+          </div>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-4);">Legal</h4>
+          <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+            <a href="#" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Privacy Policy</a>
+            <a href="#" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Terms of Service</a>
+            <a href="#" style="color: var(--neutral-600); text-decoration: none; font-size: 0.875rem;">Refund Policy</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid var(--neutral-200); padding-top: var(--space-6); text-align: center;">
+        <p style="color: var(--neutral-500); font-size: 0.875rem;">
+          © 2024 Heritage Centre. All rights reserved. | Demo Project — Uses localStorage for demo data.
+        </p>
+      </div>
+    </div>
   </footer>
+
+  <!-- ========================================
+       SCRIPTS
+       ======================================== -->
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenuToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    // Profile Dropdown Toggle
+    const profileTrigger = document.getElementById('profile-trigger');
+    const profileMenu = document.getElementById('profile-menu');
+
+    if (profileTrigger) {
+      profileTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('open');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!profileMenu.contains(e.target) && !profileTrigger.contains(e.target)) {
+          profileMenu.classList.remove('open');
+        }
+      });
+    }
+
+    // Header Scroll Effect
+    const header = document.getElementById('main-header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    });
+
+    // User Authentication State Management
+    function updateUIForUser() {
+      const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
+      const role = localStorage.getItem('hc_user_role') || '';
+      
+      const signinBtn = document.getElementById('signin-btn');
+      const createBtn = document.getElementById('create-btn');
+      const profileDropdown = document.getElementById('profile-dropdown');
+      const profileName = document.getElementById('profile-name');
+      const profileAvatar = document.getElementById('profile-avatar');
+      const adminLink = document.getElementById('admin-link');
+      const ceoLink = document.getElementById('ceo-link');
+      
+      // Mobile menu items
+      const mobileSignin = document.getElementById('mobile-signin');
+      const mobileAccount = document.getElementById('mobile-account');
+      const mobileBookings = document.getElementById('mobile-bookings');
+      const mobileLoyalty = document.getElementById('mobile-loyalty');
+
+      if (user && user.name) {
+        // User is logged in
+        signinBtn.style.display = 'none';
+        createBtn.style.display = 'none';
+        profileDropdown.style.display = 'block';
+        
+        // Update profile info
+        profileName.textContent = user.name.split(' ')[0]; // First name only
+        profileAvatar.textContent = user.name.charAt(0).toUpperCase();
+        
+        // Mobile menu
+        mobileSignin.style.display = 'none';
+        mobileAccount.style.display = 'block';
+        mobileBookings.style.display = 'block';
+        mobileLoyalty.style.display = 'block';
+        
+        // Show admin/CEO links based on role
+        if (role === 'admin') {
+          adminLink.style.display = 'block';
+          adminLink.href = 'cinema-admin.html';
+        }
+        if (role === 'ceo') {
+          ceoLink.style.display = 'block';
+          ceoLink.href = 'cinema-ceo.html';
+        }
+      } else {
+        // User is not logged in
+        signinBtn.style.display = 'inline-flex';
+        createBtn.style.display = 'inline-flex';
+        profileDropdown.style.display = 'none';
+        
+        // Mobile menu
+        mobileSignin.style.display = 'block';
+        mobileAccount.textContent = 'Create Account';
+        mobileBookings.style.display = 'none';
+        mobileLoyalty.style.display = 'none';
+      }
+    }
+
+    // Logout Handler
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('hc_user');
+        localStorage.removeItem('hc_user_role');
+        updateUIForUser();
+        window.location.href = 'index.html';
+      });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', updateUIForUser);
+    
+    // Update when localStorage changes (from another tab)
+    window.addEventListener('storage', updateUIForUser);
+
+    // Lazy Load Images
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    
+    if ('IntersectionObserver' in window) {
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.classList.add('loaded');
+            observer.unobserve(img);
+          }
+        });
+      });
+
+      images.forEach(img => imageObserver.observe(img));
+    }
+  </script>
 
   <script src="js/app.js"></script>
 </body>
