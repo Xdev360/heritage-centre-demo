@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Heritage Center — Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-4 py-4 flex items-center">
+      <!-- Left: Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">HC</div>
+        <a href="index.html" class="text-xl font-bold text-gray-800">Heritage Centre</a>
+      </div>
+
+      <!-- Center: Main Navigation (equal-width links on md+ screens) -->
+      <nav class="hidden md:flex md:flex-1 md:justify-center">
+        <div class="flex w-full max-w-3xl">
+          <a href="index.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Home</a>
+
+          <!-- Discover dropdown container -->
+          <div class="flex-1 text-center relative">
+            <button id="discover-btn" class="w-full text-center text-gray-700 hover:text-yellow-600 flex items-center justify-center space-x-2"> 
+              <span>Discover</span>
+              <span class="text-sm">▾</span>
+            </button>
+            <div id="discover-menu" class="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white shadow rounded border hidden w-56 text-left z-40">
+              <a href="playplanet.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">PlayPlanet (Arcade)</a>
+              <a href="spa.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Royal Retreat (Spa & Beauty)</a>
+              <a href="cinema.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cinema</a>
+              <a href="lounge.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Lounge & Events</a>
+              <a href="restaurant.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Restaurant</a>
+              <a href="superstore.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Superstore</a>
+            </div>
+          </div>
+
+          <a href="bookings.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Bookings</a>
+          <a href="events.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Events</a>
+          <a href="about.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">About</a>
+          <a href="contact.html" class="flex-1 text-center text-gray-700 hover:text-yellow-600">Contact</a>
+        </div>
+      </nav>
+
+      <!-- Right: Actions (Sign In / Create) and optional links -->
+      <div class="ml-auto flex items-center space-x-3">
+        <a id="loyalty-link" href="loyalty.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">Loyalty</a>
+        <a id="dashboard-link" href="account.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">My Dashboard</a>
+
+        <a id="signin-btn" href="account.html" class="px-3 py-2 text-gray-700 rounded hover:bg-gray-100">Sign In</a>
+        <a id="create-btn" href="account.html" class="px-4 py-2 bg-yellow-600 text-white rounded shadow">Create an Account</a>
+
+        <a id="admin-link" href="admin.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">Admin</a>
+        <a id="ceo-link" href="ceo.html" class="hidden px-3 py-2 text-gray-700 rounded hover:bg-gray-100">CEO</a>
+      </div>
+    </div>
+  </header>
+
+  <script>
+    // Header interactions: Discover dropdown and conditional links based on localStorage
+    document.addEventListener('click', function(e){
+      const menu = document.getElementById('discover-menu');
+      const btn = document.getElementById('discover-btn');
+      if(!btn || !menu) return;
+      if(btn.contains(e.target)){
+        menu.classList.toggle('hidden');
+      } else {
+        if(!menu.contains(e.target)) menu.classList.add('hidden');
+      }
+    });
+
+    function updateHeaderForUser(){
+      const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
+      const role = localStorage.getItem('hc_user_role') || '';
+      const loyalty = document.getElementById('loyalty-link');
+      const dash = document.getElementById('dashboard-link');
+      const signin = document.getElementById('signin-btn');
+      const create = document.getElementById('create-btn');
+      const admin = document.getElementById('admin-link');
+      const ceo = document.getElementById('ceo-link');
+
+      if(user){
+        // show user links
+        if(loyalty) loyalty.classList.remove('hidden');
+        if(dash) dash.classList.remove('hidden');
+        if(signin) signin.classList.add('hidden');
+        if(create) create.textContent = 'My Account';
+      } else {
+        if(loyalty) loyalty.classList.add('hidden');
+        if(dash) dash.classList.add('hidden');
+        if(signin) signin.classList.remove('hidden');
+        if(create) create.textContent = 'Create an Account';
+      }
+
+      // role-based links
+      if(role === 'admin'){
+        if(admin) admin.classList.remove('hidden');
+      } else {
+        if(admin) admin.classList.add('hidden');
+      }
+      if(role === 'ceo'){
+        if(ceo) ceo.classList.remove('hidden');
+      } else {
+        if(ceo) ceo.classList.add('hidden');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', updateHeaderForUser);
+    // also update after storage changes in another tab
+    window.addEventListener('storage', updateHeaderForUser);
+  </script>
+
+  <main class="container mx-auto px-4 py-8">
+    <!-- Hero -->
+    <section class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg text-white p-8 mb-8 flex flex-col md:flex-row items-center">
+      <div class="md:w-1/2">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">Heritage Center — Lifestyle Hub</h1>
+        <p class="mb-4 text-indigo-100">Play, relax, watch and celebrate — all under one roof. Explore demos of each department.</p>
+        <div class="space-x-2">
+          <a href="playplanet.html" class="bg-white text-indigo-700 px-4 py-2 rounded shadow font-semibold">Book PlayPlanet</a>
+          <a href="spa.html" class="bg-white text-indigo-700 px-4 py-2 rounded shadow font-semibold">Book Royal Retreat</a>
+          <a href="cinema.html" class="bg-white text-indigo-700 px-4 py-2 rounded shadow font-semibold">Book Cinema</a>
+        </div>
+      </div>
+      <div class="md:w-1/2 mt-6 md:mt-0">
+        <img src="https://images.unsplash.com/photo-1541558618392-efb8a0e20d57?w=800&q=80" alt="lifestyle" class="rounded-lg shadow-lg" />
+      </div>
+    </section>
+
+    <!-- Sections -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div id="play" class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">PlayPlanet (Arcade)</h2>
+        <p class="text-gray-600 mb-4">Arcade games, card top-ups, and family fun.</p>
+        <a href="playplanet.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
+      </div>
+
+      <div id="spa" class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">Royal Retreat (Spa)</h2>
+        <p class="text-gray-600 mb-4">Relax with massages, facials, and premium treatments.</p>
+        <a href="spa.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
+      </div>
+
+      <div id="cinema" class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">Cinema</h2>
+        <p class="text-gray-600 mb-4">Latest movies in a comfortable setting.</p>
+        <a href="cinema.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
+      </div>
+
+      <div id="lounge" class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-2">Lounge & Events</h2>
+        <p class="text-gray-600 mb-4">Private events, live music, and fine dining.</p>
+        <a href="lounge.html" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded">Learn More</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-white mt-8 py-6 shadow-inner">
+    <div class="container mx-auto px-4 text-sm text-gray-500">Demo project — no real bookings. Uses localStorage for demo data.</div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

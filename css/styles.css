@@ -1,0 +1,4 @@
+/* Minimal custom styles */
+@media (min-width: 768px) {
+  .container { max-width: 900px; }
+}

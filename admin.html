@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard — Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="index.html" class="text-2xl font-bold">Heritage Center</a>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-4">Admin Dashboard (Demo)</h1>
+    <div class="bg-white rounded shadow p-4 mb-4">
+      <h2 class="font-semibold mb-2">Daily Bookings</h2>
+      <table class="w-full text-sm" id="bookings-table"><thead><tr><th>ID</th><th>Dept</th><th>Details</th><th>Time</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <div class="bg-white rounded shadow p-4">
+      <h2 class="font-semibold mb-2">Scan QR Simulation</h2>
+      <input id="scan-input" class="border rounded px-3 py-2 w-full mb-3" placeholder="Paste QR text (e.g. CINEMA:C-...)" />
+      <button id="scan-btn" class="bg-indigo-600 text-white px-4 py-2 rounded">Scan</button>
+      <div id="scan-result" class="mt-3 text-sm"></div>
+      <div class="mt-4"><button id="print-report" class="bg-gray-800 text-white px-3 py-2 rounded">Printable Daily Report</button></div>
+    </div>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
