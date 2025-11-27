@@ -11,6 +11,8 @@
   <!-- ========================================
        NAVIGATION HEADER
        ======================================== -->
+  <!-- Tailwind CDN for dropdown styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <header class="header" id="main-header">
     <div class="nav-container">
       <!-- Logo -->
@@ -22,11 +24,26 @@
       <!-- Main Navigation (Desktop) -->
       <nav class="nav-main" id="main-nav">
         <a href="index.html" class="nav-link active">Home</a>
-        <a href="cinema-booking.html" class="nav-link">Cinema</a>
-        <a href="playplanet.html" class="nav-link">Arcade</a>
-        <a href="spa.html" class="nav-link">Spa & Beauty</a>
-        <a href="lounge.html" class="nav-link">Lounge & Events</a>
-        <a href="restaurant.html" class="nav-link">Restaurant</a>
+        
+        <!-- Discover Dropdown (Desktop: hover, Mobile: tap) -->
+        <div class="relative group" id="discover-desktop">
+          <button class="nav-link flex items-center gap-2" aria-haspopup="true" aria-expanded="false">
+            <span>Discover</span>
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/></svg>
+          </button>
+          <!-- Menu -->
+          <div class="absolute left-0 mt-2 w-64 rounded-lg shadow-lg border border-gray-200 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 origin-top z-50">
+            <!-- NOTE: 12–16px padding, readable text 14–16px, hover effect -->
+            <a href="cinema.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Cinema</a>
+            <a href="playplanet.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Arcade (PlayPlanet)</a>
+            <a href="spa.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Spa & Beauty</a>
+            <a href="lounge.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Lounge & Events</a>
+            <a href="restaurant.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Restaurant / Superstore</a>
+          </div>
+        </div>
+
+        <a href="bookings.html" class="nav-link">Bookings</a>
+        <a href="events.html" class="nav-link">Events</a>
         <a href="contact.html" class="nav-link">Contact</a>
       </nav>
 
@@ -73,12 +90,23 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobile-menu">
       <a href="index.html" class="mobile-menu-link">Home</a>
-      <a href="cinema-booking.html" class="mobile-menu-link">Cinema</a>
-      <a href="playplanet.html" class="mobile-menu-link">Arcade (PlayPlanet)</a>
-      <a href="spa.html" class="mobile-menu-link">Spa & Beauty</a>
-      <a href="lounge.html" class="mobile-menu-link">Lounge & Events</a>
-      <a href="restaurant.html" class="mobile-menu-link">Restaurant</a>
-      <a href="superstore.html" class="mobile-menu-link">Superstore</a>
+      
+      <!-- Collapsible Discover submenu (Mobile) -->
+      <div class="border-t border-gray-100 my-2"></div>
+      <button id="discover-mobile-toggle" class="mobile-menu-link flex items-center justify-between" aria-expanded="false">
+        <span>Discover</span>
+        <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/></svg>
+      </button>
+      <div id="discover-mobile-menu" class="ml-2 hidden">
+        <a href="cinema.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Cinema</a>
+        <a href="playplanet.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Arcade (PlayPlanet)</a>
+        <a href="spa.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Spa & Beauty</a>
+        <a href="lounge.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Lounge & Events</a>
+        <a href="restaurant.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Restaurant / Superstore</a>
+      </div>
+
+      <a href="bookings.html" class="mobile-menu-link">Bookings</a>
+      <a href="events.html" class="mobile-menu-link">Events</a>
       <a href="contact.html" class="mobile-menu-link">Contact</a>
       <div style="height: 1px; background: var(--neutral-200); margin: var(--space-4) 0;"></div>
       <a href="account.html" class="mobile-menu-link" id="mobile-signin">Sign In</a>
@@ -465,6 +493,25 @@
     
     // Update when localStorage changes (from another tab)
     window.addEventListener('storage', updateUIForUser);
+
+    // Discover mobile collapsible submenu
+    const discoverToggle = document.getElementById('discover-mobile-toggle');
+    const discoverMenu = document.getElementById('discover-mobile-menu');
+    if (discoverToggle && discoverMenu) {
+      discoverToggle.addEventListener('click', () => {
+        const isOpen = discoverMenu.classList.contains('hidden') === false;
+        discoverMenu.classList.toggle('hidden');
+        discoverToggle.setAttribute('aria-expanded', (!isOpen).toString());
+      });
+    }
+
+    // Desktop Discover aria state on hover
+    const discoverDesktop = document.getElementById('discover-desktop');
+    if (discoverDesktop) {
+      const trigger = discoverDesktop.querySelector('button');
+      discoverDesktop.addEventListener('mouseenter', () => trigger.setAttribute('aria-expanded', 'true'));
+      discoverDesktop.addEventListener('mouseleave', () => trigger.setAttribute('aria-expanded', 'false'));
+    }
 
     // Lazy Load Images
     const images = document.querySelectorAll('img[loading="lazy"]');
