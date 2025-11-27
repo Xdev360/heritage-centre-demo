@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administration Login — Heritage Centre</title>
+  <meta name="description" content="Secure administration access for Admin and CEO roles." />
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .admin-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 768px) { .admin-grid { grid-template-columns: 1fr 1fr; } }
+    .login-card { padding: var(--space-8); border-radius: var(--radius-xl); border: 1px solid var(--neutral-200); background: white; }
+    .login-card h2 { margin: 0 0 var(--space-2); font-size: 1.25rem; }
+    .subtle { color: var(--neutral-600); font-size: 0.938rem; }
+    .field { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4); }
+    .input { border: 1px solid var(--neutral-300); padding: var(--space-3); border-radius: var(--radius-md); font-size: 0.938rem; }
+    .hint { color: var(--neutral-500); font-size: 0.813rem; }
+  </style>
+</head>
+<body data-page="admin-login">
+  <!-- Header -->
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container" style="padding: var(--space-10) var(--space-4); max-width: 960px;">
+      <div style="text-align: center; margin-bottom: var(--space-8);">
+        <div style="width: 72px; height: 72px; margin: 0 auto var(--space-4); background: var(--neutral-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid var(--neutral-200);">🔒</div>
+        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">Administration Login</h1>
+        <p class="subtle">Choose your role to continue. This area is restricted to authorized personnel.</p>
+      </div>
+
+      <div class="admin-grid">
+        <!-- Admin Login -->
+        <div class="login-card">
+          <div style="display:flex; align-items:center; justify-content: space-between; margin-bottom: var(--space-2);">
+            <h2>Admin Login</h2>
+            <span class="badge" style="background: var(--neutral-100); color: var(--neutral-700); padding: 4px 8px; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--neutral-200);">Operations</span>
+          </div>
+          <p class="subtle" style="margin-bottom: var(--space-5);">Access ticketing, payments verification, and operations dashboard.</p>
+          <div class="field">
+            <label>Email</label>
+            <input id="admin-email" type="email" class="input" placeholder="admin@heritage.ng" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="admin-password" type="password" class="input" placeholder="••••••••" />
+            <div class="hint">For demo purposes, any credentials will work.</div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;" onclick="login('admin')">Sign in as Admin</button>
+        </div>
+
+        <!-- CEO Login -->
+        <div class="login-card">
+          <div style="display:flex; align-items:center; justify-content: space-between; margin-bottom: var(--space-2);">
+            <h2>CEO Login</h2>
+            <span class="badge" style="background: var(--neutral-100); color: var(--neutral-700); padding: 4px 8px; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--neutral-200);">Executive</span>
+          </div>
+          <p class="subtle" style="margin-bottom: var(--space-5);">Access analytics, revenue insights, and executive dashboards.</p>
+          <div class="field">
+            <label>Email</label>
+            <input id="ceo-email" type="email" class="input" placeholder="ceo@heritage.ng" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="ceo-password" type="password" class="input" placeholder="••••••••" />
+            <div class="hint">For demo purposes, any credentials will work.</div>
+          </div>
+          <button class="btn btn-secondary" style="width: 100%;" onclick="login('ceo')">Sign in as CEO</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: var(--space-8);">
+        <p class="subtle">By signing in, you agree to the internal policy and confidentiality guidelines of Heritage Centre.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem;">
+        © 2024 Heritage Centre. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function login(role) {
+      const email = (role === 'admin') ? (document.getElementById('admin-email').value || 'admin@heritage.ng') : (document.getElementById('ceo-email').value || 'ceo@heritage.ng');
+      const name = role === 'admin' ? 'Admin User' : 'CEO User';
+
+      // Mock authentication: set user and role
+      localStorage.setItem('hc_user', JSON.stringify({ name, email }));
+      localStorage.setItem('hc_user_role', role);
+
+      // Redirect based on role
+      if (role === 'admin') {
+        window.location.href = 'cinema-admin.html';
+      } else {
+        window.location.href = 'cinema-ceo.html';
+      }
+    }
+  </script>
+</body>
+</html>
