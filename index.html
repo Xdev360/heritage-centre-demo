@@ -105,8 +105,8 @@
     .event-popup {
       background: white;
       border-radius: 24px;
-      max-width: 600px;
-      width: 90%;
+      max-width: min(600px, 92vw);
+      width: 92vw;
       max-height: 90vh;
       overflow-y: auto;
       position: relative;
@@ -121,15 +121,15 @@
     
     .event-popup-close {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: var(--space-5);
+      right: var(--space-5);
       background: rgba(0, 0, 0, 0.1);
       border: none;
-      width: 40px;
-      height: 40px;
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 24px;
+      font-size: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -144,26 +144,26 @@
     
     .event-popup-image {
       width: 100%;
-      height: 300px;
+      height: clamp(180px, 40vh, 320px);
       object-fit: cover;
       border-radius: 24px 24px 0 0;
     }
     
     .event-popup-content {
-      padding: 40px;
+      padding: var(--space-6);
     }
     
     .event-popup-badge {
       display: inline-block;
       background: linear-gradient(135deg, #D4AF37, #F4E4C1);
       color: #1a1a1a;
-      padding: 8px 20px;
-      border-radius: 20px;
+      padding: var(--space-2) var(--space-5);
+      border-radius: 999px;
       font-weight: 700;
       font-size: 0.875rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 20px;
+      margin-bottom: var(--space-5);
     }
     
     /* Newsletter Popup Styles */
@@ -191,9 +191,9 @@
     .newsletter-popup {
       background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
       border-radius: 24px;
-      max-width: 500px;
-      width: 90%;
-      padding: 50px;
+      max-width: min(500px, 92vw);
+      width: 92vw;
+      padding: var(--space-8);
       position: relative;
       transform: translateY(30px);
       transition: transform 0.3s ease;
@@ -208,15 +208,15 @@
     
     .newsletter-popup-close {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: var(--space-5);
+      right: var(--space-5);
       background: rgba(255, 255, 255, 0.1);
       border: none;
-      width: 36px;
-      height: 36px;
+      width: 2.25rem;
+      height: 2.25rem;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 20px;
+      font-size: 1.125rem;
       color: white;
       display: flex;
       align-items: center;
@@ -230,25 +230,25 @@
     }
     
     .newsletter-popup-form {
-      margin-top: 30px;
+      margin-top: var(--space-6);
     }
     
     .newsletter-popup-input {
       width: 100%;
-      padding: 16px;
+      padding: var(--space-4);
       border: 2px solid #D4AF37;
-      border-radius: 12px;
+      border-radius: var(--radius-xl);
       font-size: 1rem;
-      margin-bottom: 16px;
+      margin-bottom: var(--space-4);
     }
     
     .newsletter-popup-btn {
       width: 100%;
-      padding: 16px;
+      padding: var(--space-4);
       background: #D4AF37;
       color: white;
       border: none;
-      border-radius: 12px;
+      border-radius: var(--radius-xl);
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
@@ -259,6 +259,13 @@
       background: #F4E4C1;
       color: #1a1a1a;
       transform: translateY(-2px);
+    }
+  </style>
+  <!-- Responsive enhancements for popups on larger screens -->
+  <style>
+    @media (min-width: 640px) {
+      .event-popup-content { padding: var(--space-8); }
+      .newsletter-popup { padding: var(--space-10); }
     }
   </style>
 </head>
