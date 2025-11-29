@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events & Promotions — Heritage Centre</title>
+  <meta name="description" content="Stay updated with the latest events, promotions, and exclusive offers at Heritage Centre." />
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+    
+    .events-hero {
+      background: linear-gradient(135deg, #D4AF37 0%, #F4E4C1 50%, #D4AF37 100%);
+      padding: var(--space-12) var(--space-4);
+      text-align: center;
+      color: #1a1a1a;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .events-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="%23000" opacity="0.05"/></svg>');
+      animation: sparkle 20s linear infinite;
+    }
+    
+    @keyframes sparkle {
+      from { transform: translateY(0); }
+      to { transform: translateY(100px); }
+    }
+    
+    .events-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: var(--space-4);
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .event-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+    }
+    
+    .event-card-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #D4AF37;
+      color: white;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 2;
+    }
+    
+    .event-card-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+    
+    .event-card-content {
+      padding: var(--space-6);
+    }
+    
+    .event-date {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: #F4E4C1;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #8B7355;
+      margin-bottom: var(--space-4);
+    }
+    
+    .newsletter-section {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      padding: var(--space-12);
+      border-radius: var(--radius-xl);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .newsletter-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .newsletter-form {
+      display: flex;
+      gap: var(--space-3);
+      max-width: 500px;
+      margin: var(--space-6) auto 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .newsletter-input {
+      flex: 1;
+      padding: var(--space-4);
+      border: 2px solid #D4AF37;
+      border-radius: var(--radius-lg);
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .newsletter-input:focus {
+      outline: none;
+      border-color: #F4E4C1;
+      background: white;
+    }
+    
+    .newsletter-btn {
+      padding: var(--space-4) var(--space-6);
+      background: #D4AF37;
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    
+    .newsletter-btn:hover {
+      background: #F4E4C1;
+      color: #1a1a1a;
+      transform: translateY(-2px);
+    }
+    
+    .promo-banner {
+      background: linear-gradient(90deg, #D4AF37 0%, #F4E4C1 50%, #D4AF37 100%);
+      padding: var(--space-3);
+      text-align: center;
+      font-weight: 700;
+      color: #1a1a1a;
+      animation: shimmer 3s linear infinite;
+      background-size: 200% 100%;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    
+    .success-message {
+      background: #10B981;
+      color: white;
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      margin-top: var(--space-4);
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Promo Banner -->
+  <div class="promo-banner">
+    🎉 BLACK FRIDAY SALE — Up to 50% OFF on all services! Limited time only
+  </div>
+  
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+
+      <nav class="nav-main" id="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        
+        <div class="relative group" id="discover-desktop">
+          <button class="nav-link flex items-center gap-2" aria-haspopup="true" aria-expanded="false">
+            <span>Discover</span>
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/></svg>
+          </button>
+          <div class="absolute left-0 mt-2 w-64 rounded-lg shadow-lg border border-gray-200 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 origin-top z-50">
+            <a href="cinema.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Cinema</a>
+            <a href="playplanet.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Arcade (PlayPlanet)</a>
+            <a href="spa.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Spa & Beauty</a>
+            <a href="lounge.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Lounge & Events</a>
+            <a href="restaurant.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Restaurant / Superstore</a>
+          </div>
+        </div>
+
+        <a href="bookings.html" class="nav-link">Bookings</a>
+        <a href="events.html" class="nav-link active">Events</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+        <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+        
+        <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
+          <button class="profile-trigger" id="profile-trigger">
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            <span id="profile-name">User</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          
+          <div class="profile-menu" id="profile-menu">
+            <a href="account.html" class="profile-menu-item">My Dashboard</a>
+            <a href="bookings.html" class="profile-menu-item">My Bookings</a>
+            <a href="loyalty.html" class="profile-menu-item">Loyalty Rewards</a>
+            <div class="profile-menu-divider"></div>
+            <a href="about.html" class="profile-menu-item">About Us</a>
+            <a href="#" class="profile-menu-item" id="admin-link" style="display: none;">Admin Dashboard</a>
+            <a href="#" class="profile-menu-item" id="ceo-link" style="display: none;">CEO Analytics</a>
+            <div class="profile-menu-divider"></div>
+            <a href="#" class="profile-menu-item" id="logout-btn">Sign Out</a>
+          </div>
+        </div>
+
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-menu-link">Home</a>
+      
+      <div class="border-t border-gray-100 my-2"></div>
+      <button id="discover-mobile-toggle" class="mobile-menu-link flex items-center justify-between" aria-expanded="false">
+        <span>Discover</span>
+        <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/></svg>
+      </button>
+      <div id="discover-mobile-menu" class="ml-2 hidden">
+        <a href="cinema.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Cinema</a>
+        <a href="playplanet.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Arcade (PlayPlanet)</a>
+        <a href="spa.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Spa & Beauty</a>
+        <a href="lounge.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Lounge & Events</a>
+        <a href="restaurant.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Restaurant / Superstore</a>
+      </div>
+
+      <a href="bookings.html" class="mobile-menu-link">Bookings</a>
+      <a href="events.html" class="mobile-menu-link">Events</a>
+      <a href="about.html" class="mobile-menu-link">About Us</a>
+      <a href="contact.html" class="mobile-menu-link">Contact</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="events-hero">
+      <h1>🌟 Events & Promotions</h1>
+      <p style="font-size: 1.25rem; max-width: 700px; margin: 0 auto; position: relative; z-index: 1;">
+        Stay ahead with the latest updates, exclusive offers, and exciting events at Heritage Centre
+      </p>
+    </section>
+
+    <!-- Live Events Section -->
+    <section class="section">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--space-10);">
+          <h2 style="font-size: 2.5rem; margin-bottom: var(--space-3);">🔥 Live Events & Sales</h2>
+          <p style="color: var(--neutral-600); font-size: 1.125rem;">Don't miss out on these amazing opportunities</p>
+        </div>
+
+        <div id="events-grid" class="grid grid-cols-3" style="gap: var(--space-8);">
+          <!-- Events will be loaded dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section">
+      <div class="container">
+        <div class="newsletter-section">
+          <div style="position: relative; z-index: 1;">
+            <div style="font-size: 3rem; margin-bottom: var(--space-4);">📬</div>
+            <h2 style="font-size: 2.5rem; margin-bottom: var(--space-4); font-weight: 800;">Subscribe to Our Newsletter</h2>
+            <p style="font-size: 1.125rem; margin-bottom: var(--space-2); opacity: 0.95;">
+              Get exclusive promotions, early access to events, and special discounts delivered to your inbox
+            </p>
+            <p style="font-size: 0.938rem; opacity: 0.85; margin-bottom: var(--space-6);">
+              Join 10,000+ subscribers who never miss an update
+            </p>
+            
+            <form class="newsletter-form" id="newsletter-form">
+              <input 
+                type="email" 
+                class="newsletter-input" 
+                placeholder="Enter your email address" 
+                required
+                id="newsletter-email"
+              />
+              <button type="submit" class="newsletter-btn">Subscribe Now</button>
+            </form>
+            
+            <div class="success-message" id="success-message">
+              ✅ Success! You're now subscribed to Heritage Centre updates.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Past Events -->
+    <section class="section" style="background: white;">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: var(--space-10);">
+          <h2 style="font-size: 2.5rem; margin-bottom: var(--space-3);">📅 Upcoming Events</h2>
+          <p style="color: var(--neutral-600); font-size: 1.125rem;">Mark your calendar for these exciting events</p>
+        </div>
+
+        <div id="upcoming-events" class="grid grid-cols-2" style="gap: var(--space-6);">
+          <!-- Upcoming events will be loaded here -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container">
+      <div style="text-align: center;">
+        <p style="color: var(--neutral-500); font-size: 0.875rem;">
+          © 2024 Heritage Centre. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Event data storage
+    const EVENTS_KEY = 'hc_events';
+    const SUBSCRIBERS_KEY = 'hc_newsletter_subscribers';
+
+    // Initialize default events
+    function initializeEvents() {
+      let events = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
+      
+      if (events.length === 0) {
+        events = [
+          {
+            id: 1,
+            title: 'Black Friday Mega Sale',
+            description: 'Up to 50% off on all cinema tickets, arcade games, and spa treatments. Limited time only!',
+            date: 'Nov 29, 2024 - Dec 2, 2024',
+            badge: 'Hot Deal',
+            image: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&q=80',
+            type: 'live',
+            ctaText: 'Shop Now',
+            ctaLink: 'cinema-booking.html'
+          },
+          {
+            id: 2,
+            title: 'VIP Cinema Experience',
+            description: 'Book VIP seats and get free premium snacks + drinks. Exclusive luxury experience awaits.',
+            date: 'Valid until Dec 15, 2024',
+            badge: 'VIP Only',
+            image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80',
+            type: 'live',
+            ctaText: 'Book VIP Seats',
+            ctaLink: 'cinema-booking.html'
+          },
+          {
+            id: 3,
+            title: 'PlayPlanet Arcade Tournament',
+            description: 'Compete in our weekly gaming championship. Winners get free gameplay cards and exclusive merch!',
+            date: 'Every Saturday at 4 PM',
+            badge: 'Weekly',
+            image: 'https://images.unsplash.com/photo-1511882150382-421056c89033?w=800&q=80',
+            type: 'live',
+            ctaText: 'Register Now',
+            ctaLink: 'playplanet.html'
+          },
+          {
+            id: 4,
+            title: 'Christmas Gala Night',
+            description: 'Join us for an unforgettable evening of music, dining, and entertainment. Limited seats available.',
+            date: 'December 20, 2024',
+            badge: 'Upcoming',
+            image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80',
+            type: 'upcoming',
+            ctaText: 'Reserve Your Spot',
+            ctaLink: 'lounge.html'
+          },
+          {
+            id: 5,
+            title: 'New Year Spa Package',
+            description: 'Start 2025 refreshed! Book our special spa package and get 30% off all treatments.',
+            date: 'January 1-7, 2025',
+            badge: 'Upcoming',
+            image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80',
+            type: 'upcoming',
+            ctaText: 'Book Treatment',
+            ctaLink: 'spa.html'
+          }
+        ];
+        localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+      }
+      
+      return events;
+    }
+
+    // Load events
+    function loadEvents() {
+      const events = initializeEvents();
+      const liveEvents = events.filter(e => e.type === 'live');
+      const upcomingEvents = events.filter(e => e.type === 'upcoming');
+      
+      // Live Events
+      const eventsGrid = document.getElementById('events-grid');
+      eventsGrid.innerHTML = liveEvents.map(event => `
+        <div class="event-card">
+          <span class="event-card-badge">${event.badge}</span>
+          <img src="${event.image}" alt="${event.title}" class="event-card-image">
+          <div class="event-card-content">
+            <span class="event-date">📅 ${event.date}</span>
+            <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-3);">${event.title}</h3>
+            <p style="color: var(--neutral-600); margin-bottom: var(--space-5); line-height: 1.6;">${event.description}</p>
+            <a href="${event.ctaLink}" class="btn btn-primary" style="width: 100%;">${event.ctaText}</a>
+          </div>
+        </div>
+      `).join('');
+      
+      // Upcoming Events
+      const upcomingGrid = document.getElementById('upcoming-events');
+      upcomingGrid.innerHTML = upcomingEvents.map(event => `
+        <div class="event-card">
+          <span class="event-card-badge">${event.badge}</span>
+          <img src="${event.image}" alt="${event.title}" class="event-card-image">
+          <div class="event-card-content">
+            <span class="event-date">📅 ${event.date}</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-3);">${event.title}</h3>
+            <p style="color: var(--neutral-600); margin-bottom: var(--space-4); line-height: 1.6;">${event.description}</p>
+            <a href="${event.ctaLink}" class="btn btn-secondary" style="width: 100%;">${event.ctaText}</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Newsletter form submission
+    document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('newsletter-email').value;
+      
+      let subscribers = JSON.parse(localStorage.getItem(SUBSCRIBERS_KEY) || '[]');
+      
+      if (!subscribers.includes(email)) {
+        subscribers.push(email);
+        localStorage.setItem(SUBSCRIBERS_KEY, JSON.stringify(subscribers));
+      }
+      
+      // Show success message
+      const successMsg = document.getElementById('success-message');
+      successMsg.style.display = 'block';
+      
+      // Reset form
+      e.target.reset();
+      
+      // Hide message after 5 seconds
+      setTimeout(() => {
+        successMsg.style.display = 'none';
+      }, 5000);
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenuToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    // Profile Dropdown
+    const profileTrigger = document.getElementById('profile-trigger');
+    const profileMenu = document.getElementById('profile-menu');
+
+    if (profileTrigger) {
+      profileTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!profileMenu.contains(e.target) && !profileTrigger.contains(e.target)) {
+          profileMenu.classList.remove('open');
+        }
+      });
+    }
+
+    // Header Scroll Effect
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // User Authentication State
+    function updateUIForUser() {
+      const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
+      const signinBtn = document.getElementById('signin-btn');
+      const createBtn = document.getElementById('create-btn');
+      const profileDropdown = document.getElementById('profile-dropdown');
+      const profileName = document.getElementById('profile-name');
+      const profileAvatar = document.getElementById('profile-avatar');
+
+      if (user && user.name) {
+        signinBtn.style.display = 'none';
+        createBtn.style.display = 'none';
+        profileDropdown.style.display = 'block';
+        profileName.textContent = user.name.split(' ')[0];
+        profileAvatar.textContent = user.name.charAt(0).toUpperCase();
+      } else {
+        signinBtn.style.display = 'inline-flex';
+        createBtn.style.display = 'inline-flex';
+        profileDropdown.style.display = 'none';
+      }
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('hc_user');
+        localStorage.removeItem('hc_user_role');
+        updateUIForUser();
+        window.location.href = 'index.html';
+      });
+    }
+
+    // Mobile discover toggle
+    const discoverToggle = document.getElementById('discover-mobile-toggle');
+    const discoverMenu = document.getElementById('discover-mobile-menu');
+    if (discoverToggle && discoverMenu) {
+      discoverToggle.addEventListener('click', () => {
+        discoverMenu.classList.toggle('hidden');
+      });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateUIForUser();
+      loadEvents();
+    });
+  </script>
+</body>
+</html>
