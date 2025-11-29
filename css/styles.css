@@ -282,10 +282,9 @@ p {
   width: 100%;
   height: 200px;
   object-fit: cover;
-}
-
-@media (max-width: 640px) {
-  .service-card-image { height: 160px; }
+  object-position: center;
+  /* Prevent image distortion and ensure smooth scaling */
+  display: block;
 }
 
 .service-card-content {
@@ -318,6 +317,11 @@ p {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  /* Ensure badge scales smoothly and doesn't break layout */
+  max-width: calc(100% - var(--space-8));
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ========================================
@@ -776,34 +780,120 @@ img {
 }
 
 /* ========================================
-   HOMEPAGE SERVICES SECTION TUNING (Mobile)
-   Gives more breathing room on small screens
+   HOMEPAGE SERVICES SECTION - RESPONSIVE BREAKPOINTS
+   Progressive enhancement from mobile-first to desktop
    ======================================== */
-@media (max-width: 640px) {
-  /* Increase vertical rhythm for this section */
+
+/* Mobile: 320px - 479px (small phones) */
+@media (max-width: 479px) {
   #services.section {
-    padding-top: var(--space-12);
-    padding-bottom: var(--space-12);
+    padding: var(--space-10) 0;
   }
-  /* Wider side padding than default container for comfort */
+  #services .container {
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
+  }
+  #services .grid {
+    gap: var(--space-8);
+  }
+  #services .service-card-image {
+    height: clamp(140px, 35vw, 180px);
+  }
+  #services .service-card-content {
+    padding: var(--space-5);
+  }
+  #services .service-card-title {
+    font-size: clamp(1.125rem, 4.5vw, 1.5rem);
+  }
+  #services .service-card-description {
+    font-size: clamp(0.875rem, 3.5vw, 1rem);
+    line-height: 1.5;
+  }
+  #services .service-card-badge {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.688rem;
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+}
+
+/* Mobile: 480px - 640px (standard phones) */
+@media (min-width: 480px) and (max-width: 640px) {
+  #services.section {
+    padding: var(--space-12) 0;
+  }
   #services .container {
     padding-left: var(--space-6);
     padding-right: var(--space-6);
   }
-  /* Larger gaps between cards so it feels less tight */
   #services .grid {
     gap: var(--space-10);
   }
-  /* Slightly taller images still constrained */
   #services .service-card-image {
-    height: 150px;
+    height: clamp(160px, 30vw, 200px);
   }
-  /* Maintain generous card padding */
   #services .service-card-content {
     padding: var(--space-6);
   }
+  #services .service-card-badge {
+    top: var(--space-4);
+    right: var(--space-4);
+  }
+}
 
-  /* Why section: similar breathing room on phones */
+/* Tablet: 641px - 767px (small tablets, large phones landscape) */
+@media (min-width: 641px) and (max-width: 767px) {
+  #services .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+  #services .service-card-image {
+    height: clamp(180px, 25vw, 220px);
+  }
+  #services .service-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    margin: 0 auto;
+  }
+}
+
+/* Tablet: 768px - 1023px (standard tablets) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #services .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+  #services .service-card-image {
+    height: clamp(200px, 22vw, 240px);
+  }
+  #services .service-card-content {
+    padding: var(--space-6);
+  }
+}
+
+/* Desktop: 1024px - 1279px (small desktops, large tablets landscape) */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  #services .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+  #services .service-card-image {
+    height: 200px;
+  }
+}
+
+/* Desktop: 1280px+ (large desktops) */
+@media (min-width: 1280px) {
+  #services .grid {
+    gap: var(--space-8);
+  }
+  #services .service-card:hover {
+    transform: translateY(-6px);
+  }
+}
+
+/* Why section & Footer: apply similar mobile comfort */
+@media (max-width: 640px) {
   #why.section {
     padding-top: var(--space-12);
     padding-bottom: var(--space-12);
@@ -816,7 +906,6 @@ img {
     gap: var(--space-10);
   }
 
-  /* Footer: increase side padding and gaps for clarity */
   footer .container {
     padding-left: var(--space-6);
     padding-right: var(--space-6);
