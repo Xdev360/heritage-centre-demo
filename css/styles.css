@@ -850,11 +850,6 @@ img {
   #services .service-card-image {
     height: clamp(180px, 25vw, 220px);
   }
-  #services .service-card:last-child {
-    grid-column: 1 / -1;
-    max-width: 50%;
-    margin: 0 auto;
-  }
 }
 
 /* Tablet: 768px - 1023px (standard tablets) */
@@ -874,7 +869,7 @@ img {
 /* Desktop: 1024px - 1279px (small desktops, large tablets landscape) */
 @media (min-width: 1024px) and (max-width: 1279px) {
   #services .grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-6);
   }
   #services .service-card-image {
@@ -885,6 +880,7 @@ img {
 /* Desktop: 1280px+ (large desktops) */
 @media (min-width: 1280px) {
   #services .grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-8);
   }
   #services .service-card:hover {
