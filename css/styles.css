@@ -802,6 +802,28 @@ img {
   #services .service-card-content {
     padding: var(--space-6);
   }
+
+  /* Why section: similar breathing room on phones */
+  #why.section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+  #why .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+  #why .grid {
+    gap: var(--space-10);
+  }
+
+  /* Footer: increase side padding and gaps for clarity */
+  footer .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+  footer .grid {
+    gap: var(--space-10);
+  }
 }
 .hide-mobile {
   display: none;
