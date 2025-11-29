@@ -5,31 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spa Admin Dashboard — Heritage Centre</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    body { font-family: 'Playfair Display', serif; }
     .admin-tabs { display: flex; gap: var(--space-2); border-bottom: 2px solid var(--neutral-200); margin-bottom: var(--space-6); flex-wrap: wrap; }
     .admin-tab { padding: var(--space-3) var(--space-5); border: none; background: none; color: var(--neutral-600); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
-    .admin-tab:hover { color: var(--primary-600); }
-    .admin-tab.active { color: var(--primary-600); border-bottom-color: var(--primary-600); }
+    .admin-tab:hover { color: #ec4899; }
+    .admin-tab.active { color: #ec4899; border-bottom-color: #ec4899; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
-    .stat-card { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; }
-    .stat-value { font-size: 2rem; font-weight: 800; color: var(--primary-600); margin-bottom: var(--space-2); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-8); }
+    .stat-card { background: white; border: 2px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-5); text-align: center; transition: all 0.3s; }
+    .stat-card:hover { border-color: #ec4899; transform: translateY(-2px); }
+    .stat-value { font-size: 2.5rem; font-weight: 800; color: #ec4899; margin-bottom: var(--space-2); }
     .data-table { width: 100%; border-collapse: collapse; }
-    .data-table th { background: var(--neutral-50); padding: var(--space-3); text-align: left; font-weight: 600; border-bottom: 2px solid var(--neutral-200); }
+    .data-table th { background: var(--neutral-50); padding: var(--space-3); text-align: left; font-weight: 700; border-bottom: 2px solid var(--neutral-200); }
     .data-table td { padding: var(--space-3); border-bottom: 1px solid var(--neutral-200); }
-    .service-item { background: white; border: 1px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-3); }
+    .status-badge { padding: 6px 12px; border-radius: var(--radius-md); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    .status-pending { background: #FEF3C7; color: #92400E; }
+    .status-approved { background: #D1FAE5; color: #065F46; }
+    .status-rejected { background: #FEE2E2; color: #991B1B; }
+    .status-confirmed { background: #DBEAFE; color: #1E40AF; }
+    .service-editor { background: white; border: 2px solid var(--neutral-200); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4); }
+    .filter-bar { display: flex; gap: var(--space-3); margin-bottom: var(--space-5); flex-wrap: wrap; }
+    .filter-input { padding: var(--space-3); border: 2px solid var(--neutral-300); border-radius: var(--radius-md); font-size: 0.938rem; }
   </style>
 </head>
-<body data-page="spa-admin">
+<body>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
   <header class="header" id="main-header">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo"><div class="nav-logo-icon">HC</div><span>Heritage Centre</span></a>
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
       <nav class="nav-main">
         <a href="spa-admin.html" class="nav-link active">Spa Admin</a>
         <a href="admin-login.html" class="nav-link">Switch Department</a>
       </nav>
       <div class="nav-actions">
+        <span id="user-name" style="margin-right: var(--space-3); font-weight: 600;"></span>
         <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
       </div>
     </div>
@@ -38,141 +54,179 @@
   <main>
     <div class="container" style="padding: var(--space-8) var(--space-4);">
       <div style="margin-bottom: var(--space-8);">
-        <h1 style="font-size: 2rem; margin-bottom: var(--space-2);">💆 Royal Retreat Spa Admin</h1>
-        <p style="color: var(--neutral-600);">Manage appointments, services, pricing, and payment approvals</p>
+        <h1 style="font-size: 2.5rem; margin-bottom: var(--space-2); font-weight: 800;">💆 Royal Retreat Spa Admin</h1>
+        <p style="color: var(--neutral-600); font-size: 1.125rem;">Manage bookings, services, pricing, and payment approvals</p>
       </div>
 
       <!-- Stats -->
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-value" id="stat-pending">0</div><div>Pending Payments</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-appointments">0</div><div>Today's Appointments</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-services">6</div><div>Active Services</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-revenue">₦0</div><div>Today's Revenue</div></div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-pending">0</div>
+          <div style="font-weight: 600; color: var(--neutral-700);">Pending Payments</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-bookings">0</div>
+          <div style="font-weight: 600; color: var(--neutral-700);">Total Bookings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-services">28</div>
+          <div style="font-weight: 600; color: var(--neutral-700);">Active Services</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-revenue">₦0</div>
+          <div style="font-weight: 600; color: var(--neutral-700);">Total Revenue</div>
+        </div>
       </div>
 
       <!-- Tabs -->
       <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchTab('payments')">💳 Payments</button>
-        <button class="admin-tab" onclick="switchTab('appointments')">📅 Appointments</button>
-        <button class="admin-tab" onclick="switchTab('services')">✨ Services</button>
-        <button class="admin-tab" onclick="switchTab('pricing')">💰 Pricing</button>
+        <button class="admin-tab active" onclick="switchTab('bookings')">📅 Bookings</button>
+        <button class="admin-tab" onclick="switchTab('payments')">💳 Payments</button>
+        <button class="admin-tab" onclick="switchTab('services')">✨ Services & Pricing</button>
+        <button class="admin-tab" onclick="switchTab('search')">🔍 Search</button>
+      </div>
+
+      <!-- Bookings Tab -->
+      <div id="tab-bookings" class="tab-content active">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
+            <h3 style="font-size: 1.5rem; font-weight: 700;">All Bookings</h3>
+            <div class="filter-bar">
+              <select class="filter-input" id="filter-status" onchange="filterBookings()">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <input type="date" class="filter-input" id="filter-date" onchange="filterBookings()" />
+            </div>
+          </div>
+          
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Services</th>
+                <th>Date & Time</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-list">
+              <tr><td colspan="9" style="text-align:center; padding: var(--space-8); color: var(--neutral-500);">No bookings found</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Payments Tab -->
-      <div id="tab-payments" class="tab-content active">
+      <div id="tab-payments" class="tab-content">
         <div class="card">
-          <h3 style="margin-bottom: var(--space-4);">Payment Approvals</h3>
+          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-5);">Payment Approvals</h3>
+          
           <table class="data-table">
-            <thead><tr><th>Ref</th><th>Customer</th><th>Service</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="payments-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No payments pending</td></tr></tbody>
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Services</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="payments-list">
+              <tr><td colspan="8" style="text-align:center; padding: var(--space-8); color: var(--neutral-500);">No pending payments</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Appointments Tab -->
-      <div id="tab-appointments" class="tab-content">
-        <div class="card">
-          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
-            <h3>Appointments & Bookings</h3>
-            <button class="btn btn-primary btn-sm" onclick="addAppointment()">+ New Appointment</button>
-          </div>
-          <table class="data-table">
-            <thead><tr><th>Time</th><th>Customer</th><th>Service</th><th>Therapist</th><th>Duration</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="appointments-list"><tr><td colspan="7" style="text-align:center; color: var(--neutral-500);">No appointments scheduled</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Services Tab -->
+      <!-- Services & Pricing Tab -->
       <div id="tab-services" class="tab-content">
         <div class="card">
-          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
-            <h3>Services Management</h3>
-            <button class="btn btn-primary btn-sm" onclick="addService()">+ Add Service</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-5);">
+            <h3 style="font-size: 1.5rem; font-weight: 700;">Services & Pricing Management</h3>
+            <select class="filter-input" id="filter-category" onchange="filterServices()">
+              <option value="all">All Categories</option>
+              <option value="massage">Massage</option>
+              <option value="hammam">Hammam Bar</option>
+              <option value="facial">Facials & Waxing</option>
+              <option value="medspa">Med Spa</option>
+              <option value="cosmetics">Cosmetics</option>
+              <option value="hair">Barbie (Hair)</option>
+              <option value="unisex">Unisex Dining</option>
+              <option value="photo">Photography</option>
+            </select>
           </div>
-          <div id="services-list">
-            <div class="service-item">
-              <div style="display:flex; justify-content: space-between; align-items: start;">
-                <div style="flex: 1;">
-                  <h4 style="margin-bottom: var(--space-2);">Swedish Massage</h4>
-                  <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Relaxing full-body massage with essential oils</p>
-                  <span style="font-weight: 700; color: var(--primary-600);">₦8,000</span> <span style="color: var(--neutral-500);">• 60 min</span>
-                </div>
-                <div style="display:flex; gap: var(--space-2);">
-                  <button class="btn btn-ghost btn-sm" onclick="editService('swedish')">Edit</button>
-                  <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="removeService('swedish')">Remove</button>
-                </div>
-              </div>
-            </div>
-            <div class="service-item">
-              <div style="display:flex; justify-content: space-between; align-items: start;">
-                <div style="flex: 1;">
-                  <h4 style="margin-bottom: var(--space-2);">Deep Tissue Massage</h4>
-                  <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Intense muscle therapy for chronic pain relief</p>
-                  <span style="font-weight: 700; color: var(--primary-600);">₦12,000</span> <span style="color: var(--neutral-500);">• 90 min</span>
-                </div>
-                <div style="display:flex; gap: var(--space-2);">
-                  <button class="btn btn-ghost btn-sm" onclick="editService('deep')">Edit</button>
-                  <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="removeService('deep')">Remove</button>
-                </div>
-              </div>
-            </div>
-            <div class="service-item">
-              <div style="display:flex; justify-content: space-between; align-items: start;">
-                <div style="flex: 1;">
-                  <h4 style="margin-bottom: var(--space-2);">Hydration Facial</h4>
-                  <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-2);">Deep cleansing and moisturizing facial treatment</p>
-                  <span style="font-weight: 700; color: var(--primary-600);">₦10,000</span> <span style="color: var(--neutral-500);">• 75 min</span>
-                </div>
-                <div style="display:flex; gap: var(--space-2);">
-                  <button class="btn btn-ghost btn-sm" onclick="editService('facial')">Edit</button>
-                  <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="removeService('facial')">Remove</button>
-                </div>
-              </div>
-            </div>
+
+          <div id="services-editor-list">
+            <!-- Services will be loaded here -->
           </div>
         </div>
       </div>
 
-      <!-- Pricing Tab -->
-      <div id="tab-pricing" class="tab-content">
+      <!-- Search Tab -->
+      <div id="tab-search" class="tab-content">
         <div class="card">
-          <div style="display:flex; justify-content: space-between; margin-bottom: var(--space-4);">
-            <h3>Package Pricing</h3>
-            <button class="btn btn-primary btn-sm" onclick="updatePricing()">Save Changes</button>
+          <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-5);">Search Bookings</h3>
+          
+          <div style="margin-bottom: var(--space-6);">
+            <input 
+              type="text" 
+              class="filter-input" 
+              id="search-input" 
+              placeholder="Search by booking ID, customer name, email, or phone..."
+              style="width: 100%; font-size: 1rem; padding: var(--space-4);"
+              onkeyup="performSearch()"
+            />
           </div>
-          <div style="display: grid; gap: var(--space-4);">
-            <div class="field"><label>Quick Escape (60 min)</label><input type="number" class="input" id="package-quick" value="8000" /></div>
-            <div class="field"><label>Full Day Bliss (4 hours)</label><input type="number" class="input" id="package-full" value="18000" /></div>
-            <div class="field"><label>Couples Retreat (3 hours)</label><input type="number" class="input" id="package-couples" value="30000" /></div>
-            <div class="field"><label>Manicure</label><input type="number" class="input" id="service-manicure" value="3000" /></div>
-            <div class="field"><label>Pedicure</label><input type="number" class="input" id="service-pedicure" value="3500" /></div>
+
+          <div id="search-results">
+            <p style="text-align: center; color: var(--neutral-500); padding: var(--space-8);">Enter search criteria to find bookings</p>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
-    <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
-      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre. All rights reserved.</p>
-    </div>
-  </footer>
-
   <script>
+    const BOOKINGS_KEY = 'hc_spa_bookings';
+    const SERVICES_KEY = 'hc_spa_services';
+
+    // Check authentication
     function checkAuth() {
       const dept = localStorage.getItem('hc_department');
+      const user = JSON.parse(localStorage.getItem('hc_user') || '{}');
+      
       if (dept !== 'spa' && dept !== 'ceo') {
         alert('Access denied. Spa admin privileges required.');
         window.location.href = 'admin-login.html';
+        return;
+      }
+      
+      if (user.name) {
+        document.getElementById('user-name').textContent = user.name;
       }
     }
 
     function switchTab(tab) {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
       event.target.classList.add('active');
       document.getElementById(`tab-${tab}`).classList.add('active');
+      
+      if (tab === 'bookings') loadBookings();
+      if (tab === 'payments') loadPayments();
+      if (tab === 'services') loadServicesEditor();
     }
 
     function logout() {
@@ -182,21 +236,344 @@
       window.location.href = 'index.html';
     }
 
-    function addService() { alert('Add Service feature - integrate with your backend'); }
-    function editService(id) { alert(`Edit service: ${id}`); }
-    function removeService(id) { if(confirm('Remove this service?')) alert(`Service ${id} removed`); }
-    function addAppointment() { alert('Add Appointment feature'); }
-    function updatePricing() { alert('Pricing updated successfully!'); }
-
-    function loadStats() {
-      const payments = JSON.parse(localStorage.getItem('hc_all_pending_payments') || '[]');
-      const spaPayments = payments.filter(p => p.serviceType && p.serviceType.toLowerCase().includes('spa'));
-      document.getElementById('stat-pending').textContent = spaPayments.filter(p => p.status === 'pending').length;
+    // Load bookings
+    function loadBookings() {
+      const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      const tbody = document.getElementById('bookings-list');
+      
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: var(--space-8); color: var(--neutral-500);">No bookings found</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      bookings.forEach(booking => {
+        const statusClass = `status-${booking.status}`;
+        const dateTime = `${booking.bookingDate} ${booking.bookingTime}`;
+        
+        html += `
+          <tr>
+            <td><strong>${booking.bookingId}</strong></td>
+            <td>${booking.customerName}</td>
+            <td>${booking.customerEmail}</td>
+            <td>${booking.customerPhone}</td>
+            <td><small>${booking.servicesSummary}</small></td>
+            <td>${dateTime}</td>
+            <td><strong>₦${booking.totalAmount.toLocaleString()}</strong></td>
+            <td><span class="status-badge ${statusClass}">${booking.status.toUpperCase()}</span></td>
+            <td>
+              <button class="btn btn-ghost btn-sm" onclick="viewBookingDetails('${booking.bookingId}')">View</button>
+            </td>
+          </tr>
+        `;
+      });
+      
+      tbody.innerHTML = html;
     }
 
+    // Load payments
+    function loadPayments() {
+      const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      const pending = bookings.filter(b => b.status === 'pending');
+      const tbody = document.getElementById('payments-list');
+      
+      if (pending.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: var(--space-8); color: var(--neutral-500);">No pending payments</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      pending.forEach(booking => {
+        html += `
+          <tr>
+            <td><strong>${booking.bookingId}</strong></td>
+            <td>${booking.customerName}</td>
+            <td>${booking.customerEmail}</td>
+            <td><small>${booking.servicesSummary}</small></td>
+            <td><strong>₦${booking.totalAmount.toLocaleString()}</strong></td>
+            <td>${booking.bookingDate} ${booking.bookingTime}</td>
+            <td><span class="status-badge status-pending">PENDING</span></td>
+            <td>
+              <button class="btn btn-primary btn-sm" onclick="approvePayment('${booking.bookingId}')">Approve</button>
+              <button class="btn btn-ghost btn-sm" style="color: var(--error-600);" onclick="rejectPayment('${booking.bookingId}')">Reject</button>
+            </td>
+          </tr>
+        `;
+      });
+      
+      tbody.innerHTML = html;
+    }
+
+    function approvePayment(bookingId) {
+      if (!confirm('Approve this payment?')) return;
+      
+      let bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      const booking = bookings.find(b => b.bookingId === bookingId);
+      
+      if (booking) {
+        booking.status = 'confirmed';
+        booking.approvedDate = new Date().toISOString();
+        localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+        
+        alert('Payment approved! Booking confirmed.');
+        loadPayments();
+        loadStats();
+      }
+    }
+
+    function rejectPayment(bookingId) {
+      const reason = prompt('Rejection reason:');
+      if (!reason) return;
+      
+      let bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      const booking = bookings.find(b => b.bookingId === bookingId);
+      
+      if (booking) {
+        booking.status = 'cancelled';
+        booking.rejectionReason = reason;
+        localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+        
+        alert('Payment rejected. Booking cancelled.');
+        loadPayments();
+        loadStats();
+      }
+    }
+
+    // Load services editor
+    function loadServicesEditor() {
+      const services = JSON.parse(localStorage.getItem(SERVICES_KEY) || '[]');
+      const container = document.getElementById('services-editor-list');
+      
+      if (services.length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: var(--space-8); color: var(--neutral-500);">No services found</p>';
+        return;
+      }
+      
+      let html = '';
+      services.forEach(service => {
+        html += `
+          <div class="service-editor">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div style="flex: 1;">
+                <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">${service.name}</h4>
+                <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-3);">${service.description}</p>
+                <div style="display: flex; gap: var(--space-4); align-items: center;">
+                  <div>
+                    <label style="font-size: 0.75rem; color: var(--neutral-600); display: block; margin-bottom: 4px;">Price</label>
+                    <input type="number" value="${service.price}" id="price-${service.id}" style="width: 120px; padding: 8px; border: 2px solid var(--neutral-300); border-radius: 6px; font-weight: 700;" />
+                  </div>
+                  <div>
+                    <label style="font-size: 0.75rem; color: var(--neutral-600); display: block; margin-bottom: 4px;">Duration (min)</label>
+                    <input type="number" value="${service.duration}" id="duration-${service.id}" style="width: 100px; padding: 8px; border: 2px solid var(--neutral-300); border-radius: 6px;" />
+                  </div>
+                  <div style="margin-top: 20px;">
+                    <button class="btn btn-primary btn-sm" onclick="updateService(${service.id})">Save Changes</button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span style="background: var(--neutral-100); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${service.category}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    function updateService(serviceId) {
+      let services = JSON.parse(localStorage.getItem(SERVICES_KEY) || '[]');
+      const service = services.find(s => s.id === serviceId);
+      
+      if (service) {
+        const newPrice = parseInt(document.getElementById(`price-${serviceId}`).value);
+        const newDuration = parseInt(document.getElementById(`duration-${serviceId}`).value);
+        
+        service.price = newPrice;
+        service.duration = newDuration;
+        
+        localStorage.setItem(SERVICES_KEY, JSON.stringify(services));
+        alert('Service updated successfully!');
+      }
+    }
+
+    // Filter services
+    function filterServices() {
+      const category = document.getElementById('filter-category').value;
+      const services = JSON.parse(localStorage.getItem(SERVICES_KEY) || '[]');
+      const filtered = category === 'all' ? services : services.filter(s => s.category === category);
+      
+      const container = document.getElementById('services-editor-list');
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="text-align: center; padding: var(--space-8); color: var(--neutral-500);">No services found in this category</p>';
+        return;
+      }
+      
+      // Re-render with filtered services (same logic as loadServicesEditor)
+      let html = '';
+      filtered.forEach(service => {
+        html += `
+          <div class="service-editor">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div style="flex: 1;">
+                <h4 style="font-size: 1.125rem; font-weight: 700; margin-bottom: var(--space-2);">${service.name}</h4>
+                <p style="color: var(--neutral-600); font-size: 0.875rem; margin-bottom: var(--space-3);">${service.description}</p>
+                <div style="display: flex; gap: var(--space-4); align-items: center;">
+                  <div>
+                    <label style="font-size: 0.75rem; color: var(--neutral-600); display: block; margin-bottom: 4px;">Price</label>
+                    <input type="number" value="${service.price}" id="price-${service.id}" style="width: 120px; padding: 8px; border: 2px solid var(--neutral-300); border-radius: 6px; font-weight: 700;" />
+                  </div>
+                  <div>
+                    <label style="font-size: 0.75rem; color: var(--neutral-600); display: block; margin-bottom: 4px;">Duration (min)</label>
+                    <input type="number" value="${service.duration}" id="duration-${service.id}" style="width: 100px; padding: 8px; border: 2px solid var(--neutral-300); border-radius: 6px;" />
+                  </div>
+                  <div style="margin-top: 20px;">
+                    <button class="btn btn-primary btn-sm" onclick="updateService(${service.id})">Save Changes</button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span style="background: var(--neutral-100); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">${service.category}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    // Filter bookings
+    function filterBookings() {
+      const status = document.getElementById('filter-status').value;
+      const date = document.getElementById('filter-date').value;
+      
+      let bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      
+      if (status !== 'all') {
+        bookings = bookings.filter(b => b.status === status);
+      }
+      
+      if (date) {
+        bookings = bookings.filter(b => b.bookingDate === date);
+      }
+      
+      const tbody = document.getElementById('bookings-list');
+      
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: var(--space-8); color: var(--neutral-500);">No bookings match your filters</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      bookings.forEach(booking => {
+        const statusClass = `status-${booking.status}`;
+        const dateTime = `${booking.bookingDate} ${booking.bookingTime}`;
+        
+        html += `
+          <tr>
+            <td><strong>${booking.bookingId}</strong></td>
+            <td>${booking.customerName}</td>
+            <td>${booking.customerEmail}</td>
+            <td>${booking.customerPhone}</td>
+            <td><small>${booking.servicesSummary}</small></td>
+            <td>${dateTime}</td>
+            <td><strong>₦${booking.totalAmount.toLocaleString()}</strong></td>
+            <td><span class="status-badge ${statusClass}">${booking.status.toUpperCase()}</span></td>
+            <td>
+              <button class="btn btn-ghost btn-sm" onclick="viewBookingDetails('${booking.bookingId}')">View</button>
+            </td>
+          </tr>
+        `;
+      });
+      
+      tbody.innerHTML = html;
+    }
+
+    // Search
+    function performSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const results = document.getElementById('search-results');
+      
+      if (query.length < 2) {
+        results.innerHTML = '<p style="text-align: center; color: var(--neutral-500); padding: var(--space-8);">Enter at least 2 characters to search</p>';
+        return;
+      }
+      
+      const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      const filtered = bookings.filter(b =>
+        b.bookingId.toLowerCase().includes(query) ||
+        b.customerName.toLowerCase().includes(query) ||
+        b.customerEmail.toLowerCase().includes(query) ||
+        b.customerPhone.includes(query)
+      );
+      
+      if (filtered.length === 0) {
+        results.innerHTML = '<p style="text-align: center; color: var(--neutral-500); padding: var(--space-8);">No bookings found</p>';
+        return;
+      }
+      
+      let html = '<table class="data-table"><thead><tr><th>Booking ID</th><th>Customer</th><th>Email</th><th>Phone</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>';
+      
+      filtered.forEach(booking => {
+        html += `
+          <tr>
+            <td><strong>${booking.bookingId}</strong></td>
+            <td>${booking.customerName}</td>
+            <td>${booking.customerEmail}</td>
+            <td>${booking.customerPhone}</td>
+            <td>${booking.bookingDate} ${booking.bookingTime}</td>
+            <td><strong>₦${booking.totalAmount.toLocaleString()}</strong></td>
+            <td><span class="status-badge status-${booking.status}">${booking.status.toUpperCase()}</span></td>
+          </tr>
+        `;
+      });
+      
+      html += '</tbody></table>';
+      results.innerHTML = html;
+    }
+
+    function viewBookingDetails(bookingId) {
+      const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      const booking = bookings.find(b => b.bookingId === bookingId);
+      
+      if (booking) {
+        const details = `
+Booking ID: ${booking.bookingId}
+Customer: ${booking.customerName}
+Email: ${booking.customerEmail}
+Phone: ${booking.customerPhone}
+Date & Time: ${booking.bookingDate} ${booking.bookingTime}
+Services: ${booking.servicesSummary}
+Total Amount: ₦${booking.totalAmount.toLocaleString()}
+Total Duration: ${booking.totalDuration} minutes
+Status: ${booking.status.toUpperCase()}
+${booking.specialRequests ? '\nSpecial Requests: ' + booking.specialRequests : ''}
+        `;
+        alert(details);
+      }
+    }
+
+    // Load stats
+    function loadStats() {
+      const bookings = JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]');
+      
+      const pending = bookings.filter(b => b.status === 'pending').length;
+      const total = bookings.length;
+      const revenue = bookings.filter(b => b.status === 'confirmed' || b.status === 'completed').reduce((sum, b) => sum + b.totalAmount, 0);
+      
+      document.getElementById('stat-pending').textContent = pending;
+      document.getElementById('stat-bookings').textContent = total;
+      document.getElementById('stat-revenue').textContent = '₦' + revenue.toLocaleString();
+    }
+
+    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       checkAuth();
       loadStats();
+      loadBookings();
     });
   </script>
 </body>

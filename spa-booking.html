@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Spa Services — Royal Retreat Spa</title>
+  <meta name="description" content="Book luxury spa treatments, massages, facials, and wellness services at Heritage Centre." />
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .service-card {
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      transition: all 0.3s ease;
+      background: white;
+      cursor: pointer;
+    }
+    
+    .service-card:hover {
+      border-color: #ec4899;
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.15);
+      transform: translateY(-4px);
+    }
+    
+    .service-card.in-cart {
+      border-color: #10B981;
+      background: #F0FDF4;
+    }
+    
+    .category-pill {
+      display: inline-block;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid var(--neutral-200);
+      background: white;
+    }
+    
+    .category-pill:hover {
+      border-color: #ec4899;
+      background: #FCE7F3;
+    }
+    
+    .category-pill.active {
+      border-color: #ec4899;
+      background: #ec4899;
+      color: white;
+    }
+    
+    .search-bar {
+      position: relative;
+      margin-bottom: var(--space-8);
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: var(--space-4) var(--space-4) var(--space-4) 48px;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #ec4899;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.25rem;
+      color: var(--neutral-400);
+    }
+    
+    .cart-sidebar {
+      position: sticky;
+      top: 100px;
+      background: white;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3);
+      background: var(--neutral-50);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: var(--space-8) var(--space-4);
+      color: var(--neutral-500);
+    }
+    
+    .popular-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #F59E0B;
+      color: white;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+      <nav class="nav-main">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="spa.html" class="nav-link active">Spa & Beauty</a>
+        <a href="bookings.html" class="nav-link">Bookings</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+        <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" style="padding: var(--space-6) var(--space-4);">
+      <nav class="breadcrumbs">
+        <a href="index.html" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="spa.html" class="breadcrumb-item">Spa</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Book Services</span>
+      </nav>
+    </div>
+
+    <div class="container" style="padding: var(--space-8) var(--space-4);">
+      <!-- Hero Section -->
+      <div style="text-align: center; margin-bottom: var(--space-10);">
+        <h1 style="font-size: 3rem; margin-bottom: var(--space-3);">💆 Book Your Spa Experience</h1>
+        <p style="color: var(--neutral-600); font-size: 1.25rem;">Browse our services, add to cart, and book your perfect wellness journey</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Search for treatments, massages, facials..." 
+          id="search-input" oninput="performSearch()"
+        />
+      </div>
+
+      <!-- Category Filter -->
+      <div style="margin-bottom: var(--space-10);">
+        <h3 style="font-size: 1.125rem; margin-bottom: var(--space-4); font-weight: 600;">Filter by Category:</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-3);" id="category-filters">
+          <span class="category-pill category-chip active" data-category="all" onclick="filterByCategory('all')">All Services</span>
+          <span class="category-pill category-chip" data-category="massage" onclick="filterByCategory('massage')">Massage</span>
+          <span class="category-pill category-chip" data-category="hammam" onclick="filterByCategory('hammam')">Hammam Bar</span>
+          <span class="category-pill category-chip" data-category="facial" onclick="filterByCategory('facial')">Facials & Waxing</span>
+          <span class="category-pill category-chip" data-category="medspa" onclick="filterByCategory('medspa')">Med Spa</span>
+          <span class="category-pill category-chip" data-category="cosmetics" onclick="filterByCategory('cosmetics')">Cosmetics</span>
+          <span class="category-pill category-chip" data-category="hair" onclick="filterByCategory('hair')">Barbie (Hair & Glam)</span>
+          <span class="category-pill category-chip" data-category="unisex" onclick="filterByCategory('unisex')">Unisex Dining</span>
+          <span class="category-pill category-chip" data-category="photo" onclick="filterByCategory('photo')">Photography Studio</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 380px; gap: var(--space-8); align-items: start;">
+        <!-- Services Grid -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+            <h2 style="font-size: 1.5rem; font-weight: 700;">Available Services</h2>
+            <span id="results-count" style="color: var(--neutral-600); font-size: 0.938rem;"></span>
+          </div>
+
+          <div id="services-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--space-6);"></div>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-sidebar">
+          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-5); display: flex; align-items: center; gap: var(--space-2);">
+            🛒 Your Cart
+            <span id="cart-count" style="background: #ec4899; color: white; padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 700;">0</span>
+          </h3>
+
+          <div id="cart-items">
+            <div class="empty-cart">
+              <div style="font-size: 3rem; margin-bottom: var(--space-3); opacity: 0.5;">🛒</div>
+              <p>Your cart is empty</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-2);">Add services to get started</p>
+            </div>
+          </div>
+
+          <div id="cart-summary" style="display: none;">
+            <div style="border-top: 2px solid var(--neutral-200); margin: var(--space-5) 0; padding-top: var(--space-5);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-3);">
+                <span style="font-weight: 600; color: var(--neutral-700);">Subtotal:</span>
+                <span id="cart-subtotal" style="font-weight: 700; color: var(--neutral-900);">₦0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-5);">
+                <span style="font-weight: 800; font-size: 1.125rem;">Total:</span>
+                <span id="cart-total" style="font-weight: 800; font-size: 1.5rem; color: #ec4899;">₦0</span>
+              </div>
+
+              <button id="checkout-btn" class="btn btn-primary btn-lg" style="width: 100%; background: #ec4899; border-color: #ec4899;" onclick="proceedToCheckout()">
+                Proceed to Checkout →
+              </button>
+              <button class="btn btn-ghost btn-sm" style="width: 100%; margin-top: var(--space-3);" onclick="clearCart()">
+                Clear Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4); margin-top: var(--space-12);">
+    <div class="container" style="display:flex; justify-content:center; gap: var(--space-3); flex-wrap: wrap; align-items:center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2024 Heritage Centre Royal Retreat Spa. All rights reserved.</p>
+      <span style="color: var(--neutral-300);">•</span>
+      <a href="admin-login.html" style="color: var(--neutral-500); text-decoration: none; font-size: 0.875rem;">Administration Login</a>
+    </div>
+  </footer>
+
+  <script src="js/spa-services.js"></script>
+  <script>
+    // Initialize existing services and UI
+    document.addEventListener('DOMContentLoaded', () => {
+      const services = initializeServices();
+      displayServices(services);
+      updateCart();
+    });
+  </script>
+</body>
+</html>

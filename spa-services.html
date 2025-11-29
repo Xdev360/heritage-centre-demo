@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Spa Services — Royal Retreat Spa & Beauty</title>
+  <meta name="description" content="Browse and book luxury spa and beauty treatments. Massage, Hammam, Facials, Med Spa, Cosmetics, Hair, and Photography services." />
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .spa-hero {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+      padding: var(--space-12) var(--space-4);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .spa-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="1" fill="%23fff" opacity="0.1"/></svg>');
+      animation: float 20s linear infinite;
+    }
+    
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(60px); }
+    }
+    
+    .search-filter-bar {
+      background: white;
+      padding: var(--space-6);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin: calc(-1 * var(--space-10)) auto var(--space-10);
+      max-width: 1000px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: var(--space-4);
+      border: 2px solid var(--neutral-300);
+      border-radius: var(--radius-lg);
+      font-size: 1rem;
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #ec4899;
+    }
+    
+    .category-filters {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+    
+    .category-chip {
+      padding: var(--space-2) var(--space-4);
+      border: 2px solid var(--neutral-300);
+      border-radius: var(--radius-full);
+      background: white;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .category-chip:hover {
+      border-color: #ec4899;
+      background: #fdf2f8;
+    }
+    
+    .category-chip.active {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: white;
+      border-color: #ec4899;
+    }
+    
+    .service-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.15);
+      border-color: #ec4899;
+    }
+    
+    .service-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: white;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .service-icon {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #fdf2f8, #f3e8ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+    }
+    
+    .price-tag {
+      background: #10B981;
+      color: white;
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-md);
+      font-weight: 800;
+      font-size: 1.25rem;
+      display: inline-block;
+    }
+    
+    .duration-tag {
+      background: var(--neutral-100);
+      color: var(--neutral-700);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+    
+    .cart-sidebar {
+      position: sticky;
+      top: 100px;
+      background: white;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      padding: var(--space-3);
+      background: var(--neutral-50);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+    }
+    
+    .empty-cart {
+      text-align: center;
+      padding: var(--space-8) var(--space-4);
+      color: var(--neutral-500);
+    }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <header class="header" id="main-header">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">HC</div>
+        <span>Heritage Centre</span>
+      </a>
+
+      <nav class="nav-main" id="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        
+        <div class="relative group" id="discover-desktop">
+          <button class="nav-link flex items-center gap-2" aria-haspopup="true" aria-expanded="false">
+            <span>Discover</span>
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/></svg>
+          </button>
+          <div class="absolute left-0 mt-2 w-64 rounded-lg shadow-lg border border-gray-200 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 origin-top z-50">
+            <a href="cinema.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Cinema</a>
+            <a href="playplanet.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Arcade (PlayPlanet)</a>
+            <a href="spa.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Spa & Beauty</a>
+            <a href="lounge.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Lounge & Events</a>
+            <a href="restaurant.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">Restaurant / Superstore</a>
+          </div>
+        </div>
+
+        <a href="bookings.html" class="nav-link">Bookings</a>
+        <a href="events.html" class="nav-link">Events</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="account.html" class="btn btn-ghost btn-sm" id="signin-btn">Sign In</a>
+        <a href="account.html" class="btn btn-primary btn-sm" id="create-btn">Get Started</a>
+        
+        <div class="profile-dropdown" id="profile-dropdown" style="display: none;">
+          <button class="profile-trigger" id="profile-trigger">
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            <span id="profile-name">User</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          
+          <div class="profile-menu" id="profile-menu">
+            <a href="account.html" class="profile-menu-item">My Dashboard</a>
+            <a href="bookings.html" class="profile-menu-item">My Bookings</a>
+            <a href="loyalty.html" class="profile-menu-item">Loyalty Rewards</a>
+            <div class="profile-menu-divider"></div>
+            <a href="about.html" class="profile-menu-item">About Us</a>
+            <a href="#" class="profile-menu-item" id="admin-link" style="display: none;">Admin Dashboard</a>
+            <a href="#" class="profile-menu-item" id="ceo-link" style="display: none;">CEO Analytics</a>
+            <div class="profile-menu-divider"></div>
+            <a href="#" class="profile-menu-item" id="logout-btn">Sign Out</a>
+          </div>
+        </div>
+
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="index.html" class="mobile-menu-link">Home</a>
+      
+      <div class="border-t border-gray-100 my-2"></div>
+      <button id="discover-mobile-toggle" class="mobile-menu-link flex items-center justify-between" aria-expanded="false">
+        <span>Discover</span>
+        <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/></svg>
+      </button>
+      <div id="discover-mobile-menu" class="ml-2 hidden">
+        <a href="cinema.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Cinema</a>
+        <a href="playplanet.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Arcade (PlayPlanet)</a>
+        <a href="spa.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Spa & Beauty</a>
+        <a href="lounge.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Lounge & Events</a>
+        <a href="restaurant.html" class="block px-4 py-3 text-sm text-gray-800 hover:bg-gray-100 rounded-md">Restaurant / Superstore</a>
+      </div>
+
+      <a href="bookings.html" class="mobile-menu-link">Bookings</a>
+      <a href="events.html" class="mobile-menu-link">Events</a>
+      <a href="contact.html" class="mobile-menu-link">Contact</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="spa-hero">
+      <div style="position: relative; z-index: 1;">
+        <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: var(--space-4);">💆 Royal Retreat Spa & Beauty</h1>
+        <p style="font-size: 1.25rem; max-width: 700px; margin: 0 auto; opacity: 0.95;">Browse our premium services and book your perfect wellness experience</p>
+      </div>
+    </section>
+
+    <!-- Search & Filter Bar -->
+    <div class="container">
+      <div class="search-filter-bar">
+        <div style="display: flex; gap: var(--space-3); margin-bottom: var(--space-2);">
+          <input 
+            type="text" 
+            class="search-input" 
+            id="search-input" 
+            placeholder="🔍 Search for services (e.g., massage, facial, makeup...)"
+          />
+          <button class="btn btn-primary" onclick="performSearch()">Search</button>
+        </div>
+        
+        <div class="category-filters">
+          <button class="category-chip active" data-category="all" onclick="filterByCategory('all')">All Services</button>
+          <button class="category-chip" data-category="massage" onclick="filterByCategory('massage')">💆 Massage</button>
+          <button class="category-chip" data-category="hammam" onclick="filterByCategory('hammam')">🧖 Hammam Bar</button>
+          <button class="category-chip" data-category="facial" onclick="filterByCategory('facial')">✨ Facials & Waxing</button>
+          <button class="category-chip" data-category="medspa" onclick="filterByCategory('medspa')">💉 Med Spa</button>
+          <button class="category-chip" data-category="cosmetics" onclick="filterByCategory('cosmetics')">💄 Cosmetics</button>
+          <button class="category-chip" data-category="hair" onclick="filterByCategory('hair')">💇 Barbie (Hair)</button>
+          <button class="category-chip" data-category="unisex" onclick="filterByCategory('unisex')">👥 Unisex Dining</button>
+          <button class="category-chip" data-category="photo" onclick="filterByCategory('photo')">📸 Photography</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Grid with Cart -->
+    <section class="container" style="padding: var(--space-8) var(--space-4);">
+      <div style="display: grid; grid-template-columns: 1fr 380px; gap: var(--space-8); align-items: start;">
+        
+        <!-- Services Grid -->
+        <div>
+          <div style="margin-bottom: var(--space-6);">
+            <h2 style="font-size: 2rem; margin-bottom: var(--space-2);">Available Services</h2>
+            <p style="color: var(--neutral-600);" id="results-count">Loading services...</p>
+          </div>
+
+          <div id="services-grid" class="grid grid-cols-2" style="gap: var(--space-6);">
+            <!-- Services will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-sidebar">
+          <h3 style="font-size: 1.5rem; margin-bottom: var(--space-5); display: flex; align-items: center; gap: var(--space-2);">
+            🛒 Booking Cart
+            <span id="cart-count" style="background: #ec4899; color: white; padding: 4px 10px; border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 700;">0</span>
+          </h3>
+
+          <div id="cart-items">
+            <div class="empty-cart">
+              <div style="font-size: 3rem; margin-bottom: var(--space-3); opacity: 0.5;">🛒</div>
+              <p>Your cart is empty</p>
+              <p style="font-size: 0.875rem; margin-top: var(--space-2);">Add services to get started</p>
+            </div>
+          </div>
+
+          <div id="cart-summary" style="display: none;">
+            <div style="border-top: 2px solid var(--neutral-200); margin: var(--space-5) 0; padding-top: var(--space-5);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-3);">
+                <span style="font-weight: 600; color: var(--neutral-700);">Subtotal:</span>
+                <span id="cart-subtotal" style="font-weight: 700; color: var(--neutral-900);">₦0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-5);">
+                <span style="font-weight: 800; font-size: 1.125rem;">Total:</span>
+                <span id="cart-total" style="font-weight: 800; font-size: 1.5rem; color: #ec4899;">₦0</span>
+              </div>
+
+              <button id="checkout-btn" class="btn btn-primary btn-lg" style="width: 100%; background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="proceedToCheckout()">
+                Proceed to Booking →
+              </button>
+              <button class="btn btn-ghost btn-sm" style="width: 100%; margin-top: var(--space-3);" onclick="clearCart()">
+                Clear Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Popular Services Section -->
+    <section class="container section" style="background: var(--neutral-50); padding: var(--space-10) var(--space-4); margin-top: var(--space-10);">
+      <div style="text-align: center; margin-bottom: var(--space-8);">
+        <h2 style="font-size: 2rem; margin-bottom: var(--space-3);">🌟 Most Popular Services</h2>
+        <p style="color: var(--neutral-600); font-size: 1.125rem;">Customer favorites that deliver amazing results</p>
+      </div>
+      <div id="popular-services" class="grid grid-cols-3" style="gap: var(--space-6);">
+        <!-- Popular services will be loaded here -->
+      </div>
+    </section>
+  </main>
+
+  <footer style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="text-align: center;">
+      <p style="color: var(--neutral-500); font-size: 0.875rem;">© 2024 Heritage Centre Royal Retreat Spa. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/spa-services.js"></script>
+  <script>
+    // Mobile Menu Toggle
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenuToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    // Profile Dropdown
+    const profileTrigger = document.getElementById('profile-trigger');
+    const profileMenu = document.getElementById('profile-menu');
+
+    if (profileTrigger) {
+      profileTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!profileMenu.contains(e.target) && !profileTrigger.contains(e.target)) {
+          profileMenu.classList.remove('open');
+        }
+      });
+    }
+
+    // Header Scroll Effect
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // User Authentication
+    function updateUIForUser() {
+      const user = JSON.parse(localStorage.getItem('hc_user') || 'null');
+      const signinBtn = document.getElementById('signin-btn');
+      const createBtn = document.getElementById('create-btn');
+      const profileDropdown = document.getElementById('profile-dropdown');
+      const profileName = document.getElementById('profile-name');
+      const profileAvatar = document.getElementById('profile-avatar');
+
+      if (user && user.name) {
+        signinBtn.style.display = 'none';
+        createBtn.style.display = 'none';
+        profileDropdown.style.display = 'block';
+        profileName.textContent = user.name.split(' ')[0];
+        profileAvatar.textContent = user.name.charAt(0).toUpperCase();
+      } else {
+        signinBtn.style.display = 'inline-flex';
+        createBtn.style.display = 'inline-flex';
+        profileDropdown.style.display = 'none';
+      }
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('hc_user');
+        localStorage.removeItem('hc_user_role');
+        updateUIForUser();
+        window.location.href = 'index.html';
+      });
+    }
+
+    // Mobile discover toggle
+    const discoverToggle = document.getElementById('discover-mobile-toggle');
+    const discoverMenu = document.getElementById('discover-mobile-menu');
+    if (discoverToggle && discoverMenu) {
+      discoverToggle.addEventListener('click', () => {
+        discoverMenu.classList.toggle('hidden');
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', updateUIForUser);
+  </script>
+</body>
+</html>
