@@ -774,6 +774,35 @@ img {
 .grid {
   width: 100%;
 }
+
+/* ========================================
+   HOMEPAGE SERVICES SECTION TUNING (Mobile)
+   Gives more breathing room on small screens
+   ======================================== */
+@media (max-width: 640px) {
+  /* Increase vertical rhythm for this section */
+  #services.section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+  /* Wider side padding than default container for comfort */
+  #services .container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+  /* Larger gaps between cards so it feels less tight */
+  #services .grid {
+    gap: var(--space-10);
+  }
+  /* Slightly taller images still constrained */
+  #services .service-card-image {
+    height: 150px;
+  }
+  /* Maintain generous card padding */
+  #services .service-card-content {
+    padding: var(--space-6);
+  }
+}
 .hide-mobile {
   display: none;
 }
