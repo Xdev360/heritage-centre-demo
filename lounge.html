@@ -12,29 +12,123 @@
 <body class="bg-gray-50 text-gray-800" data-page="lounge">
   <nav id="nav"></nav>
 
-  <main class="container mx-auto px-4 py-8">
-    <article class="bg-white rounded-lg shadow p-6">
-      <div class="md:flex md:items-center">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80" alt="Lounge" class="w-full md:w-1/3 rounded-lg object-cover shadow-md mb-4 md:mb-0" />
-        <div class="md:ml-6">
-          <h1 class="text-2xl font-bold mb-2">Lounge & Events — Celebrate With Us</h1>
-          <p class="text-gray-600 mb-4">Our Lounge hosts live music, private dinners and special events. We cater for intimate gatherings and large celebrations with tailored menus and event planning support.</p>
-          <ul class="text-gray-700 mb-4 list-disc list-inside">
-            <li>Weekly live performances and DJ nights</li>
-            <li>Private event planning and bespoke menus</li>
-            <li>Table reservations and VIP experiences</li>
-          </ul>
-          <div class="flex flex-wrap gap-3">
-            <a href="bookings.html?dept=lounge" class="px-4 py-2 bg-yellow-600 text-white rounded shadow">Book Services</a>
-            <a href="lounge-menu.html" class="px-4 py-2 border rounded text-gray-700">View Menu</a>
-            <a href="lounge-events.html" class="px-4 py-2 border rounded text-gray-700">Upcoming Events</a>
-            <a href="lounge-vip.html" class="px-4 py-2 border rounded text-gray-700">VIP Experience</a>
-            <a href="index.html" class="px-4 py-2 border rounded text-gray-700">Back to Home</a>
+  <!-- Hero Section: 7th Heaven Lounge & Bar -->
+  <section class="hero" style="background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: #fff;">
+    <div class="hero-content">
+      <div class="hero-badge">7th Heaven Lounge & Bar</div>
+      <h1 class="hero-title" style="font-family: 'Staple', 'Playfair Display', serif;">A Luxurious Night in Gold</h1>
+      <p class="hero-description">Immerse yourself in a premium lounge experience with gourmet cuisine, signature cocktails, VIP service, and unforgettable events — all wrapped in elegant gold.</p>
+      <div class="hero-actions">
+        <a href="#features" class="btn btn-primary">Explore Lounge</a>
+        <a href="#reserve" class="btn btn-outline">Book a Table</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Cards -->
+  <section id="features" class="section">
+    <div class="container">
+      <div class="grid grid-cols-3">
+        <!-- View Menu -->
+        <a href="lounge-menu.html" class="card fade-in" style="text-decoration:none;">
+          <img src="assets/menu/menu-hero.jpg" alt="View Menu" onerror="this.src='assets/placeholder-menu.jpg'" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-lg);">
+          <h3 class="mt-4" style="font-family: 'Staple','Playfair Display', serif;">View Menu</h3>
+          <p>Starters, Mains, Drinks, Desserts & Intercontinental delights. Add items to your pre-table order.</p>
+        </a>
+
+        <!-- Book a Table (opens form modal) -->
+        <button class="card fade-in" onclick="openReserve()" style="text-align:left;">
+          <img src="assets/lounge/reserve.jpg" alt="Book a Table" onerror="this.src='assets/placeholder-vip.jpg'" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-lg);">
+          <h3 class="mt-4" style="font-family: 'Staple','Playfair Display', serif;">Book a Table</h3>
+          <p>Reserve Regular or VIP tables with flexible guest options and preferred lounge areas.</p>
+        </button>
+
+        <!-- VIP Experience -->
+        <a href="lounge-vip.html" class="card fade-in" style="text-decoration:none;">
+          <img src="assets/vip/vip-ambiance.jpg" alt="VIP Experience" onerror="this.src='assets/placeholder-vip.jpg'" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-lg);">
+          <h3 class="mt-4" style="font-family: 'Staple','Playfair Display', serif;">VIP Experience</h3>
+          <p>Private seating, special service, exclusive menu — reserve VIP for a golden night.</p>
+        </a>
+
+        <!-- Upcoming Events -->
+        <a href="lounge-events.html" class="card fade-in" style="text-decoration:none;">
+          <img src="assets/events/event-hero.jpg" alt="Upcoming Events" onerror="this.src='assets/placeholder-event.jpg'" style="width:100%; height:180px; object-fit:cover; border-radius: var(--radius-lg);">
+          <h3 class="mt-4" style="font-family: 'Staple','Playfair Display', serif;">Upcoming Events</h3>
+          <p>Live Jazz, DJ Nights, Tastings — buy tickets or reserve tables in advance.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reservation Modal -->
+  <div id="reserve-modal" class="lounge-modal" style="display:none;">
+    <div class="lounge-modal-content" style="max-width:640px;">
+      <div class="lounge-modal-header">
+        <h3>Book a Table</h3>
+        <button onclick="closeReserve()" class="lounge-close-btn">×</button>
+      </div>
+      <div class="lounge-modal-body" id="reserve-body">
+        <form id="reserve-form" class="grid grid-cols-2">
+          <div class="lounge-form-group"><label>Name</label><input type="text" id="r-name" required></div>
+          <div class="lounge-form-group"><label>Phone</label><input type="tel" id="r-phone" required></div>
+          <div class="lounge-form-group"><label>Email</label><input type="email" id="r-email" required></div>
+          <div class="lounge-form-group"><label>No. of Guests</label><input type="number" id="r-guests" min="1" value="2" required></div>
+          <div class="lounge-form-group"><label>Date</label><input type="date" id="r-date" required></div>
+          <div class="lounge-form-group"><label>Time</label><input type="time" id="r-time" required></div>
+          <div class="lounge-form-group"><label>Lounge Area</label>
+            <select id="r-area"><option>Regular</option><option>VIP</option></select></div>
+          <div class="lounge-form-group"><label>Table Type</label>
+            <select id="r-type"><option>Regular</option><option>VIP</option></select></div>
+          <div class="grid grid-cols-1" style="grid-column: 1 / -1;">
+            <button type="submit" class="btn btn-primary">Confirm Booking</button>
           </div>
+        </form>
+        <div id="reserve-confirm" style="display:none;" class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Newsletter Section -->
+  <section class="section" id="newsletter">
+    <div class="container">
+      <div class="card" style="text-align:center;">
+        <h3 style="font-family: 'Staple','Playfair Display', serif;">Join Our Newsletter</h3>
+        <p>Be the first to know about new menus, VIP nights, and events.</p>
+        <form id="newsletter-form" class="grid grid-cols-3" style="gap: var(--space-3);">
+          <input type="email" id="n-email" placeholder="you@example.com" required style="grid-column: span 2;">
+          <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+        <div id="n-confirm" class="mt-4" style="display:none;">Subscribed! Check your inbox for a welcome note.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promo Popup -->
+  <div id="promo" class="lounge-modal" style="display:none;">
+    <div class="lounge-modal-content" style="max-width:520px;">
+      <div class="lounge-modal-header"><h3>Tonight's Special</h3><button class="lounge-close-btn" onclick="closePromo()">×</button></div>
+      <div class="lounge-modal-body">
+        <p>Black Friday Golden Night — 20% off signature cocktails. Limited seats!</p>
+        <div class="lounge-modal-actions">
+          <a href="lounge-events.html" class="btn btn-primary">View Events</a>
         </div>
       </div>
-    </article>
-  </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer" style="background: white; border-top: 1px solid var(--neutral-200); padding: var(--space-8) var(--space-4);">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap: var(--space-3);">
+      <div style="display:flex; align-items:center; gap: var(--space-3);">
+        <p style="color: var(--neutral-500); font-size: 0.875rem; margin:0;">© 2025 7th Heaven Lounge & Bar. All rights reserved.</p>
+        <a href="admin-login.html" style="color: var(--neutral-700); text-decoration: none; font-size: 0.875rem;">Admin Login</a>
+      </div>
+      <form id="footer-newsletter" style="display:flex; gap: var(--space-2);">
+        <input type="email" id="fn-email" placeholder="newsletter@yourmail.com" required>
+        <button class="btn btn-secondary" type="submit">Join</button>
+      </form>
+    </div>
+  </footer>
 
   <script src="js/app.js?v=20251130"></script>
   <script>
@@ -48,6 +142,45 @@
         } catch (e) { /* ignore */ }
       }
     })();
+
+    function openReserve(){ document.getElementById('reserve-modal').style.display='block'; }
+    function closeReserve(){ document.getElementById('reserve-modal').style.display='none'; }
+    function closePromo(){ document.getElementById('promo').style.display='none'; }
+
+    // Timed promo popup (3s after load)
+    setTimeout(()=>{ const p=document.getElementById('promo'); if(p) p.style.display='block'; }, 3000);
+
+    // Reservation handling + mock email
+    document.getElementById('reserve-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = {
+        name: document.getElementById('r-name').value,
+        phone: document.getElementById('r-phone').value,
+        email: document.getElementById('r-email').value,
+        guests: parseInt(document.getElementById('r-guests').value||'1'),
+        date: document.getElementById('r-date').value,
+        time: document.getElementById('r-time').value,
+        area: document.getElementById('r-area').value,
+        type: document.getElementById('r-type').value,
+        id: 'LR-'+Date.now()
+      };
+      const bookings = JSON.parse(localStorage.getItem('hc_lounge_reservations')||'[]');
+      bookings.push(data);
+      localStorage.setItem('hc_lounge_reservations', JSON.stringify(bookings));
+      const confirm = document.getElementById('reserve-confirm');
+      confirm.style.display='block';
+      confirm.textContent = `Booking confirmed! Ref ${data.id}. A copy has been emailed to ${data.email}.`;
+    });
+
+    // Newsletter mock
+    document.getElementById('newsletter-form').addEventListener('submit',(e)=>{
+      e.preventDefault();
+      document.getElementById('n-confirm').style.display='block';
+    });
+    document.getElementById('footer-newsletter').addEventListener('submit',(e)=>{
+      e.preventDefault();
+      alert('Subscribed to 7th Heaven newsletter!');
+    });
   </script>
 </body>
 </html>
