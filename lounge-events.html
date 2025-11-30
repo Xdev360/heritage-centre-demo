@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lounge Events | The Heritage Lounge</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/lounge.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="lounge-page">
+    <!-- Navigation -->
+    <nav id="nav"></nav>
+
+    <!-- Events Header -->
+    <section class="lounge-events-header">
+        <div class="lounge-events-header-bg"></div>
+        <div class="container">
+            <h1 class="lounge-events-title">Upcoming Events</h1>
+            <p class="lounge-events-subtitle">Experience unforgettable nights filled with music, culture, and luxury. Reserve your tickets now for exclusive Heritage Lounge events.</p>
+        </div>
+    </section>
+
+    <!-- Event Filters -->
+    <div class="lounge-events-nav-wrapper">
+        <div class="container">
+            <div class="lounge-events-filters">
+                <button class="lounge-filter-btn active" data-filter="all">All Events</button>
+                <button class="lounge-filter-btn" data-filter="Music">Music</button>
+                <button class="lounge-filter-btn" data-filter="Food">Food & Wine</button>
+                <button class="lounge-filter-btn" data-filter="Exclusive Nights">Exclusive Nights</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <section class="lounge-events-section">
+        <div class="container">
+            <div id="eventsGrid" class="lounge-events-grid">
+                <!-- Events will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Events Gallery -->
+    <section class="lounge-past-events">
+        <div class="container">
+            <h2 class="lounge-section-title">Past Events Gallery</h2>
+            <p class="lounge-section-subtitle">Relive the magic of our previous events</p>
+            
+            <div class="lounge-past-gallery">
+                <div class="lounge-gallery-item">
+                    <img src="assets/gallery/past-jazz.jpg" alt="Jazz Night" onerror="this.src='assets/placeholder-event.jpg'">
+                    <div class="lounge-gallery-overlay">
+                        <h4>Jazz Night Live</h4>
+                        <p>November 2025</p>
+                    </div>
+                </div>
+                <div class="lounge-gallery-item">
+                    <img src="assets/gallery/past-wine.jpg" alt="Wine Tasting" onerror="this.src='assets/placeholder-event.jpg'">
+                    <div class="lounge-gallery-overlay">
+                        <h4>Wine Tasting</h4>
+                        <p>October 2025</p>
+                    </div>
+                </div>
+                <div class="lounge-gallery-item">
+                    <img src="assets/gallery/past-gala.jpg" alt="VIP Gala" onerror="this.src='assets/placeholder-event.jpg'">
+                    <div class="lounge-gallery-overlay">
+                        <h4>VIP Exclusive Gala</h4>
+                        <p>September 2025</p>
+                    </div>
+                </div>
+                <div class="lounge-gallery-item">
+                    <img src="assets/gallery/past-dj.jpg" alt="DJ Night" onerror="this.src='assets/placeholder-event.jpg'">
+                    <div class="lounge-gallery-overlay">
+                        <h4>DJ Night - Afrobeats</h4>
+                        <p>August 2025</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ticket Purchase Modal -->
+    <div id="ticketModal" class="lounge-modal">
+        <div class="lounge-modal-content lounge-ticket-modal">
+            <div class="lounge-modal-header">
+                <h3 id="ticketEventName">Event Name</h3>
+                <button onclick="closeTicketModal()" class="lounge-close-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="lounge-ticket-details">
+                <div class="lounge-ticket-info">
+                    <p><strong>Date:</strong> <span id="ticketDate"></span></p>
+                    <p><strong>Time:</strong> <span id="ticketTime"></span></p>
+                    <p><strong>Price per ticket:</strong> <span id="ticketPrice"></span></p>
+                </div>
+
+                <form id="ticketPurchaseForm">
+                    <div class="lounge-form-group">
+                        <label for="ticketQuantity">Number of Tickets</label>
+                        <div class="lounge-quantity-selector">
+                            <button type="button" onclick="decreaseTicketQty()" class="lounge-qty-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                            <input type="number" id="ticketQuantity" value="1" min="1" max="10" readonly>
+                            <button type="button" onclick="increaseTicketQty()" class="lounge-qty-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lounge-form-group">
+                        <label for="buyerName">Full Name</label>
+                        <input type="text" id="buyerName" required placeholder="John Doe">
+                    </div>
+
+                    <div class="lounge-form-group">
+                        <label for="buyerEmail">Email Address</label>
+                        <input type="email" id="buyerEmail" required placeholder="john@example.com">
+                    </div>
+
+                    <div class="lounge-form-group">
+                        <label for="buyerPhone">Phone Number</label>
+                        <input type="tel" id="buyerPhone" required placeholder="+234 800 000 0000">
+                    </div>
+
+                    <div class="lounge-ticket-summary">
+                        <div class="lounge-summary-row">
+                            <span>Tickets (<span id="summaryQty">1</span>):</span>
+                            <span id="summarySubtotal">₦0</span>
+                        </div>
+                        <div class="lounge-summary-row">
+                            <span>Service Fee (5%):</span>
+                            <span id="summaryFee">₦0</span>
+                        </div>
+                        <div class="lounge-summary-row total">
+                            <span>Total:</span>
+                            <span id="summaryTotal">₦0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="lounge-btn lounge-btn-primary lounge-btn-large">
+                        Purchase Tickets
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Success Modal -->
+    <div id="ticketSuccessModal" class="lounge-modal">
+        <div class="lounge-modal-content">
+            <div class="lounge-success-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h3>Tickets Purchased Successfully!</h3>
+            <p>Your tickets have been sent to <strong><span id="confirmEmail"></span></strong>. Please check your email for your ticket confirmation and QR code.</p>
+            
+            <div class="lounge-ticket-confirmation">
+                <p><strong>Confirmation ID:</strong> <span id="confirmId"></span></p>
+                <p><strong>Event:</strong> <span id="confirmEvent"></span></p>
+                <p><strong>Date:</strong> <span id="confirmDate"></span></p>
+                <p><strong>Tickets:</strong> <span id="confirmQty"></span></p>
+                <p><strong>Total Paid:</strong> <span id="confirmTotal"></span></p>
+            </div>
+
+            <div class="lounge-modal-actions">
+                <button onclick="closeTicketSuccessModal()" class="lounge-btn lounge-btn-primary">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer"></footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/lounge.js"></script>
+    <script src="js/lounge-events.js"></script>
+</body>
+</html>
