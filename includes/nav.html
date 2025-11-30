@@ -16,6 +16,23 @@
       <a href="playplanet.html" class="nav-link" data-page="arcade">Arcade</a>
       <a href="spa.html" class="nav-link" data-page="spa">Spa & Beauty</a>
       <a href="spa-booking.html" class="nav-link" data-page="spa-booking">Book Spa</a>
+      
+      <!-- Discover dropdown: quick access to Lounge section -->
+      <div class="profile-dropdown" id="discover-dropdown">
+        <button class="profile-trigger" id="discover-trigger">
+          <span>Discover</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="profile-menu" id="discover-menu">
+          <a href="lounge.html" class="profile-menu-item">Lounge & Events</a>
+          <a href="lounge-menu.html" class="profile-menu-item">Lounge Menu</a>
+          <a href="lounge-events.html" class="profile-menu-item">Upcoming Events</a>
+          <a href="lounge-vip.html" class="profile-menu-item">VIP Lounge</a>
+        </div>
+      </div>
+
       <a href="lounge.html" class="nav-link" data-page="lounge">Lounge & Events</a>
       <a href="restaurant.html" class="nav-link" data-page="restaurant">Restaurant</a>
       <a href="contact.html" class="nav-link" data-page="contact">Contact</a>
@@ -62,6 +79,9 @@
     <a href="spa.html" class="mobile-menu-link">Spa & Beauty</a>
     <a href="spa-booking.html" class="mobile-menu-link">Book Spa</a>
     <a href="lounge.html" class="mobile-menu-link">Lounge & Events</a>
+    <a href="lounge-menu.html" class="mobile-menu-link">Lounge Menu</a>
+    <a href="lounge-events.html" class="mobile-menu-link">Upcoming Events</a>
+    <a href="lounge-vip.html" class="mobile-menu-link">VIP Lounge</a>
     <a href="restaurant.html" class="mobile-menu-link">Restaurant</a>
     <a href="superstore.html" class="mobile-menu-link">Superstore</a>
     <a href="contact.html" class="mobile-menu-link">Contact</a>
@@ -78,6 +98,8 @@
   const mobileMenu = document.getElementById('mobile-menu');
   const profileTrigger = document.getElementById('profile-trigger');
   const profileMenu = document.getElementById('profile-menu');
+  const discoverTrigger = document.getElementById('discover-trigger');
+  const discoverMenu = document.getElementById('discover-menu');
   const header = document.getElementById('main-header');
 
   // Mobile menu toggle
@@ -97,6 +119,19 @@
     document.addEventListener('click', (e) => {
       if (!profileMenu.contains(e.target) && !profileTrigger.contains(e.target)) {
         profileMenu.classList.remove('open');
+      }
+    });
+  }
+
+  // Discover dropdown
+  if (discoverTrigger) {
+    discoverTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      discoverMenu.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!discoverMenu.contains(e.target) && !discoverTrigger.contains(e.target)) {
+        discoverMenu.classList.remove('open');
       }
     });
   }

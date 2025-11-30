@@ -5,19 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Lounge & Events — Heritage Centre</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20251130">
+  <link rel="stylesheet" href="css/lounge.css?v=20251130">
+  
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="index.html" class="text-xl font-bold">Heritage Centre</a>
-      <nav class="space-x-4">
-        <a href="index.html" class="text-gray-600">Home</a>
-        <a href="events.html" class="text-gray-600">Events</a>
-         <a href="about.html" class="text-gray-600">About Us</a>
-      </nav>
-    </div>
-  </header>
+<body class="bg-gray-50 text-gray-800" data-page="lounge">
+  <nav id="nav"></nav>
 
   <main class="container mx-auto px-4 py-8">
     <article class="bg-white rounded-lg shadow p-6">
@@ -31,8 +24,11 @@
             <li>Private event planning and bespoke menus</li>
             <li>Table reservations and VIP experiences</li>
           </ul>
-          <div class="flex space-x-3">
+          <div class="flex flex-wrap gap-3">
             <a href="bookings.html?dept=lounge" class="px-4 py-2 bg-yellow-600 text-white rounded shadow">Book Services</a>
+            <a href="lounge-menu.html" class="px-4 py-2 border rounded text-gray-700">View Menu</a>
+            <a href="lounge-events.html" class="px-4 py-2 border rounded text-gray-700">Upcoming Events</a>
+            <a href="lounge-vip.html" class="px-4 py-2 border rounded text-gray-700">VIP Experience</a>
             <a href="index.html" class="px-4 py-2 border rounded text-gray-700">Back to Home</a>
           </div>
         </div>
@@ -40,6 +36,18 @@
     </article>
   </main>
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=20251130"></script>
+  <script>
+    (async () => {
+      const navEl = document.getElementById('nav');
+      if (navEl) {
+        try {
+          const res = await fetch('includes/nav.html?v=20251130');
+          const html = await res.text();
+          navEl.outerHTML = html;
+        } catch (e) { /* ignore */ }
+      }
+    })();
+  </script>
 </body>
 </html>
