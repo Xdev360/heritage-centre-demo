@@ -15,7 +15,7 @@ function seedMenuData() {
                 description: 'Crispy risotto balls stuffed with mozzarella, parmesan, and black truffle oil. Served with roasted garlic aioli.',
                 price: 3500,
                 category: 'starters',
-                image: 'assets/menu/truffle-arancini.jpg',
+                image: 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -25,7 +25,7 @@ function seedMenuData() {
                 description: 'Fresh tuna with avocado, sesame seeds, and spicy mayo on crispy wonton chips.',
                 price: 4200,
                 category: 'starters',
-                image: 'assets/menu/tuna-tartare.jpg',
+                image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -35,7 +35,7 @@ function seedMenuData() {
                 description: 'Tender squid rings lightly battered and fried golden. Served with lemon aioli and marinara.',
                 price: 3800,
                 category: 'starters',
-                image: 'assets/menu/calamari.jpg',
+                image: 'https://images.unsplash.com/photo-1604909052743-94e838986d24?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -45,7 +45,7 @@ function seedMenuData() {
                 description: 'Cherry tomatoes, fresh mozzarella, and basil drizzled with balsamic glaze.',
                 price: 2900,
                 category: 'starters',
-                image: 'assets/menu/caprese.jpg',
+                image: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -55,7 +55,7 @@ function seedMenuData() {
                 description: 'Paper-thin slices of premium beef tenderloin with arugula, parmesan shavings, and truffle oil.',
                 price: 5500,
                 category: 'starters',
-                image: 'assets/menu/carpaccio.jpg',
+                image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: true
             }
@@ -67,7 +67,7 @@ function seedMenuData() {
                 description: '300g premium ribeye steak grilled to perfection. Served with herb butter, roasted vegetables, and truffle mashed potatoes.',
                 price: 12500,
                 category: 'mains',
-                image: 'assets/menu/ribeye.jpg',
+                image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -77,7 +77,7 @@ function seedMenuData() {
                 description: 'Fresh Atlantic salmon with lemon butter sauce, asparagus, and jasmine rice.',
                 price: 9800,
                 category: 'mains',
-                image: 'assets/menu/salmon.jpg',
+                image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -87,7 +87,7 @@ function seedMenuData() {
                 description: 'Whole lobster tail with creamy brandy sauce, cheese crust, and garlic butter vegetables.',
                 price: 18500,
                 category: 'mains',
-                image: 'assets/menu/lobster.jpg',
+                image: 'https://images.unsplash.com/photo-1625944230945-1b7dd3b949ab?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: true
             },
@@ -97,7 +97,7 @@ function seedMenuData() {
                 description: 'Breaded chicken breast topped with marinara and melted mozzarella. Served with spaghetti.',
                 price: 7500,
                 category: 'mains',
-                image: 'assets/menu/chicken-parm.jpg',
+                image: 'https://images.unsplash.com/photo-1632778149955-e80f8ceca2e8?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -107,7 +107,7 @@ function seedMenuData() {
                 description: 'Creamy arborio rice with wild mushrooms, parmesan, white wine, and fresh herbs.',
                 price: 6800,
                 category: 'mains',
-                image: 'assets/menu/risotto.jpg',
+                image: 'https://images.unsplash.com/photo-1476124369491-f51d85c697e0?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -117,7 +117,7 @@ function seedMenuData() {
                 description: 'Herb-crusted New Zealand lamb chops with rosemary jus, grilled vegetables, and potato gratin.',
                 price: 14500,
                 category: 'mains',
-                image: 'assets/menu/lamb.jpg',
+                image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             }
@@ -129,7 +129,7 @@ function seedMenuData() {
                 description: 'Premium French champagne with delicate bubbles and fruity notes.',
                 price: 45000,
                 category: 'drinks',
-                image: 'assets/menu/moet.jpg',
+                image: 'https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: true
             },
@@ -139,7 +139,7 @@ function seedMenuData() {
                 description: 'Signature blend of rum, passion fruit, mango, and a hint of chili. Our house special!',
                 price: 3500,
                 category: 'drinks',
-                image: 'assets/menu/golden-sunset.jpg',
+                image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -149,7 +149,7 @@ function seedMenuData() {
                 description: 'Premium bourbon, sugar, bitters, and orange peel. A timeless classic.',
                 price: 4200,
                 category: 'drinks',
-                image: 'assets/menu/old-fashioned.jpg',
+                image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -159,7 +159,7 @@ function seedMenuData() {
                 description: 'Smooth single malt Scotch whisky with notes of oak, fruit, and spice.',
                 price: 12000,
                 category: 'drinks',
-                image: 'assets/menu/glenfiddich.jpg',
+                image: 'https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -169,7 +169,7 @@ function seedMenuData() {
                 description: 'Vodka, coffee liqueur, and fresh espresso topped with coffee beans.',
                 price: 3800,
                 category: 'drinks',
-                image: 'assets/menu/espresso-martini.jpg',
+                image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -179,7 +179,7 @@ function seedMenuData() {
                 description: 'Freshly squeezed Nigerian mangoes. Sweet, refreshing, and natural.',
                 price: 1500,
                 category: 'drinks',
-                image: 'assets/menu/mango-juice.jpg',
+                image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -189,7 +189,7 @@ function seedMenuData() {
                 description: 'Nigerian classic - Fanta, Sprite, grenadine, Angostura bitters, cucumber, and lemon.',
                 price: 2000,
                 category: 'drinks',
-                image: 'assets/menu/chapman.jpg',
+                image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             }
@@ -201,7 +201,7 @@ function seedMenuData() {
                 description: 'Warm chocolate cake with a molten center. Served with vanilla ice cream and berry coulis.',
                 price: 3500,
                 category: 'desserts',
-                image: 'assets/menu/lava-cake.jpg',
+                image: 'https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -211,7 +211,7 @@ function seedMenuData() {
                 description: 'Classic Italian dessert with espresso-soaked ladyfingers, mascarpone cream, and cocoa.',
                 price: 3200,
                 category: 'desserts',
-                image: 'assets/menu/tiramisu.jpg',
+                image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -221,7 +221,7 @@ function seedMenuData() {
                 description: 'Silky vanilla custard with a caramelized sugar crust. Served with fresh berries.',
                 price: 3800,
                 category: 'desserts',
-                image: 'assets/menu/creme-brulee.jpg',
+                image: 'https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             },
@@ -231,7 +231,7 @@ function seedMenuData() {
                 description: 'Rich and creamy cheesecake on graham cracker crust with strawberry compote.',
                 price: 3600,
                 category: 'desserts',
-                image: 'assets/menu/cheesecake.jpg',
+                image: 'https://images.unsplash.com/photo-1533134486753-c833f0ed4866?w=600&h=400&fit=crop',
                 vegetarian: true,
                 vipOnly: false
             }
@@ -243,7 +243,7 @@ function seedMenuData() {
                 description: 'Signature Nigerian jollof rice with grilled chicken, plantains, coleslaw, and spicy sauce.',
                 price: 6500,
                 category: 'intercontinental',
-                image: 'assets/menu/jollof.jpg',
+                image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -253,7 +253,7 @@ function seedMenuData() {
                 description: 'Spicy grilled beef suya skewers served with sliced onions, tomatoes, and yaji spice.',
                 price: 4500,
                 category: 'intercontinental',
-                image: 'assets/menu/suya.jpg',
+                image: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -263,7 +263,7 @@ function seedMenuData() {
                 description: 'Traditional Nigerian pepper soup with goat meat, catfish, and assorted offal in spicy broth.',
                 price: 5200,
                 category: 'intercontinental',
-                image: 'assets/menu/pepper-soup.jpg',
+                image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -273,7 +273,7 @@ function seedMenuData() {
                 description: 'Smooth pounded yam served with rich egusi soup, stockfish, and assorted meats.',
                 price: 7200,
                 category: 'intercontinental',
-                image: 'assets/menu/pounded-yam.jpg',
+                image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             },
@@ -283,7 +283,7 @@ function seedMenuData() {
                 description: 'Spicy stir-fried gizzard and plantain in peppered sauce. A Nigerian favorite!',
                 price: 4800,
                 category: 'intercontinental',
-                image: 'assets/menu/gizdodo.jpg',
+                image: 'https://images.unsplash.com/photo-1587740896339-96a76170508d?w=600&h=400&fit=crop',
                 vegetarian: false,
                 vipOnly: false
             }
@@ -309,7 +309,7 @@ function seedEventsData() {
             category: 'Music',
             price: 8000,
             ticketsAvailable: 80,
-            image: 'assets/events/jazz-night.jpg',
+            image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800&h=600&fit=crop',
             vipOnly: false
         },
         {
@@ -321,7 +321,7 @@ function seedEventsData() {
             category: 'Food',
             price: 12000,
             ticketsAvailable: 40,
-            image: 'assets/events/wine-tasting.jpg',
+            image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&h=600&fit=crop',
             vipOnly: false
         },
         {
@@ -333,7 +333,7 @@ function seedEventsData() {
             category: 'Exclusive Nights',
             price: 35000,
             ticketsAvailable: 25,
-            image: 'assets/events/vip-gala.jpg',
+            image: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&h=600&fit=crop',
             vipOnly: true
         },
         {
@@ -345,7 +345,7 @@ function seedEventsData() {
             category: 'Music',
             price: 6000,
             ticketsAvailable: 120,
-            image: 'assets/events/dj-night.jpg',
+            image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&h=600&fit=crop',
             vipOnly: false
         },
         {
@@ -357,7 +357,7 @@ function seedEventsData() {
             category: 'Food',
             price: 10000,
             ticketsAvailable: 30,
-            image: 'assets/events/cocktail-class.jpg',
+            image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&h=600&fit=crop',
             vipOnly: false
         }
     ];
