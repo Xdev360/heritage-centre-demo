@@ -1,0 +1,570 @@
+/* ========================================
+   RESTAURANT PAGE - CHICKEN REPUBLIC STYLE
+   ======================================== */
+
+:root {
+    --restaurant-primary: #E63946;
+    --restaurant-primary-dark: #C5303D;
+    --restaurant-secondary: #F77F00;
+    --restaurant-accent: #FCBF49;
+    --restaurant-dark: #1A1A1A;
+    --restaurant-gray: #6C757D;
+    --restaurant-light: #F8F9FA;
+    --restaurant-white: #FFFFFF;
+    
+    --restaurant-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --restaurant-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
+    --restaurant-transition: all 0.3s ease;
+}
+
+/* ========================================
+   GLOBAL RESTAURANT STYLES
+   ======================================== */
+
+.restaurant-page {
+    background: var(--restaurant-light);
+    color: var(--restaurant-dark);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+
+.restaurant-hero {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--restaurant-primary) 0%, var(--restaurant-secondary) 100%);
+    overflow: hidden;
+}
+
+.restaurant-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: 1;
+}
+
+.restaurant-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(230, 57, 70, 0.9) 0%, 
+        rgba(247, 127, 0, 0.85) 100%);
+    z-index: 2;
+}
+
+.restaurant-hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    max-width: 800px;
+    padding: var(--space-8);
+    color: var(--restaurant-white);
+}
+
+.restaurant-badge {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.restaurant-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.restaurant-hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.7;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   SECTION STYLES
+   ======================================== */
+
+.restaurant-section {
+    padding: clamp(3rem, 6vw, 6rem) var(--space-4);
+}
+
+.restaurant-section-alt {
+    background: var(--restaurant-white);
+}
+
+.restaurant-section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto var(--space-10);
+}
+
+.restaurant-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--restaurant-dark);
+    margin-bottom: var(--space-3);
+}
+
+.restaurant-section-subtitle {
+    font-size: 1.125rem;
+    color: var(--restaurant-gray);
+    line-height: 1.6;
+}
+
+/* ========================================
+   COMBO MEALS GRID
+   ======================================== */
+
+.restaurant-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.restaurant-meal-card {
+    background: var(--restaurant-white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--restaurant-shadow);
+    transition: var(--restaurant-transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-meal-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--restaurant-shadow-hover);
+}
+
+.restaurant-meal-image {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+}
+
+.restaurant-meal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--restaurant-transition);
+}
+
+.restaurant-meal-card:hover .restaurant-meal-image img {
+    transform: scale(1.05);
+}
+
+.restaurant-meal-badge {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--restaurant-primary);
+    color: var(--restaurant-white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    z-index: 2;
+}
+
+.restaurant-meal-badge.vegetarian {
+    background: #28A745;
+}
+
+.restaurant-meal-badge.premium {
+    background: var(--restaurant-secondary);
+}
+
+.restaurant-meal-content {
+    padding: var(--space-5);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-meal-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--restaurant-dark);
+    margin-bottom: var(--space-3);
+}
+
+.restaurant-meal-items {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-4) 0;
+    flex: 1;
+}
+
+.restaurant-meal-items li {
+    position: relative;
+    padding-left: var(--space-4);
+    margin-bottom: var(--space-2);
+    color: var(--restaurant-gray);
+    line-height: 1.6;
+}
+
+.restaurant-meal-items li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--restaurant-primary);
+    font-weight: 700;
+}
+
+.restaurant-meal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--neutral-200);
+}
+
+.restaurant-meal-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--restaurant-primary);
+}
+
+.restaurant-order-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    background: var(--restaurant-primary);
+    color: var(--restaurant-white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.938rem;
+    transition: var(--restaurant-transition);
+    white-space: nowrap;
+}
+
+.restaurant-order-btn:hover {
+    background: var(--restaurant-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+}
+
+.restaurant-order-btn svg {
+    flex-shrink: 0;
+}
+
+/* ========================================
+   SINGLE ITEMS GRID
+   ======================================== */
+
+.restaurant-singles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-5);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.restaurant-single-card {
+    background: var(--restaurant-light);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--restaurant-shadow);
+    transition: var(--restaurant-transition);
+}
+
+.restaurant-single-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--restaurant-shadow-hover);
+}
+
+.restaurant-single-image {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.restaurant-single-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--restaurant-transition);
+}
+
+.restaurant-single-card:hover .restaurant-single-image img {
+    transform: scale(1.1);
+}
+
+.restaurant-single-content {
+    padding: var(--space-4);
+}
+
+.restaurant-single-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--restaurant-dark);
+    margin-bottom: var(--space-3);
+}
+
+.restaurant-single-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+}
+
+.restaurant-single-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--restaurant-primary);
+}
+
+.restaurant-order-btn-sm {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: var(--restaurant-primary);
+    color: var(--restaurant-white);
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: var(--restaurant-transition);
+}
+
+.restaurant-order-btn-sm:hover {
+    background: var(--restaurant-primary-dark);
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   CTA SECTION
+   ======================================== */
+
+.restaurant-cta {
+    padding: clamp(4rem, 8vw, 6rem) var(--space-4);
+    background: linear-gradient(135deg, var(--restaurant-primary) 0%, var(--restaurant-secondary) 100%);
+    color: var(--restaurant-white);
+    text-align: center;
+}
+
+.restaurant-cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.restaurant-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: var(--space-3);
+}
+
+.restaurant-cta p {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-6);
+    opacity: 0.95;
+}
+
+.restaurant-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-7);
+    background: var(--restaurant-white);
+    color: var(--restaurant-primary);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.125rem;
+    transition: var(--restaurant-transition);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.restaurant-cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .restaurant-menu-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: var(--space-5);
+    }
+
+    .restaurant-singles-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .restaurant-hero {
+        height: 50vh;
+        min-height: 350px;
+    }
+
+    .restaurant-menu-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+
+    .restaurant-singles-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+
+    .restaurant-meal-image {
+        height: 200px;
+    }
+
+    .restaurant-single-image {
+        height: 150px;
+    }
+
+    .restaurant-meal-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .restaurant-order-btn {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .restaurant-section {
+        padding: clamp(2rem, 4vw, 3rem) var(--space-4);
+    }
+}
+
+@media (max-width: 640px) {
+    .restaurant-hero {
+        min-height: 300px;
+    }
+
+    .restaurant-hero-content {
+        padding: var(--space-6) var(--space-4);
+    }
+
+    .restaurant-singles-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .restaurant-meal-content {
+        padding: var(--space-4);
+    }
+
+    .restaurant-meal-name {
+        font-size: 1.25rem;
+    }
+
+    .restaurant-meal-price {
+        font-size: 1.5rem;
+    }
+
+    .restaurant-single-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-2);
+    }
+
+    .restaurant-order-btn-sm {
+        text-align: center;
+        width: 100%;
+    }
+
+    .restaurant-cta {
+        padding: clamp(3rem, 6vw, 4rem) var(--space-4);
+    }
+
+    .restaurant-cta-btn {
+        padding: var(--space-3) var(--space-6);
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .restaurant-hero-title {
+        font-size: 2rem;
+    }
+
+    .restaurant-section-title {
+        font-size: 1.75rem;
+    }
+
+    .restaurant-meal-badge {
+        font-size: 0.688rem;
+        padding: 0.375rem 0.75rem;
+    }
+
+    .restaurant-order-btn {
+        font-size: 0.875rem;
+        padding: var(--space-2) var(--space-4);
+    }
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.restaurant-meal-card,
+.restaurant-single-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.restaurant-meal-card:nth-child(1),
+.restaurant-single-card:nth-child(1) { animation-delay: 0.1s; }
+.restaurant-meal-card:nth-child(2),
+.restaurant-single-card:nth-child(2) { animation-delay: 0.2s; }
+.restaurant-meal-card:nth-child(3),
+.restaurant-single-card:nth-child(3) { animation-delay: 0.3s; }
+.restaurant-meal-card:nth-child(4),
+.restaurant-single-card:nth-child(4) { animation-delay: 0.4s; }
+.restaurant-meal-card:nth-child(5),
+.restaurant-single-card:nth-child(5) { animation-delay: 0.5s; }
+.restaurant-meal-card:nth-child(6),
+.restaurant-single-card:nth-child(6) { animation-delay: 0.6s; }

@@ -1,52 +1,378 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Restaurant — Heritage Centre</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heritage Centre Restaurant - Order Your Favorite Nigerian Meals</title>
+  <link rel="stylesheet" href="css/style.css?v=20251201">
+  <link rel="stylesheet" href="css/restaurant.css?v=20251201">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <header class="bg-white shadow">
-    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="index.html" class="text-xl font-bold">Heritage Centre</a>
-      <nav class="space-x-4">
-        <a href="index.html" class="text-gray-600">Home</a>
-        <a href="about.html" class="text-gray-600">About Us</a>
-        <a href="contact.html" class="text-gray-600">Contact</a>
-      </nav>
-    </div>
-  </header>
+<body class="restaurant-page">
 
-  <main class="container mx-auto px-4 py-8">
-    <article class="bg-white rounded-lg shadow p-6">
-      <div class="md:flex md:items-center">
-        <img src="https://images.unsplash.com/photo-1541542684-4e5b8c2b7b0c?w=1200&q=80" alt="Restaurant" class="w-full md:w-1/3 rounded-lg object-cover shadow-md mb-4 md:mb-0" />
-        <div class="md:ml-6">
-          <h1 class="text-2xl font-bold mb-2">Restaurant — Dine & Delight</h1>
-          <p class="text-gray-600 mb-4">Enjoy curated menus from our resident chefs, seasonal flavors and a relaxed dining atmosphere. We offer lunch, dinner and private dining options.</p>
-          <ul class="text-gray-700 mb-4 list-disc list-inside">
-            <li>Seasonal tasting menus</li>
-            <li>Private dining and chef tables</li>
-            <li>Special dietary options available</li>
-          </ul>
-          <div class="flex space-x-3">
-            <a href="bookings.html?dept=restaurant" class="px-4 py-2 bg-yellow-600 text-white rounded shadow">Book Services</a>
-            <a href="index.html" class="px-4 py-2 border rounded text-gray-700">Back to Home</a>
+  <!-- Navigation with shared nav include -->
+  <div id="nav-placeholder"></div>
+
+  <!-- Hero Section -->
+  <section class="restaurant-hero">
+    <div class="restaurant-hero-overlay"></div>
+    <div class="restaurant-hero-content">
+      <div class="restaurant-badge">Heritage Centre Restaurant</div>
+      <h1 class="restaurant-hero-title">Delicious Nigerian Cuisine</h1>
+      <p class="restaurant-hero-subtitle">From combo meals to single dishes — fresh, tasty, and ready to order via Chowdeck</p>
+    </div>
+  </section>
+
+  <!-- Combo Meals Section -->
+  <section class="restaurant-section" id="combos">
+    <div class="container">
+      <div class="restaurant-section-header">
+        <h2 class="restaurant-section-title">Combo Meals</h2>
+        <p class="restaurant-section-subtitle">Complete meals with everything you need</p>
+      </div>
+
+      <div class="restaurant-menu-grid">
+        <!-- Classic Chicken Combo -->
+        <div class="restaurant-meal-card">
+          <div class="restaurant-meal-image">
+            <img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=600&h=400&fit=crop&q=80" alt="Classic Chicken Combo" loading="lazy">
+            <div class="restaurant-meal-badge">Popular</div>
+          </div>
+          <div class="restaurant-meal-content">
+            <h3 class="restaurant-meal-name">Classic Chicken Combo</h3>
+            <ul class="restaurant-meal-items">
+              <li>Jollof rice</li>
+              <li>Spicy fried chicken</li>
+              <li>Fried plantain</li>
+              <li>Fresh salad</li>
+              <li>Bottled water</li>
+            </ul>
+            <div class="restaurant-meal-footer">
+              <span class="restaurant-meal-price">₦3,500</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Order from Chowdeck
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beef Power Meal -->
+        <div class="restaurant-meal-card">
+          <div class="restaurant-meal-image">
+            <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=600&h=400&fit=crop&q=80" alt="Beef Power Meal" loading="lazy">
+          </div>
+          <div class="restaurant-meal-content">
+            <h3 class="restaurant-meal-name">Beef Power Meal</h3>
+            <ul class="restaurant-meal-items">
+              <li>White rice</li>
+              <li>Beef stew</li>
+              <li>Coleslaw</li>
+              <li>Soda drink</li>
+            </ul>
+            <div class="restaurant-meal-footer">
+              <span class="restaurant-meal-price">₦3,200</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Order from Chowdeck
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Veggie Lover Combo -->
+        <div class="restaurant-meal-card">
+          <div class="restaurant-meal-image">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&h=400&fit=crop&q=80" alt="Veggie Lover Combo" loading="lazy">
+            <div class="restaurant-meal-badge vegetarian">Vegetarian</div>
+          </div>
+          <div class="restaurant-meal-content">
+            <h3 class="restaurant-meal-name">Veggie Lover Combo</h3>
+            <ul class="restaurant-meal-items">
+              <li>Fried rice</li>
+              <li>Grilled tofu</li>
+              <li>Fried plantain</li>
+              <li>Fresh juice</li>
+            </ul>
+            <div class="restaurant-meal-footer">
+              <span class="restaurant-meal-price">₦3,000</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Order from Chowdeck
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Super Combo -->
+        <div class="restaurant-meal-card">
+          <div class="restaurant-meal-image">
+            <img src="https://images.unsplash.com/photo-1596560548464-f010549b84d7?w=600&h=400&fit=crop&q=80" alt="Super Combo" loading="lazy">
+            <div class="restaurant-meal-badge premium">Premium</div>
+          </div>
+          <div class="restaurant-meal-content">
+            <h3 class="restaurant-meal-name">Super Combo</h3>
+            <ul class="restaurant-meal-items">
+              <li>Jollof + Fried rice mix</li>
+              <li>Chicken & beef</li>
+              <li>Fresh salad</li>
+              <li>Premium drink</li>
+            </ul>
+            <div class="restaurant-meal-footer">
+              <span class="restaurant-meal-price">₦4,000</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Order from Chowdeck
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fish Delight Combo -->
+        <div class="restaurant-meal-card">
+          <div class="restaurant-meal-image">
+            <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=600&h=400&fit=crop&q=80" alt="Fish Delight Combo" loading="lazy">
+          </div>
+          <div class="restaurant-meal-content">
+            <h3 class="restaurant-meal-name">Fish Delight Combo</h3>
+            <ul class="restaurant-meal-items">
+              <li>Jollof rice</li>
+              <li>Grilled fish</li>
+              <li>Fried plantain</li>
+              <li>Pepper sauce</li>
+              <li>Bottled water</li>
+            </ul>
+            <div class="restaurant-meal-footer">
+              <span class="restaurant-meal-price">₦3,800</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Order from Chowdeck
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Family Pack -->
+        <div class="restaurant-meal-card">
+          <div class="restaurant-meal-image">
+            <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&h=400&fit=crop&q=80" alt="Family Pack" loading="lazy">
+            <div class="restaurant-meal-badge premium">Family Size</div>
+          </div>
+          <div class="restaurant-meal-content">
+            <h3 class="restaurant-meal-name">Family Pack</h3>
+            <ul class="restaurant-meal-items">
+              <li>2 portions Jollof rice</li>
+              <li>4 pieces fried chicken</li>
+              <li>Fried plantain</li>
+              <li>Large coleslaw</li>
+              <li>4 drinks</li>
+            </ul>
+            <div class="restaurant-meal-footer">
+              <span class="restaurant-meal-price">₦9,500</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Order from Chowdeck
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </article>
-  </main>
-  <footer class="bg-white border-t border-gray-200">
-    <div class="container mx-auto px-4 py-6 flex items-center justify-center space-x-3 text-sm text-gray-500">
-      <span>© 2024 Heritage Centre. All rights reserved.</span>
-      <span class="text-gray-300">•</span>
-      <a href="admin-login.html" class="hover:underline">Administration Login</a>
     </div>
-  </footer>
+  </section>
 
-  <script src="js/app.js"></script>
+  <!-- Single Items Section -->
+  <section class="restaurant-section restaurant-section-alt" id="singles">
+    <div class="container">
+      <div class="restaurant-section-header">
+        <h2 class="restaurant-section-title">Single Items</h2>
+        <p class="restaurant-section-subtitle">Build your own meal</p>
+      </div>
+
+      <div class="restaurant-singles-grid">
+        <!-- Jollof Rice -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop&q=80" alt="Jollof Rice" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Jollof Rice</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦1,000</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fried Rice -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400&h=300&fit=crop&q=80" alt="Fried Rice" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Fried Rice</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦1,000</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chicken -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1562059390-a761a084768e?w=400&h=300&fit=crop&q=80" alt="Fried Chicken" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Fried Chicken</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦1,200</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plantain -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1587411768373-616375123750?w=400&h=300&fit=crop&q=80" alt="Fried Plantain" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Fried Plantain</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦500</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Salad -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&h=300&fit=crop&q=80" alt="Fresh Salad" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Fresh Salad</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦800</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beef -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=400&h=300&fit=crop&q=80" alt="Beef" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Beef Stew</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦1,500</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fish -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&h=300&fit=crop&q=80" alt="Grilled Fish" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Grilled Fish</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦1,800</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drinks -->
+        <div class="restaurant-single-card">
+          <div class="restaurant-single-image">
+            <img src="https://images.unsplash.com/photo-1437418747212-8d9709afab22?w=400&h=300&fit=crop&q=80" alt="Drinks" loading="lazy">
+          </div>
+          <div class="restaurant-single-content">
+            <h3 class="restaurant-single-name">Soft Drinks</h3>
+            <div class="restaurant-single-footer">
+              <span class="restaurant-single-price">₦300</span>
+              <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-order-btn-sm">
+                Order
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="restaurant-cta">
+    <div class="container">
+      <div class="restaurant-cta-content">
+        <h2>Ready to Order?</h2>
+        <p>Get your favorite meals delivered fresh to your doorstep</p>
+        <a href="https://chowdeck.com" target="_blank" rel="noopener noreferrer" class="restaurant-cta-btn">
+          Order Now on Chowdeck
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <script src="js/app.js?v=20251201"></script>
+  <script>
+    // Load shared navigation
+    fetch('includes/nav.html?v=20251201')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('nav-placeholder').innerHTML = data;
+        
+        // Initialize navigation after loading
+        if (typeof initNavigation === 'function') {
+          initNavigation();
+        }
+      });
+
+    // Load shared footer
+    fetch('includes/footer.html?v=20251201')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+      });
+  </script>
 </body>
 </html>
